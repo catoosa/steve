@@ -221,6 +221,27 @@ export async function analyzeCall(callId: string, questions: Array<{ question: s
   });
 }
 
+/** List calls with optional filters */
+export async function listCalls(params?: Record<string, unknown>) {
+  const query = params ? "?" + new URLSearchParams(
+    Object.entries(params).reduce((acc, [k, v]) => {
+      if (v !== undefined) acc[k] = String(v);
+      return acc;
+    }, {} as Record<string, string>)
+  ).toString() : "";
+  return blandFetch(`/calls${query}`);
+}
+
+/** List all currently active calls */
+export async function listActiveCalls() {
+  return blandFetch("/calls/active");
+}
+
+/** Stop all currently active calls */
+export async function stopAllActiveCalls() {
+  return blandFetch("/calls/active", { method: "POST" });
+}
+
 // =============================================================================
 // BATCH MANAGEMENT
 // =============================================================================
@@ -233,6 +254,16 @@ export async function getBatch(batchId: string) {
 /** Get batch call logs */
 export async function getBatchLogs(batchId: string) {
   return blandFetch(`/batches/${batchId}/logs`);
+}
+
+/** List all batches */
+export async function listBatches() {
+  return blandFetch("/batches");
+}
+
+/** Stop an active batch */
+export async function stopBatch(batchId: string) {
+  return blandFetch(`/batches/${batchId}/stop`, { method: "POST" });
 }
 
 // =============================================================================
@@ -286,6 +317,258 @@ export async function updateNumber(
 }
 
 // =============================================================================
+// PATHWAYS
+// =============================================================================
+
+/** Create a new pathway */
+export async function createPathway(name: string, description: string, nodes?: unknown) {
+  return blandFetch("/pathway", {
+    method: "POST",
+    body: JSON.stringify({ name, description, ...(nodes ? { nodes } : {}) }),
+  });
+}
+
+/** Update an existing pathway */
+export async function updatePathway(id: string, data: Record<string, unknown>) {
+  return blandFetch(`/pathway/${id}`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Delete a pathway */
+export async function deletePathway(id: string) {
+  return blandFetch(`/pathway/${id}`, { method: "DELETE" });
+}
+
+/** Get pathway details */
+export async function getPathway(id: string) {
+  return blandFetch(`/pathway/${id}`);
+}
+
+/** List all pathways */
+export async function listPathways() {
+  return blandFetch("/pathway");
+}
+
+/** Create a new version of a pathway */
+export async function createPathwayVersion(pathwayId: string, data: Record<string, unknown>) {
+  return blandFetch(`/pathway/${pathwayId}/versions`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Get all versions of a pathway */
+export async function getPathwayVersions(pathwayId: string) {
+  return blandFetch(`/pathway/${pathwayId}/versions`);
+}
+
+/** Get a specific version of a pathway */
+export async function getPathwayVersion(pathwayId: string, versionId: string) {
+  return blandFetch(`/pathway/${pathwayId}/versions/${versionId}`);
+}
+
+/** Delete a specific version of a pathway */
+export async function deletePathwayVersion(pathwayId: string, versionId: string) {
+  return blandFetch(`/pathway/${pathwayId}/versions/${versionId}`, { method: "DELETE" });
+}
+
+/** Promote a pathway version to active */
+export async function promotePathwayVersion(pathwayId: string, versionId: string) {
+  return blandFetch(`/pathway/${pathwayId}/versions/${versionId}/promote`, { method: "POST" });
+}
+
+/** Generate a pathway from a text prompt */
+export async function generatePathway(prompt: string) {
+  return blandFetch("/pathway/generate", {
+    method: "POST",
+    body: JSON.stringify({ prompt }),
+  });
+}
+
+/** Check the status of a pathway generation job */
+export async function getPathwayGenerationStatus(jobId: string) {
+  return blandFetch(`/pathway/generate/${jobId}`);
+}
+
+/** Chat with a pathway for testing */
+export async function chatWithPathway(pathwayId: string, message: string, chatId?: string) {
+  return blandFetch(`/pathway/${pathwayId}/chat`, {
+    method: "POST",
+    body: JSON.stringify({ message, ...(chatId ? { chat_id: chatId } : {}) }),
+  });
+}
+
+// =============================================================================
+// PERSONAS
+// =============================================================================
+
+/** Create a new persona */
+export async function createPersona(data: Record<string, unknown>) {
+  return blandFetch("/personas", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Update a persona */
+export async function updatePersona(id: string, data: Record<string, unknown>) {
+  return blandFetch(`/personas/${id}`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Delete a persona */
+export async function deletePersona(id: string) {
+  return blandFetch(`/personas/${id}`, { method: "DELETE" });
+}
+
+/** Get persona details */
+export async function getPersona(id: string) {
+  return blandFetch(`/personas/${id}`);
+}
+
+/** List all personas */
+export async function listPersonas() {
+  return blandFetch("/personas");
+}
+
+/** Get all versions of a persona */
+export async function getPersonaVersions(id: string) {
+  return blandFetch(`/personas/${id}/versions`);
+}
+
+/** Get a specific persona version */
+export async function getPersonaVersion(id: string, versionId: string) {
+  return blandFetch(`/personas/${id}/versions/${versionId}`);
+}
+
+/** Promote a persona version to active */
+export async function promotePersonaVersion(id: string, versionId: string) {
+  return blandFetch(`/personas/${id}/versions/${versionId}/promote`, { method: "POST" });
+}
+
+/** Attach phone numbers to a persona */
+export async function attachNumbersToPersona(id: string, numbers: string[]) {
+  return blandFetch(`/personas/${id}/numbers`, {
+    method: "POST",
+    body: JSON.stringify({ numbers }),
+  });
+}
+
+/** Detach phone numbers from a persona */
+export async function detachNumbersFromPersona(id: string, numbers: string[]) {
+  return blandFetch(`/personas/${id}/numbers`, {
+    method: "DELETE",
+    body: JSON.stringify({ numbers }),
+  });
+}
+
+// =============================================================================
+// KNOWLEDGE BASES
+// =============================================================================
+
+/** Create a knowledge base */
+export async function createKnowledgeBase(name: string, description?: string) {
+  return blandFetch("/knowledge-bases", {
+    method: "POST",
+    body: JSON.stringify({ name, ...(description ? { description } : {}) }),
+  });
+}
+
+/** List all knowledge bases */
+export async function listKnowledgeBases() {
+  return blandFetch("/knowledge-bases");
+}
+
+/** Get knowledge base details */
+export async function getKnowledgeBase(id: string) {
+  return blandFetch(`/knowledge-bases/${id}`);
+}
+
+/** Delete a knowledge base */
+export async function deleteKnowledgeBase(id: string) {
+  return blandFetch(`/knowledge-bases/${id}`, { method: "DELETE" });
+}
+
+/** Update a knowledge base */
+export async function updateKnowledgeBase(id: string, data: Record<string, unknown>) {
+  return blandFetch(`/knowledge-bases/${id}`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Upload text content to a knowledge base */
+export async function uploadTextToKB(id: string, text: string, name?: string) {
+  return blandFetch(`/knowledge-bases/${id}/upload/text`, {
+    method: "POST",
+    body: JSON.stringify({ text, ...(name ? { name } : {}) }),
+  });
+}
+
+/** Upload a file to a knowledge base via URL */
+export async function uploadFileToKB(id: string, fileUrl: string) {
+  return blandFetch(`/knowledge-bases/${id}/upload/file`, {
+    method: "POST",
+    body: JSON.stringify({ url: fileUrl }),
+  });
+}
+
+/** Scrape web pages into a knowledge base */
+export async function scrapeWebToKB(id: string, urls: string[]) {
+  return blandFetch(`/knowledge-bases/${id}/upload/web`, {
+    method: "POST",
+    body: JSON.stringify({ urls }),
+  });
+}
+
+/** Chat with a knowledge base */
+export async function chatWithKB(id: string, message: string) {
+  return blandFetch(`/knowledge-bases/${id}/chat`, {
+    method: "POST",
+    body: JSON.stringify({ message }),
+  });
+}
+
+// =============================================================================
+// GUARD RAILS
+// =============================================================================
+
+/** Create a guard rail */
+export async function createGuardRail(data: Record<string, unknown>) {
+  return blandFetch("/guard-rails", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** List all guard rails */
+export async function listGuardRails() {
+  return blandFetch("/guard-rails");
+}
+
+/** Get guard rail details */
+export async function getGuardRail(id: string) {
+  return blandFetch(`/guard-rails/${id}`);
+}
+
+/** Update a guard rail */
+export async function updateGuardRail(id: string, data: Record<string, unknown>) {
+  return blandFetch(`/guard-rails/${id}`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Delete a guard rail */
+export async function deleteGuardRail(id: string) {
+  return blandFetch(`/guard-rails/${id}`, { method: "DELETE" });
+}
+
+// =============================================================================
 // SMS
 // =============================================================================
 
@@ -301,6 +584,59 @@ export async function sendSMS(to: string, message: string, from?: string) {
   });
 }
 
+/** Send a batch of SMS messages */
+export async function sendSMSBatch(messages: Array<{ to: string; message: string; from?: string }>) {
+  return blandFetch("/sms/batch", {
+    method: "POST",
+    body: JSON.stringify({
+      messages: messages.map((m) => ({
+        to: normalizePhone(m.to),
+        message: m.message,
+        ...(m.from ? { from: m.from } : {}),
+      })),
+    }),
+  });
+}
+
+/** List SMS conversations */
+export async function listSMSConversations() {
+  return blandFetch("/sms/conversations");
+}
+
+/** Get SMS conversation details */
+export async function getSMSConversation(id: string) {
+  return blandFetch(`/sms/conversations/${id}`);
+}
+
+/** Create an SMS conversation */
+export async function createSMSConversation(data: Record<string, unknown>) {
+  return blandFetch("/sms/conversations", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Update an SMS conversation */
+export async function updateSMSConversation(id: string, data: Record<string, unknown>) {
+  return blandFetch(`/sms/conversations/${id}`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Delete an SMS conversation */
+export async function deleteSMSConversation(id: string) {
+  return blandFetch(`/sms/conversations/${id}`, { method: "DELETE" });
+}
+
+/** Analyze an SMS conversation */
+export async function analyzeSMSConversation(id: string, prompt: string) {
+  return blandFetch(`/sms/conversations/${id}/analyze`, {
+    method: "POST",
+    body: JSON.stringify({ prompt }),
+  });
+}
+
 // =============================================================================
 // VOICES
 // =============================================================================
@@ -308,6 +644,313 @@ export async function sendSMS(to: string, message: string, from?: string) {
 /** List available voices */
 export async function listVoices() {
   return blandFetch("/voices");
+}
+
+/** Get voice details */
+export async function getVoice(id: string) {
+  return blandFetch(`/voices/${id}`);
+}
+
+/** Update a voice (rename) */
+export async function updateVoice(id: string, data: Record<string, unknown>) {
+  return blandFetch(`/voices/${id}`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Delete a cloned voice */
+export async function deleteVoice(id: string) {
+  return blandFetch(`/voices/${id}`, { method: "DELETE" });
+}
+
+/** Clone a voice from an audio URL */
+export async function cloneVoice(name: string, audioUrl: string) {
+  return blandFetch("/voices/clone", {
+    method: "POST",
+    body: JSON.stringify({ name, audio_url: audioUrl }),
+  });
+}
+
+// =============================================================================
+// POST-CALL WEBHOOKS
+// =============================================================================
+
+/** Create a post-call webhook */
+export async function createPostCallWebhook(data: Record<string, unknown>) {
+  return blandFetch("/webhooks", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Get the post-call webhook for a call */
+export async function getPostCallWebhook(callId: string) {
+  return blandFetch(`/webhooks?call_id=${callId}`);
+}
+
+/** Resend the post-call webhook for a call */
+export async function resendPostCallWebhook(callId: string) {
+  return blandFetch("/webhooks/resend", {
+    method: "POST",
+    body: JSON.stringify({ call_id: callId }),
+  });
+}
+
+// =============================================================================
+// BLOCK RULES
+// =============================================================================
+
+/** Create a block rule */
+export async function createBlockRule(data: Record<string, unknown>) {
+  return blandFetch("/block-rules", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** List all block rules */
+export async function listBlockRules() {
+  return blandFetch("/block-rules");
+}
+
+/** Get block rule details */
+export async function getBlockRule(id: string) {
+  return blandFetch(`/block-rules/${id}`);
+}
+
+/** Edit a block rule */
+export async function editBlockRule(id: string, data: Record<string, unknown>) {
+  return blandFetch(`/block-rules/${id}`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Delete a block rule */
+export async function deleteBlockRule(id: string) {
+  return blandFetch(`/block-rules/${id}`, { method: "DELETE" });
+}
+
+// =============================================================================
+// CUSTOM TOOLS
+// =============================================================================
+
+/** Create a custom tool */
+export async function createTool(data: Record<string, unknown>) {
+  return blandFetch("/tools", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Update a custom tool */
+export async function updateTool(id: string, data: Record<string, unknown>) {
+  return blandFetch(`/tools/${id}`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** List all custom tools */
+export async function listTools() {
+  return blandFetch("/tools");
+}
+
+/** Get custom tool details */
+export async function getTool(id: string) {
+  return blandFetch(`/tools/${id}`);
+}
+
+/** Delete a custom tool */
+export async function deleteTool(id: string) {
+  return blandFetch(`/tools/${id}`, { method: "DELETE" });
+}
+
+// =============================================================================
+// CONTACTS & MEMORY
+// =============================================================================
+
+/** List all contacts */
+export async function listContacts() {
+  return blandFetch("/contacts");
+}
+
+/** Get contact details */
+export async function getContact(id: string) {
+  return blandFetch(`/contacts/${id}`);
+}
+
+/** Update a contact */
+export async function updateContact(id: string, data: Record<string, unknown>) {
+  return blandFetch(`/contacts/${id}`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Find a contact by query */
+export async function findContact(query: string) {
+  return blandFetch(`/contacts/find?query=${encodeURIComponent(query)}`);
+}
+
+/** Merge multiple contacts into one */
+export async function mergeContacts(ids: string[]) {
+  return blandFetch("/contacts/merge", {
+    method: "POST",
+    body: JSON.stringify({ contact_ids: ids }),
+  });
+}
+
+/** Create a memory entry */
+export async function createMemory(data: Record<string, unknown>) {
+  return blandFetch("/memory", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** List all memory entries */
+export async function listMemories() {
+  return blandFetch("/memory");
+}
+
+/** Get memory entry details */
+export async function getMemory(id: string) {
+  return blandFetch(`/memory/${id}`);
+}
+
+/** Delete a memory entry */
+export async function deleteMemory(id: string) {
+  return blandFetch(`/memory/${id}`, { method: "DELETE" });
+}
+
+/** Update a memory entry */
+export async function updateMemory(id: string, data: Record<string, unknown>) {
+  return blandFetch(`/memory/${id}`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Enable or disable a memory entry */
+export async function enableMemory(id: string, enabled: boolean) {
+  return blandFetch(`/memory/${id}`, {
+    method: "POST",
+    body: JSON.stringify({ enabled }),
+  });
+}
+
+// =============================================================================
+// PROMPTS
+// =============================================================================
+
+/** Create a prompt */
+export async function createPrompt(data: Record<string, unknown>) {
+  return blandFetch("/prompts", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** List all prompts */
+export async function listPrompts() {
+  return blandFetch("/prompts");
+}
+
+/** Get prompt details */
+export async function getPrompt(id: string) {
+  return blandFetch(`/prompts/${id}`);
+}
+
+// =============================================================================
+// CITATION SCHEMAS
+// =============================================================================
+
+/** Create a citation schema */
+export async function createCitationSchema(data: Record<string, unknown>) {
+  return blandFetch("/citations", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** List all citation schemas */
+export async function listCitationSchemas() {
+  return blandFetch("/citations");
+}
+
+/** Get citation schema details */
+export async function getCitationSchema(id: string) {
+  return blandFetch(`/citations/${id}`);
+}
+
+/** Update a citation schema */
+export async function updateCitationSchema(id: string, data: Record<string, unknown>) {
+  return blandFetch(`/citations/${id}`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Backfill a citation schema against existing calls */
+export async function backfillCitationSchema(id: string) {
+  return blandFetch(`/citations/${id}/backfill`, { method: "POST" });
+}
+
+// =============================================================================
+// ALARMS
+// =============================================================================
+
+/** Create an alarm */
+export async function createAlarm(data: Record<string, unknown>) {
+  return blandFetch("/alarms", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** List all alarms */
+export async function listAlarms() {
+  return blandFetch("/alarms");
+}
+
+/** Get alarm details */
+export async function getAlarm(id: string) {
+  return blandFetch(`/alarms/${id}`);
+}
+
+/** Update an alarm */
+export async function updateAlarm(id: string, data: Record<string, unknown>) {
+  return blandFetch(`/alarms/${id}`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** Delete an alarm */
+export async function deleteAlarm(id: string) {
+  return blandFetch(`/alarms/${id}`, { method: "DELETE" });
+}
+
+/** Toggle an alarm on/off */
+export async function toggleAlarm(id: string) {
+  return blandFetch(`/alarms/${id}/toggle`, { method: "POST" });
+}
+
+/** Trigger an alarm manually */
+export async function triggerAlarm(id: string) {
+  return blandFetch(`/alarms/${id}/trigger`, { method: "POST" });
+}
+
+/** Test alarm notification */
+export async function testAlarmNotification(id: string) {
+  return blandFetch(`/alarms/${id}/test`, { method: "POST" });
+}
+
+/** List alarm events */
+export async function listAlarmEvents() {
+  return blandFetch("/alarms/events");
 }
 
 // =============================================================================

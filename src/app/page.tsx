@@ -22,55 +22,59 @@ import {
   Mic,
   GitBranch,
   Activity,
-  Settings,
   ChevronRight,
+  Upload,
+  Settings,
+  Rocket,
+  Play,
+  Lock,
 } from "lucide-react";
 
 const FEATURES = [
   {
-    icon: PhoneCall,
-    title: "Outbound Calls",
-    desc: "Launch thousands of AI-powered calls simultaneously. Surveys, reminders, data collection — all automated.",
+    icon: Mic,
+    title: "Human-Like Voice AI",
+    desc: "Natural conversations powered by advanced AI that adapts tone, pace, and personality to every prospect.",
   },
   {
-    icon: PhoneForwarded,
-    title: "Inbound Handling",
-    desc: "Give your customers an AI receptionist. Route calls, answer FAQs, book appointments 24/7.",
+    icon: Zap,
+    title: "Instant Scale",
+    desc: "Go from 10 to 10,000 simultaneous calls. No hiring, no training, no overhead.",
   },
   {
-    icon: MessageSquare,
-    title: "SMS & Chat",
-    desc: "Same AI agent, multiple channels. Text message campaigns and web chat — unified in one platform.",
+    icon: Activity,
+    title: "Real-Time Analytics",
+    desc: "Live dashboards tracking call outcomes, sentiment analysis, and conversion metrics.",
+  },
+  {
+    icon: Globe,
+    title: "Multi-Language",
+    desc: "Reach global markets with AI agents fluent in 20+ languages and regional accents.",
+  },
+  {
+    icon: Lock,
+    title: "Enterprise Security",
+    desc: "SOC 2 compliant, encrypted calls, and full audit trails for regulatory peace of mind.",
+  },
+  {
+    icon: Webhook,
+    title: "CRM Integration",
+    desc: "Seamless sync with Salesforce, HubSpot, and 50+ tools. Your data, always connected.",
   },
   {
     icon: GitBranch,
     title: "Conversation Pathways",
-    desc: "Visual flow builder for complex call logic. Branch on responses, collect data, transfer to humans.",
+    desc: "Visual flow builder for branching logic. Handle objections, collect data, route to humans.",
   },
   {
     icon: Bot,
     title: "Custom Personas",
-    desc: "Create distinct AI personalities for different use cases. Friendly Steve for surveys, professional Alex for sales.",
-  },
-  {
-    icon: Mic,
-    title: "Voice Cloning",
-    desc: "Clone any voice or choose from our library. Your AI agent sounds exactly how you want.",
-  },
-  {
-    icon: Webhook,
-    title: "Webhooks & API",
-    desc: "Real-time webhooks on every call event. RESTful API for full programmatic control.",
-  },
-  {
-    icon: BarChart3,
-    title: "Live Analytics",
-    desc: "Monitor calls in real-time. Transcripts, structured extraction, sentiment analysis, and success rates.",
+    desc: "Create distinct AI personalities. Friendly Steve for surveys, sharp Alex for sales.",
   },
   {
     icon: Shield,
     title: "Guard Rails",
-    desc: "Automated compliance monitoring. Set boundaries on what your AI can and can't say.",
+    desc: "Set boundaries on what your AI says. Automated compliance monitoring on every call.",
   },
 ];
 
@@ -78,42 +82,42 @@ const USE_CASES = [
   {
     icon: Building2,
     title: "Market Research",
-    desc: "Run phone surveys at scale. 10,000 calls in an hour with structured data extraction from every response.",
+    desc: "Run phone surveys at scale. 10,000 calls in an hour with structured data from every response.",
     stat: "10,000+",
     statLabel: "calls/hour",
   },
   {
     icon: Clock,
     title: "Appointment Reminders",
-    desc: "Reduce no-shows by 65%. Friendly reminders with confirm, reschedule, or cancel options.",
+    desc: "Reduce no-shows by 65%. Confirm, reschedule, or cancel — handled automatically.",
     stat: "65%",
     statLabel: "fewer no-shows",
   },
   {
     icon: FileText,
-    title: "Stock & Availability Checks",
-    desc: "Call suppliers, stores, or warehouses. Get real-time stock data in structured JSON.",
+    title: "Stock & Availability",
+    desc: "Call suppliers, stores, or warehouses. Get structured stock data back in JSON.",
     stat: "$0.09",
     statLabel: "per call",
   },
   {
     icon: Headphones,
     title: "Customer Service",
-    desc: "Handle inbound calls 24/7. Answer questions, route to departments, resolve issues automatically.",
+    desc: "Handle inbound calls 24/7. Answer questions, route calls, resolve issues on autopilot.",
     stat: "24/7",
     statLabel: "availability",
   },
   {
     icon: Users,
     title: "Lead Qualification",
-    desc: "Screen inbound leads with qualifying questions. Only pass hot leads to your sales team.",
+    desc: "Screen leads with qualifying questions. Only pass hot prospects to your sales team.",
     stat: "3x",
-    statLabel: "more qualified leads",
+    statLabel: "qualified leads",
   },
   {
-    icon: Globe,
+    icon: PhoneForwarded,
     title: "Claims Follow-up",
-    desc: "Insurance companies: automate claims status calls. Collect updates without burning agent hours.",
+    desc: "Automate insurance claims calls. Collect updates without burning human agent hours.",
     stat: "80%",
     statLabel: "cost reduction",
   },
@@ -128,6 +132,7 @@ const INTEGRATIONS = [
   "Slack",
   "Google Sheets",
   "Webhooks",
+  "Custom API",
 ];
 
 const PLANS = [
@@ -161,7 +166,6 @@ const PLANS = [
       "Unlimited personas",
       "CSV batch upload",
       "Conversation pathways",
-      "Transcript export",
       "Webhook integrations",
       "$0.50/extra call",
       "Email support",
@@ -180,9 +184,7 @@ const PLANS = [
       "Everything in Starter",
       "Full API access",
       "Voice cloning",
-      "Guard rails",
-      "Live call monitoring",
-      "Custom analysis prompts",
+      "Guard rails & compliance",
       "Inbound numbers",
       "$0.30/extra call",
       "Priority support",
@@ -194,45 +196,17 @@ const PLANS = [
     period: "",
     desc: "For scale",
     calls: "Unlimited calls",
-    cta: "Talk to Us",
+    cta: "Talk to Sales",
     href: "mailto:hello@skawk.io",
     features: [
       "Unlimited calls",
-      "Custom pricing",
       "White-label option",
       "Dedicated infrastructure",
       "SSO / SAML",
       "SLA guarantee",
       "Custom integrations",
-      "Dedicated account manager",
+      "Account manager",
     ],
-  },
-];
-
-const STEPS = [
-  {
-    num: "01",
-    title: "Create a Persona",
-    desc: "Tell Skawk who your AI agent is. Name, voice, personality, and what they need to accomplish.",
-    color: "bg-primary",
-  },
-  {
-    num: "02",
-    title: "Design the Flow",
-    desc: "Use our visual pathway builder or just write a prompt. Define questions, branches, and data extraction.",
-    color: "bg-secondary",
-  },
-  {
-    num: "03",
-    title: "Upload Contacts",
-    desc: "Paste numbers, upload a CSV, or send calls programmatically via API. Batch up to 10,000 at once.",
-    color: "bg-accent",
-  },
-  {
-    num: "04",
-    title: "Launch & Monitor",
-    desc: "Hit go. Watch calls in real-time. Get structured data, transcripts, and analytics as results flow in.",
-    color: "bg-success",
   },
 ];
 
@@ -240,155 +214,185 @@ export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Nav */}
-      <nav className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-md">
+      <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#1a1a2e]/95 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="/skawk-logo.png"
-              alt="Skawk"
-              width={120}
-              height={40}
-              className="h-9 w-auto"
-            />
+            <Image src="/skawk-logo.png" alt="Skawk" width={120} height={40} className="h-9 w-auto" />
           </Link>
           <div className="hidden md:flex items-center gap-8">
-            <Link href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Features
-            </Link>
-            <Link href="#use-cases" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Use Cases
-            </Link>
-            <Link href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Pricing
-            </Link>
-            <Link href="/docs" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Docs
+            {["Features", "Use Cases", "Pricing"].map((item) => (
+              <Link
+                key={item}
+                href={`#${item.toLowerCase().replace(" ", "-")}`}
+                className="text-sm font-medium text-white/60 hover:text-white transition-colors"
+              >
+                {item}
+              </Link>
+            ))}
+            <Link href="/docs" className="text-sm font-medium text-white/60 hover:text-white transition-colors">
+              API Docs
             </Link>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/login" className="text-sm font-medium text-white/60 hover:text-white transition-colors">
               Log in
             </Link>
             <Link
               href="/signup"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover transition-colors glow-orange"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white hover:bg-primary-hover transition-all glow-orange"
             >
-              Get Started
-              <ArrowRight className="w-4 h-4" />
+              Start Free Trial
             </Link>
           </div>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-hero-gradient-start to-hero-gradient-end text-white">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-primary rounded-full blur-[120px]" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent rounded-full blur-[150px]" />
+      <section className="relative overflow-hidden bg-[#1a1a2e]">
+        {/* Animated background orbs */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[150px] animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/15 rounded-full blur-[120px]" />
+          <div className="absolute top-1/2 right-1/3 w-[300px] h-[300px] bg-secondary/20 rounded-full blur-[100px]" />
         </div>
-        <div className="relative max-w-7xl mx-auto px-6 py-24 lg:py-32">
+
+        <div className="relative max-w-7xl mx-auto px-6 py-28 lg:py-36">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 px-4 py-1.5 text-sm font-medium mb-8 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-4 py-1.5 text-sm font-medium text-white/70 mb-8">
               <Zap className="w-4 h-4 text-accent" />
-              AI Voice Agents — Build, Deploy, Scale
-            </div>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
-              Your AI makes the calls.
-              <br />
-              <span className="text-gradient">You get the data.</span>
-            </h1>
-            <p className="text-xl text-white/70 max-w-2xl mx-auto mb-10 leading-relaxed">
-              Build voice AI agents that make and receive phone calls. Surveys, appointments, lead qualification, customer service — all on autopilot. From 9 cents per call.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/signup"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-4 text-base font-bold text-white hover:bg-primary-hover transition-all glow-orange"
-              >
-                Start Building Free
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-              <Link
-                href="#demo"
-                className="inline-flex items-center gap-2 rounded-lg border border-white/30 px-8 py-4 text-base font-medium text-white hover:bg-white/10 transition-colors backdrop-blur-sm"
-              >
-                <Phone className="w-5 h-5" />
-                Try a Demo Call
-              </Link>
+              AI-Powered Outbound Calling
             </div>
 
-            {/* Stats bar */}
-            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
-              {[
-                { value: "1M+", label: "Calls Made" },
-                { value: "< 1s", label: "Latency" },
-                { value: "$0.09", label: "Per Call" },
-                { value: "99.9%", label: "Uptime" },
-              ].map((s) => (
-                <div key={s.label} className="text-center">
-                  <p className="text-3xl font-bold text-accent">{s.value}</p>
-                  <p className="text-sm text-white/50 mt-1">{s.label}</p>
-                </div>
-              ))}
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white mb-6 leading-[1.05]">
+              Every call,
+              <br />
+              <span className="text-gradient">brilliantly handled.</span>
+            </h1>
+
+            <p className="text-xl text-white/50 max-w-2xl mx-auto mb-10 leading-relaxed">
+              Skawk supercharges your outbound calling with voice AI that sounds human, converts leads, and scales effortlessly. No scripts. No limits.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+              <Link
+                href="/signup"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-bold text-white hover:bg-primary-hover transition-all glow-orange"
+              >
+                Start Free Trial
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <button className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-8 py-4 text-base font-medium text-white hover:bg-white/5 transition-colors">
+                <Play className="w-5 h-5 text-accent" />
+                Watch Demo
+              </button>
+            </div>
+
+            <p className="text-sm text-white/30">50 free calls. No credit card required.</p>
+          </div>
+
+          {/* Hero visual — floating call cards */}
+          <div className="relative mt-20 max-w-3xl mx-auto">
+            <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
+              {/* Stats bar */}
+              <div className="grid grid-cols-4 gap-6">
+                {[
+                  { value: "1M+", label: "Calls Made" },
+                  { value: "< 300ms", label: "Avg Latency" },
+                  { value: "$0.09", label: "Per Minute" },
+                  { value: "99.9%", label: "Uptime SLA" },
+                ].map((s) => (
+                  <div key={s.label} className="text-center">
+                    <p className="text-2xl sm:text-3xl font-black text-accent">{s.value}</p>
+                    <p className="text-xs text-white/40 mt-1 font-medium">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Mini call visualization */}
+              <div className="mt-8 grid grid-cols-3 gap-3">
+                {[
+                  { phone: "+61 412 ***", status: "Completed", dur: "0:42", color: "bg-success" },
+                  { phone: "+61 498 ***", status: "In Progress", dur: "0:18", color: "bg-accent" },
+                  { phone: "+61 411 ***", status: "Completed", dur: "1:03", color: "bg-success" },
+                ].map((call, i) => (
+                  <div key={i} className="bg-white/5 rounded-xl p-3 border border-white/5">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-mono text-white/60">{call.phone}</span>
+                      <span className={`w-2 h-2 rounded-full ${call.color}`} />
+                    </div>
+                    <p className="text-[10px] text-white/30">{call.status} &middot; {call.dur}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Demo section */}
-      <section id="demo" className="py-20 px-6 bg-muted">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Try it right now</h2>
-          <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-            Enter your phone number and pick a scenario. Our AI agent will call you in seconds.
-          </p>
-          <div className="bg-card border border-border rounded-2xl p-8 max-w-lg mx-auto shadow-lg">
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1.5 text-left">Your Phone Number</label>
-                <input
-                  type="tel"
-                  placeholder="0412 345 678"
-                  className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-                />
+      {/* Features */}
+      <section id="features" className="py-24 px-6 bg-background">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-sm font-bold text-primary uppercase tracking-wider mb-3">Features</p>
+            <h2 className="text-4xl font-black mb-4">Built for bold teams</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Everything you need to automate outbound calling and close more deals, faster.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            {FEATURES.map((f) => (
+              <div
+                key={f.title}
+                className="group bg-card border border-border rounded-2xl p-6 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all"
+              >
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                  <f.icon className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="text-lg font-bold mb-2">{f.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1.5 text-left">Demo Scenario</label>
-                <select className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
-                  <option>Appointment reminder</option>
-                  <option>Customer survey</option>
-                  <option>Lead qualification</option>
-                  <option>Stock availability check</option>
-                </select>
-              </div>
-              <button className="w-full rounded-lg bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground hover:bg-primary-hover transition-all glow-orange">
-                <span className="flex items-center justify-center gap-2">
-                  <Phone className="w-4 h-4" />
-                  Call Me Now
-                </span>
-              </button>
-              <p className="text-xs text-muted-foreground">Australian numbers only during beta. No credit card required.</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* How it works */}
-      <section className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-24 px-6 bg-muted">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Live in minutes, not months</h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Four steps from zero to thousands of automated calls.
-            </p>
+            <p className="text-sm font-bold text-primary uppercase tracking-wider mb-3">How It Works</p>
+            <h2 className="text-4xl font-black mb-4">Three steps to liftoff</h2>
           </div>
-          <div className="grid md:grid-cols-4 gap-6">
-            {STEPS.map((step) => (
-              <div key={step.num} className="relative">
-                <div className={`${step.color} w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg mb-4`}>
-                  {step.num}
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                num: "01",
+                icon: Upload,
+                title: "Upload Your Contacts",
+                desc: "Import lead lists from CSV, CRM, or connect via API. We handle deduplication and validation.",
+                color: "bg-primary",
+              },
+              {
+                num: "02",
+                icon: Settings,
+                title: "Configure Your Agent",
+                desc: "Set the voice, script outline, goals, and objection handling. Your AI agent learns your playbook.",
+                color: "bg-secondary",
+              },
+              {
+                num: "03",
+                icon: Rocket,
+                title: "Launch & Convert",
+                desc: "Hit go and watch calls happen in real time. Qualified leads get routed to your team instantly.",
+                color: "bg-accent",
+              },
+            ].map((step) => (
+              <div key={step.num} className="relative text-center">
+                <div className={`${step.color} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg`}>
+                  <step.icon className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
+                <span className="text-xs font-bold text-primary uppercase tracking-wider">{step.num}</span>
+                <h3 className="text-xl font-bold mt-2 mb-3">{step.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
               </div>
             ))}
@@ -396,93 +400,72 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features grid */}
-      <section id="features" className="py-24 px-6 bg-gradient-to-br from-hero-gradient-start to-hero-gradient-end text-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Everything you need to automate calls</h2>
-            <p className="text-white/60 max-w-xl mx-auto">
-              Build, deploy, monitor, and refine — the complete voice AI platform.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {FEATURES.map((f) => (
-              <div
-                key={f.title}
-                className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors backdrop-blur-sm"
-              >
-                <f.icon className="w-8 h-8 text-accent mb-4" />
-                <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
-                <p className="text-sm text-white/60 leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* API showcase */}
-      <section className="py-24 px-6">
+      <section className="py-24 px-6 bg-background">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary mb-4">
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary mb-4">
                 <Code2 className="w-4 h-4" />
-                Developer Friendly
+                Developer First
               </div>
-              <h2 className="text-3xl font-bold mb-4">One API call to make a phone call</h2>
+              <h2 className="text-3xl font-black mb-4">One API call to make a phone call</h2>
               <p className="text-muted-foreground mb-6 leading-relaxed">
-                Simple REST API. Send a POST with a phone number and a prompt — Skawk handles the rest. Get structured data back via webhook.
+                Simple REST API. Send a POST with a phone number and a prompt — Skawk handles the conversation, transcription, and data extraction.
               </p>
               <ul className="space-y-3 mb-8">
                 {[
-                  "Single call or batch up to 10,000",
+                  "Single or batch up to 10,000 calls",
                   "Custom voice, language, and persona",
-                  "Structured data extraction (JSON)",
+                  "Structured JSON data extraction",
                   "Real-time webhooks on every event",
-                  "Recordings and full transcripts",
+                  "Full transcripts and recordings",
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-3 text-sm">
-                    <Check className="w-4 h-4 text-success shrink-0" />
+                    <div className="w-5 h-5 rounded-full bg-success/10 flex items-center justify-center shrink-0">
+                      <Check className="w-3 h-3 text-success" />
+                    </div>
                     {item}
                   </li>
                 ))}
               </ul>
               <Link
                 href="/dashboard/api"
-                className="inline-flex items-center gap-2 text-primary font-medium text-sm hover:underline"
+                className="inline-flex items-center gap-2 text-primary font-bold text-sm hover:underline"
               >
                 View API Docs <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
-            <div className="bg-[#1e1e2e] rounded-2xl p-6 shadow-2xl">
+            <div className="bg-[#1a1a2e] rounded-2xl p-6 shadow-2xl border border-white/5">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-3 h-3 rounded-full bg-destructive" />
-                <div className="w-3 h-3 rounded-full bg-accent" />
-                <div className="w-3 h-3 rounded-full bg-success" />
-                <span className="text-xs text-white/40 ml-2 font-mono">POST /api/v1/calls</span>
+                <div className="w-3 h-3 rounded-full bg-destructive/80" />
+                <div className="w-3 h-3 rounded-full bg-accent/80" />
+                <div className="w-3 h-3 rounded-full bg-success/80" />
+                <span className="text-xs text-white/30 ml-2 font-mono">POST /api/v1/calls</span>
               </div>
-              <pre className="text-sm font-mono text-white/80 overflow-x-auto leading-relaxed">{`curl -X POST https://skawk.io/api/v1/calls \\
+              <pre className="text-[13px] font-mono text-white/70 overflow-x-auto leading-relaxed">{`curl -X POST https://skawk.io/api/v1/calls \\
   -H "x-api-key: sk_your_api_key" \\
   -H "Content-Type: application/json" \\
   -d '{
     "phone": "0412345678",
-    "prompt": "You are a friendly agent
-      confirming a dental appointment
-      for tomorrow at 2pm.",
-    "analysis_prompt": "Extract JSON:
-      {confirmed: bool, reschedule: str}",
+    "prompt": "Confirm dental appointment
+      for tomorrow at 2pm. Handle
+      rescheduling if needed.",
+    "analysis_prompt": "Extract:
+      {confirmed: bool, new_time: str}",
     "voice": "mason",
     "language": "en-AU"
   }'`}</pre>
               <div className="mt-4 pt-4 border-t border-white/10">
-                <p className="text-xs text-white/40 font-mono mb-2">// Webhook response</p>
-                <pre className="text-sm font-mono text-success/80 leading-relaxed">{`{
+                <p className="text-xs text-white/30 font-mono mb-2">// webhook response</p>
+                <pre className="text-[13px] font-mono text-success/70 leading-relaxed">{`{
   "status": "completed",
+  "duration_seconds": 34,
+  "answered_by": "human",
   "analysis": {
     "confirmed": true,
-    "reschedule": null
+    "new_time": null
   },
-  "duration_seconds": 34,
   "transcript": "Agent: Hi, this is..."
 }`}</pre>
               </div>
@@ -492,29 +475,32 @@ export default function HomePage() {
       </section>
 
       {/* Use cases */}
-      <section id="use-cases" className="py-24 px-6 bg-muted">
+      <section id="use-cases" className="py-24 px-6 bg-[#1a1a2e] text-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Built for every industry</h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              If your business makes or receives phone calls, Skawk can automate them.
+            <p className="text-sm font-bold text-accent uppercase tracking-wider mb-3">Use Cases</p>
+            <h2 className="text-4xl font-black mb-4">Works across every industry</h2>
+            <p className="text-white/50 max-w-xl mx-auto">
+              If your business makes phone calls, Skawk can automate them — for a fraction of the cost.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-5">
             {USE_CASES.map((uc) => (
               <div
                 key={uc.title}
-                className="bg-card border border-border rounded-2xl p-6 hover:shadow-lg transition-shadow"
+                className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/[0.08] transition-colors"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <uc.icon className="w-8 h-8 text-primary" />
+                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                    <uc.icon className="w-5 h-5 text-accent" />
+                  </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-primary">{uc.stat}</p>
-                    <p className="text-xs text-muted-foreground">{uc.statLabel}</p>
+                    <p className="text-xl font-black text-accent">{uc.stat}</p>
+                    <p className="text-[10px] text-white/40 font-medium">{uc.statLabel}</p>
                   </div>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{uc.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{uc.desc}</p>
+                <h3 className="text-lg font-bold mb-2">{uc.title}</h3>
+                <p className="text-sm text-white/50 leading-relaxed">{uc.desc}</p>
               </div>
             ))}
           </div>
@@ -522,17 +508,18 @@ export default function HomePage() {
       </section>
 
       {/* Integrations */}
-      <section className="py-20 px-6">
+      <section className="py-20 px-6 bg-muted">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Connects to everything</h2>
-          <p className="text-muted-foreground mb-12">
-            Push call results to your CRM, trigger workflows, or build custom integrations.
+          <p className="text-sm font-bold text-primary uppercase tracking-wider mb-3">Integrations</p>
+          <h2 className="text-3xl font-black mb-4">Connects to everything</h2>
+          <p className="text-muted-foreground mb-10">
+            Push call results to your CRM, trigger workflows, or build custom integrations via API.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-3">
             {INTEGRATIONS.map((name) => (
               <div
                 key={name}
-                className="px-6 py-3 rounded-xl bg-card border border-border text-sm font-medium hover:border-primary/50 transition-colors"
+                className="px-5 py-2.5 rounded-xl bg-card border border-border text-sm font-medium hover:border-primary/30 hover:shadow-sm transition-all cursor-default"
               >
                 {name}
               </div>
@@ -542,26 +529,25 @@ export default function HomePage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-24 px-6 bg-muted">
+      <section id="pricing" className="py-24 px-6 bg-background">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Transparent pricing</h2>
-            <p className="text-muted-foreground">
-              Start free. Pay as you grow. No hidden fees.
-            </p>
+            <p className="text-sm font-bold text-primary uppercase tracking-wider mb-3">Pricing</p>
+            <h2 className="text-4xl font-black mb-4">Transparent pricing</h2>
+            <p className="text-muted-foreground">Start free. Pay as you grow. No hidden fees.</p>
           </div>
-          <div className="grid md:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-4 gap-5">
             {PLANS.map((plan) => (
               <div
                 key={plan.name}
                 className={`rounded-2xl border p-6 flex flex-col bg-card ${
                   plan.popular
-                    ? "border-primary ring-2 ring-primary/20 relative shadow-lg"
+                    ? "border-primary ring-2 ring-primary/20 relative shadow-xl shadow-primary/10"
                     : "border-border"
                 }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-bold text-primary-foreground">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-bold text-white">
                     Most Popular
                   </div>
                 )}
@@ -570,7 +556,7 @@ export default function HomePage() {
                   <p className="text-sm text-muted-foreground">{plan.desc}</p>
                 </div>
                 <div className="mb-1">
-                  <span className="text-4xl font-bold">{plan.price}</span>
+                  <span className="text-4xl font-black">{plan.price}</span>
                   <span className="text-muted-foreground text-sm">{plan.period}</span>
                 </div>
                 <p className="text-sm text-muted-foreground mb-6">{plan.calls}</p>
@@ -584,9 +570,9 @@ export default function HomePage() {
                 </ul>
                 <Link
                   href={plan.href}
-                  className={`text-center rounded-lg px-4 py-3 text-sm font-bold transition-all ${
+                  className={`text-center rounded-xl px-4 py-3 text-sm font-bold transition-all ${
                     plan.popular
-                      ? "bg-primary text-primary-foreground hover:bg-primary-hover glow-orange"
+                      ? "bg-primary text-white hover:bg-primary-hover glow-orange"
                       : "border border-border hover:bg-muted"
                   }`}
                 >
@@ -599,57 +585,68 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 px-6 bg-gradient-to-br from-hero-gradient-start to-hero-gradient-end text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary rounded-full blur-[150px]" />
+      <section className="py-28 px-6 bg-[#1a1a2e] relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-1/3 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[150px]" />
+          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-accent/10 rounded-full blur-[120px]" />
         </div>
-        <div className="relative max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-4">
-            Stop paying humans to make phone calls
+        <div className="relative max-w-3xl mx-auto text-center text-white">
+          <h2 className="text-4xl sm:text-5xl font-black mb-6">
+            Ready to make
+            <br />
+            <span className="text-gradient">some noise?</span>
           </h2>
-          <p className="text-lg text-white/70 mb-10 max-w-xl mx-auto">
-            50 free calls. No credit card. Live in under 5 minutes.
+          <p className="text-lg text-white/50 mb-10 max-w-lg mx-auto">
+            Start automating your outbound calls and let AI handle the heavy lifting.
           </p>
-          <Link
-            href="/signup"
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-4 text-base font-bold text-white hover:bg-primary-hover transition-all glow-orange"
-          >
-            Start Building Free
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/signup"
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-bold text-white hover:bg-primary-hover transition-all glow-orange"
+            >
+              Get Started Free
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <Link
+              href="mailto:hello@skawk.io"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-8 py-4 text-base font-medium text-white hover:bg-white/5 transition-colors"
+            >
+              Talk to Sales
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
       <footer className="py-16 px-6 border-t border-border bg-background">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-12 mb-12">
-            <div>
-              <Image
-                src="/skawk-logo.png"
-                alt="Skawk"
-                width={100}
-                height={33}
-                className="h-8 w-auto mb-4"
-              />
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                AI voice agents that make and receive phone calls. Built in Australia.
+          <div className="grid md:grid-cols-5 gap-12 mb-12">
+            <div className="md:col-span-2">
+              <Image src="/skawk-logo.png" alt="Skawk" width={100} height={33} className="h-8 w-auto mb-4" />
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
+                AI-powered outbound calling that sounds human, scales instantly, and converts more leads.
               </p>
+              <p className="text-sm text-muted-foreground mt-3">skawk.io</p>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-sm">Product</h4>
+              <h4 className="font-bold mb-4 text-sm">Product</h4>
               <ul className="space-y-2.5">
-                {["Features", "Pricing", "Use Cases", "API Docs", "Changelog"].map((item) => (
-                  <li key={item}>
-                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                      {item}
+                {[
+                  { label: "Features", href: "#features" },
+                  { label: "Pricing", href: "#pricing" },
+                  { label: "Integrations", href: "#" },
+                  { label: "API Docs", href: "/dashboard/api" },
+                ].map((item) => (
+                  <li key={item.label}>
+                    <Link href={item.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                      {item.label}
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-sm">Company</h4>
+              <h4 className="font-bold mb-4 text-sm">Company</h4>
               <ul className="space-y-2.5">
                 {["About", "Blog", "Careers", "Contact"].map((item) => (
                   <li key={item}>
@@ -661,9 +658,9 @@ export default function HomePage() {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4 text-sm">Legal</h4>
+              <h4 className="font-bold mb-4 text-sm">Legal</h4>
               <ul className="space-y-2.5">
-                {["Privacy Policy", "Terms of Service", "Security"].map((item) => (
+                {["Privacy", "Terms", "Security", "GDPR"].map((item) => (
                   <li key={item}>
                     <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                       {item}

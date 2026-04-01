@@ -1,6 +1,6 @@
 import Link from "next/link";
 import {
-  Phone,
+  Bird,
   BarChart3,
   Zap,
   Shield,
@@ -66,7 +66,7 @@ const PLANS = [
     period: "",
     calls: "Unlimited calls",
     cta: "Contact Sales",
-    href: "mailto:hello@callsteve.au",
+    href: "mailto:hello@skawk.io",
     features: [
       "Unlimited calls",
       "Custom pricing",
@@ -112,8 +112,8 @@ export default function HomePage() {
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-            <Phone className="w-6 h-6 text-primary" />
-            Steve
+            <Bird className="w-6 h-6 text-primary" />
+            Skawk
           </Link>
           <div className="flex items-center gap-6">
             <Link
@@ -158,7 +158,7 @@ export default function HomePage() {
             <span className="text-primary">From 50c each.</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-            Steve makes AI-powered phone calls for you — surveys, data
+            Skawk makes AI-powered phone calls for you — surveys, data
             collection, appointment reminders, and more. Upload contacts, write a
             prompt, get structured results. No call centre needed.
           </p>
@@ -196,7 +196,7 @@ export default function HomePage() {
               {
                 step: "2",
                 title: "Write your prompt",
-                desc: 'Tell Steve what to say. "Ask about stock levels" or "Confirm their appointment at 2pm Tuesday."',
+                desc: 'Tell Skawk what to say. "Ask about stock levels" or "Confirm their appointment at 2pm Tuesday."',
               },
               {
                 step: "3",
@@ -224,7 +224,7 @@ export default function HomePage() {
               <Zap className="w-8 h-8 text-primary" />
               <h3 className="text-lg font-semibold">Batch Calling</h3>
               <p className="text-muted-foreground">
-                Send up to 1,000 calls per batch. Steve handles the
+                Send up to 1,000 calls per batch. Skawk handles the
                 conversations in parallel.
               </p>
             </div>
@@ -240,7 +240,7 @@ export default function HomePage() {
               <Shield className="w-8 h-8 text-primary" />
               <h3 className="text-lg font-semibold">API & Webhooks</h3>
               <p className="text-muted-foreground">
-                Integrate Steve into your existing systems. RESTful API and
+                Integrate Skawk into your existing systems. RESTful API and
                 real-time webhooks for call results.
               </p>
             </div>
@@ -256,7 +256,7 @@ export default function HomePage() {
           </h2>
           <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
             If your business makes phone calls for data collection, reminders,
-            or surveys — Steve can do it for a fraction of the cost.
+            or surveys — Skawk can do it for a fraction of the cost.
           </p>
           <div className="grid md:grid-cols-2 gap-8">
             {USE_CASES.map((uc) => (
@@ -361,11 +361,11 @@ export default function HomePage() {
       <footer className="py-12 px-6 border-t border-border">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 font-bold">
-            <Phone className="w-5 h-5 text-primary" />
-            Steve
+            <Bird className="w-5 h-5 text-primary" />
+            Skawk
           </div>
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Steve. AI Voice Calling as a
+            &copy; {new Date().getFullYear()} Skawk. AI Voice Calling as a
             Service.
           </p>
         </div>

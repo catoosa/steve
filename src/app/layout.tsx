@@ -13,11 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Steve — AI Voice Calling as a Service",
+  title: "Skawk — AI Voice Calling as a Service",
   description:
     "Automated phone calls powered by AI. Surveys, data collection, appointment reminders, and more. Pay per call, scale infinitely.",
   openGraph: {
-    title: "Steve — AI Voice Calling as a Service",
+    title: "Skawk — AI Voice Calling as a Service",
     description: "Automated phone calls powered by AI. From 50c per call.",
     type: "website",
   },

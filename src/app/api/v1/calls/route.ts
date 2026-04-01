@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://callsteve.au";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://skawk.io";
     const webhookUrl = `${appUrl}/api/webhook/bland`;
 
     // Log API call
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
 
       const result = await makeBatchCalls({
         calls: blandCalls,
-        label: body.label || `Steve API batch - ${callCount} calls`,
+        label: body.label || `Skawk API batch - ${callCount} calls`,
       });
 
       return Response.json({

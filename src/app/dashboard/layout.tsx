@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
-  Phone,
+  Bird,
   LayoutDashboard,
   Megaphone,
   PhoneCall,
@@ -49,8 +49,8 @@ export default async function DashboardLayout({
       <aside className="w-64 border-r border-border bg-muted/50 flex flex-col">
         <div className="h-16 flex items-center px-6 border-b border-border">
           <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-            <Phone className="w-5 h-5 text-primary" />
-            Steve
+            <Bird className="w-5 h-5 text-primary" />
+            Skawk
           </Link>
         </div>
 

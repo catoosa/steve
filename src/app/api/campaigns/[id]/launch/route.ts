@@ -74,7 +74,7 @@ export async function POST(
       );
     }
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://callsteve.au";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://skawk.io";
     const webhookUrl = `${appUrl}/api/webhook/bland`;
 
     // Create call records and build Bland payload
@@ -122,7 +122,7 @@ export async function POST(
     // Send to Bland AI
     const result = await makeBatchCalls({
       calls,
-      label: `Steve: ${campaign.name} (${calls.length} calls)`,
+      label: `Skawk: ${campaign.name} (${calls.length} calls)`,
     });
 
     // Update campaign status

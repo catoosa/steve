@@ -91,7 +91,7 @@ export default function SettingsPage() {
               value={webhookUrl}
               onChange={(e) => setWebhookUrl(e.target.value)}
               className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-              placeholder="https://your-app.com/api/steve-webhook"
+              placeholder="https://your-app.com/api/skawk-webhook"
             />
             <p className="text-xs text-muted-foreground mt-1">
               We&apos;ll POST call results to this URL when calls complete.

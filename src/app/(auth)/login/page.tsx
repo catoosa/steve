@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Phone } from "lucide-react";
+import { Bird } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
@@ -37,8 +37,8 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 font-bold text-2xl">
-            <Phone className="w-7 h-7 text-primary" />
-            Steve
+            <Bird className="w-7 h-7 text-primary" />
+            Skawk
           </Link>
           <p className="text-muted-foreground mt-2">Sign in to your account</p>
         </div>

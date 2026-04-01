@@ -54,7 +54,7 @@ export default async function ApiKeysPage() {
         <div className="space-y-6">
           <div>
             <h3 className="text-sm font-medium mb-2">Make a single call</h3>
-            <pre className="bg-muted rounded-lg p-4 text-xs font-mono overflow-x-auto whitespace-pre">{`curl -X POST https://callsteve.au/api/v1/calls \\
+            <pre className="bg-muted rounded-lg p-4 text-xs font-mono overflow-x-auto whitespace-pre">{`curl -X POST https://skawk.io/api/v1/calls \\
   -H "Content-Type: application/json" \\
   -H "x-api-key: YOUR_API_KEY" \\
   -d '{
@@ -67,7 +67,7 @@ export default async function ApiKeysPage() {
 
           <div>
             <h3 className="text-sm font-medium mb-2">Batch calls</h3>
-            <pre className="bg-muted rounded-lg p-4 text-xs font-mono overflow-x-auto whitespace-pre">{`curl -X POST https://callsteve.au/api/v1/calls \\
+            <pre className="bg-muted rounded-lg p-4 text-xs font-mono overflow-x-auto whitespace-pre">{`curl -X POST https://skawk.io/api/v1/calls \\
   -H "Content-Type: application/json" \\
   -H "x-api-key: YOUR_API_KEY" \\
   -d '{

@@ -1,16 +1,13 @@
 -- =============================================================================
--- Steve — AI Voice Calling as a Service
+-- Skawk — AI Voice Calling as a Service
 -- Multi-tenant schema
 -- =============================================================================
-
--- Extensions
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- =============================================================================
 -- ORGANIZATIONS (tenants)
 -- =============================================================================
 CREATE TABLE organizations (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
   owner_id UUID NOT NULL REFERENCES auth.users(id),
@@ -33,7 +30,7 @@ CREATE INDEX idx_orgs_slug ON organizations(slug);
 -- ORG MEMBERS
 -- =============================================================================
 CREATE TABLE org_members (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   org_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   role TEXT NOT NULL DEFAULT 'member' CHECK (role IN ('owner', 'admin', 'member')),
@@ -48,7 +45,7 @@ CREATE INDEX idx_org_members_org ON org_members(org_id);
 -- CAMPAIGNS
 -- =============================================================================
 CREATE TABLE campaigns (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   org_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'active', 'paused', 'completed', 'cancelled')),
@@ -85,7 +82,7 @@ CREATE INDEX idx_campaigns_status ON campaigns(status);
 -- CONTACTS
 -- =============================================================================
 CREATE TABLE contacts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   campaign_id UUID NOT NULL REFERENCES campaigns(id) ON DELETE CASCADE,
   org_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
   phone TEXT NOT NULL,
@@ -103,7 +100,7 @@ CREATE INDEX idx_contacts_org ON contacts(org_id);
 -- CALLS
 -- =============================================================================
 CREATE TABLE calls (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   org_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
   campaign_id UUID REFERENCES campaigns(id) ON DELETE SET NULL,
   contact_id UUID REFERENCES contacts(id) ON DELETE SET NULL,
@@ -139,7 +136,7 @@ CREATE INDEX idx_calls_status ON calls(org_id, status);
 -- USAGE / BILLING
 -- =============================================================================
 CREATE TABLE usage_records (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   org_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
   period_start DATE NOT NULL,
   period_end DATE NOT NULL,
@@ -157,7 +154,7 @@ CREATE INDEX idx_usage_org ON usage_records(org_id, period_start);
 -- API LOGS
 -- =============================================================================
 CREATE TABLE api_logs (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   org_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
   method TEXT NOT NULL,
   path TEXT NOT NULL,

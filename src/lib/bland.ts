@@ -94,7 +94,7 @@ export async function makeBatchCalls(config: BatchCallConfig) {
     method: "POST",
     body: JSON.stringify({
       calls,
-      label: config.label || `Steve batch - ${calls.length} calls`,
+      label: config.label || `Skawk batch - ${calls.length} calls`,
     }),
   });
 }

@@ -142,7 +142,7 @@ const PLANS = [
     period: "/month",
     desc: "For small teams getting started",
     calls: "300 calls included",
-    cta: "Start Free Trial",
+    cta: "Get Started",
     href: "/signup?plan=starter",
     features: [
       "300 calls/month",
@@ -161,7 +161,7 @@ const PLANS = [
     period: "/month",
     desc: "For growing operations",
     calls: "1,500 calls included",
-    cta: "Start Free Trial",
+    cta: "Get Started",
     href: "/signup?plan=pro",
     popular: true,
     features: [
@@ -228,7 +228,7 @@ export default function HomePage() {
               href="/signup"
               className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white hover:bg-primary-hover transition-all glow-orange"
             >
-              Start Free Trial
+              Get Started
             </Link>
           </div>
         </div>
@@ -265,7 +265,7 @@ export default function HomePage() {
                 href="/signup"
                 className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-bold text-white hover:bg-primary-hover transition-all glow-orange"
               >
-                Start Free Trial
+                Get Started
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <button className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-8 py-4 text-base font-medium text-white hover:bg-white/5 transition-colors">
@@ -274,7 +274,7 @@ export default function HomePage() {
               </button>
             </div>
 
-            <p className="text-sm text-white/30">14-day free trial. No credit card required.</p>
+            <p className="text-sm text-white/30">Plans from $149/month. Up and running in minutes.</p>
           </div>
 
           {/* Hero visual — floating call cards */}
@@ -591,7 +591,7 @@ export default function HomePage() {
               href="/signup"
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-bold text-white hover:bg-primary-hover transition-all glow-orange"
             >
-              Get Started Free
+              Get Started
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link

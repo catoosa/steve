@@ -56,7 +56,7 @@ export default function SignupPage() {
           <Link href="/" className="inline-block">
             <Image src="/skawk-logo.png" alt="Skawk" width={120} height={40} className="h-10 w-auto mx-auto" />
           </Link>
-          <p className="text-white/60 mt-3">Create your account — 50 free calls</p>
+          <p className="text-white/60 mt-3">Create your account to get started</p>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-card border border-border rounded-2xl p-6 space-y-4 shadow-xl">
@@ -102,7 +102,7 @@ export default function SignupPage() {
             disabled={loading}
             className="w-full rounded-lg bg-primary px-4 py-3 text-sm font-bold text-primary-foreground hover:bg-primary-hover disabled:opacity-50 transition-all glow-orange"
           >
-            {loading ? "Creating account..." : "Start Building Free"}
+            {loading ? "Creating account..." : "Create Account"}
           </button>
         </form>
 

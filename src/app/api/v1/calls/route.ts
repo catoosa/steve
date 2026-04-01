@@ -3,23 +3,33 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { makeCall, makeBatchCalls } from "@/lib/bland";
 
 /**
- * Public API — POST /api/v1/calls
- * Authenticated via API key (Bearer token or x-api-key header)
+ * Skawk Public API — Calls
  *
- * Single call:   { phone, prompt, first_sentence?, analysis_prompt?, metadata? }
- * Batch calls:   { calls: [{ phone, prompt, ... }] }
+ * POST /api/v1/calls — Send a single call or batch
+ *
+ * Auth: x-api-key header or Authorization: Bearer <key>
+ *
+ * Single: { phone, prompt?, pathway_id?, first_sentence?, analysis_prompt?,
+ *           voice?, language?, max_duration?, model?, temperature?,
+ *           transfer_phone_number?, transfer_list?, guard_rails?,
+ *           record?, metadata?, request_data?, webhook_events?,
+ *           summary_prompt?, dispositions?, retry? }
+ *
+ * Batch:  { calls: [{ phone, prompt?, first_sentence?, metadata? }],
+ *           prompt?, pathway_id?, analysis_prompt?, voice?, language?,
+ *           label?, status_webhook? }
  */
 export async function POST(request: NextRequest) {
   try {
     const supabase = createServiceClient();
 
-    // Authenticate via API key
+    // Auth
     const apiKey =
       request.headers.get("x-api-key") ||
       request.headers.get("authorization")?.replace("Bearer ", "");
 
     if (!apiKey) {
-      return Response.json({ error: "Missing API key" }, { status: 401 });
+      return Response.json({ error: "Missing API key. Pass via x-api-key header." }, { status: 401 });
     }
 
     const { data: org, error: orgErr } = await supabase
@@ -36,8 +46,8 @@ export async function POST(request: NextRequest) {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://skawk.io";
     const webhookUrl = `${appUrl}/api/webhook/bland`;
 
-    // Log API call
-    await supabase.from("api_logs").insert({
+    // Log API request
+    supabase.from("api_logs").insert({
       org_id: org.id,
       method: "POST",
       path: "/api/v1/calls",
@@ -45,17 +55,19 @@ export async function POST(request: NextRequest) {
       ip_address: request.headers.get("x-forwarded-for") || "unknown",
     });
 
-    // Batch mode
+    // =========================================================================
+    // BATCH MODE
+    // =========================================================================
     if (body.calls && Array.isArray(body.calls)) {
       const callCount = body.calls.length;
 
+      if (callCount > 10000) {
+        return Response.json({ error: "Maximum 10,000 calls per batch" }, { status: 400 });
+      }
+
       if (org.call_balance < callCount) {
         return Response.json(
-          {
-            error: "Insufficient call balance",
-            balance: org.call_balance,
-            required: callCount,
-          },
+          { error: "Insufficient call balance", balance: org.call_balance, required: callCount },
           { status: 402 }
         );
       }
@@ -77,49 +89,61 @@ export async function POST(request: NextRequest) {
         })
       );
 
-      const blandCalls = callRecords.map((c) => ({
+      const batchCalls = callRecords.map((c) => ({
         phone: c.phone as string,
-        prompt: (c.prompt as string) || body.prompt || "You are a helpful phone agent.",
+        prompt: c.prompt as string | undefined,
         firstSentence: c.first_sentence as string | undefined,
-        analysisPrompt: c.analysis_prompt as string | undefined,
-        voice: (c.voice as string) || body.voice,
-        language: (c.language as string) || body.language,
-        maxDuration: (c.max_duration as number) || body.max_duration,
-        webhookUrl,
         metadata: {
           org_id: org.id,
-          steve_call_id: c.steveCallId,
+          steve_call_id: c.steveCallId || "",
           ...(typeof c.metadata === "object" && c.metadata !== null
             ? Object.fromEntries(
                 Object.entries(c.metadata as Record<string, unknown>).map(([k, v]) => [k, String(v)])
               )
             : {}),
         },
+        requestData: c.request_data as Record<string, unknown> | undefined,
       }));
 
       const result = await makeBatchCalls({
-        calls: blandCalls,
+        calls: batchCalls,
+        global: {
+          prompt: body.prompt,
+          pathwayId: body.pathway_id,
+          firstSentence: body.first_sentence,
+          analysisPrompt: body.analysis_prompt,
+          voice: body.voice,
+          language: body.language,
+          maxDuration: body.max_duration,
+          model: body.model,
+          temperature: body.temperature,
+          record: body.record,
+          waitForGreeting: body.wait_for_greeting,
+          webhookUrl,
+          transferPhoneNumber: body.transfer_phone_number,
+          guardRails: body.guard_rails,
+          summaryPrompt: body.summary_prompt,
+        },
         label: body.label || `Skawk API batch - ${callCount} calls`,
+        statusWebhook: body.status_webhook,
       });
 
       return Response.json({
         success: true,
-        batch_id: result.batch_id,
+        batch_id: result.data?.batch_id || result.batch_id,
         calls_queued: callCount,
-        estimated_cost: `$${(callCount * 0.5).toFixed(2)}`,
       });
     }
 
-    // Single call mode
+    // =========================================================================
+    // SINGLE CALL
+    // =========================================================================
     if (!body.phone) {
       return Response.json({ error: "phone is required" }, { status: 400 });
     }
 
     if (org.call_balance < 1) {
-      return Response.json(
-        { error: "Insufficient call balance", balance: 0 },
-        { status: 402 }
-      );
+      return Response.json({ error: "Insufficient call balance", balance: 0 }, { status: 402 });
     }
 
     // Create call record
@@ -136,13 +160,27 @@ export async function POST(request: NextRequest) {
 
     const result = await makeCall({
       phone: body.phone,
-      prompt: body.prompt || "You are a helpful phone agent. Be brief and professional.",
+      prompt: body.prompt,
+      pathwayId: body.pathway_id,
       firstSentence: body.first_sentence,
       analysisPrompt: body.analysis_prompt,
       voice: body.voice,
       language: body.language,
       maxDuration: body.max_duration,
-      webhookUrl,
+      model: body.model,
+      temperature: body.temperature,
+      waitForGreeting: body.wait_for_greeting,
+      record: body.record ?? true,
+      from: body.from,
+      transferPhoneNumber: body.transfer_phone_number,
+      transferList: body.transfer_list,
+      pronunciationGuide: body.pronunciation_guide,
+      backgroundTrack: body.background_track,
+      noiseCancellation: body.noise_cancellation,
+      blockInterruptions: body.block_interruptions,
+      interruptionThreshold: body.interruption_threshold,
+      voicemail: body.voicemail,
+      summaryPrompt: body.summary_prompt,
       metadata: {
         org_id: org.id,
         steve_call_id: callRecord?.id || "",
@@ -152,6 +190,14 @@ export async function POST(request: NextRequest) {
             )
           : {}),
       },
+      requestData: body.request_data,
+      webhookUrl,
+      webhookEvents: body.webhook_events,
+      dynamicData: body.dynamic_data,
+      keywords: body.keywords,
+      guardRails: body.guard_rails,
+      dispositions: body.dispositions,
+      retry: body.retry,
     });
 
     // Update with Bland call ID
@@ -167,7 +213,7 @@ export async function POST(request: NextRequest) {
       call_id: callRecord?.id,
       bland_call_id: result.call_id,
       phone: body.phone,
-      message: "Call initiated. You'll receive a webhook when it completes.",
+      message: "Call initiated.",
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

@@ -3,8 +3,8 @@ import { getStripe } from "@/lib/stripe";
 import { createServiceClient } from "@/lib/supabase/server";
 
 const PLAN_CALLS: Record<string, number> = {
-  starter: 500,
-  pro: 5000,
+  starter: 300,
+  pro: 1500,
 };
 
 export async function POST(request: NextRequest) {
@@ -37,8 +37,8 @@ export async function POST(request: NextRequest) {
             plan,
             stripe_customer_id: session.customer as string,
             stripe_subscription_id: session.subscription as string,
-            call_balance: PLAN_CALLS[plan] || 50,
-            monthly_call_limit: PLAN_CALLS[plan] || 50,
+            call_balance: PLAN_CALLS[plan] || 300,
+            monthly_call_limit: PLAN_CALLS[plan] || 300,
           })
           .eq("id", orgId);
       }
@@ -72,10 +72,10 @@ export async function POST(request: NextRequest) {
       await supabase
         .from("organizations")
         .update({
-          plan: "free",
+          plan: "expired",
           stripe_subscription_id: null,
-          call_balance: 50,
-          monthly_call_limit: 50,
+          call_balance: 0,
+          monthly_call_limit: 0,
         })
         .eq("stripe_customer_id", customerId);
       break;

@@ -77,43 +77,35 @@ export async function POST(
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://skawk.io";
     const webhookUrl = `${appUrl}/api/webhook/bland`;
 
-    // Create call records and build Bland payload
-    const calls = await Promise.all(
+    // Create call records
+    const batchCalls = await Promise.all(
       contacts.map(async (contact: Record<string, unknown>) => {
         const { data: callRecord } = await supabase
           .from("calls")
           .insert({
             org_id: campaign.org_id,
             campaign_id: id,
-            contact_id: contact.id,
-            phone: contact.phone,
+            contact_id: contact.id as string,
+            phone: contact.phone as string,
             status: "queued",
-            metadata: contact.metadata || {},
+            metadata: (contact.metadata as Record<string, unknown>) || {},
           })
           .select("id")
           .single();
 
-        // Update contact status
         await supabase
           .from("contacts")
           .update({ status: "queued" })
-          .eq("id", contact.id);
+          .eq("id", contact.id as string);
 
         return {
-          phone: contact.phone,
-          prompt: campaign.agent_prompt,
-          firstSentence: campaign.first_sentence || undefined,
-          analysisPrompt: campaign.analysis_prompt || undefined,
-          voice: campaign.voice,
-          language: campaign.language,
-          maxDuration: campaign.max_duration,
-          webhookUrl,
+          phone: contact.phone as string,
           metadata: {
             org_id: campaign.org_id,
             campaign_id: id,
-            contact_id: contact.id,
+            contact_id: contact.id as string,
             steve_call_id: callRecord?.id || "",
-            contact_name: contact.name || "",
+            contact_name: (contact.name as string) || "",
           },
         };
       })
@@ -121,8 +113,17 @@ export async function POST(
 
     // Send to Bland AI
     const result = await makeBatchCalls({
-      calls,
-      label: `Skawk: ${campaign.name} (${calls.length} calls)`,
+      calls: batchCalls,
+      global: {
+        prompt: campaign.agent_prompt,
+        firstSentence: campaign.first_sentence || undefined,
+        analysisPrompt: campaign.analysis_prompt || undefined,
+        voice: campaign.voice,
+        language: campaign.language,
+        maxDuration: campaign.max_duration,
+        webhookUrl,
+      },
+      label: `Skawk: ${campaign.name} (${batchCalls.length} calls)`,
     });
 
     // Update campaign status
@@ -134,7 +135,7 @@ export async function POST(
     return Response.json({
       success: true,
       batch_id: result.batch_id,
-      calls_queued: calls.length,
+      calls_queued: batchCalls.length,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

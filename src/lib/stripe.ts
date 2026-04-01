@@ -11,40 +11,40 @@ export function getStripe(): Stripe {
   return _stripe;
 }
 
+// Pricing: call cost ~$0.20, minimum 50% margin = $0.30/call
 export const PLANS = {
-  free: {
-    name: "Free",
-    price: 0,
-    calls: 50,
-    perCallOverage: null, // no overage allowed
-    features: ["50 calls/month", "1 campaign", "Email support"],
-  },
   starter: {
     name: "Starter",
-    price: 49,
-    calls: 500,
-    perCallOverage: 0.5,
+    price: 149,
+    calls: 300,
+    perCallOverage: 0.55,
     priceId: "", // set after creating Stripe products
     features: [
-      "500 calls/month",
-      "Unlimited campaigns",
-      "CSV upload",
-      "Transcript export",
+      "300 calls/month",
+      "3 personas",
+      "CSV batch upload",
+      "Conversation pathways",
+      "Basic analytics",
+      "Webhook integrations",
+      "$0.55/extra call",
       "Email support",
     ],
   },
   pro: {
     name: "Pro",
-    price: 199,
-    calls: 5000,
-    perCallOverage: 0.3,
+    price: 499,
+    calls: 1500,
+    perCallOverage: 0.40,
     priceId: "",
     features: [
-      "5,000 calls/month",
-      "Unlimited campaigns",
-      "API access",
-      "Custom voice & prompts",
-      "Webhook integrations",
+      "1,500 calls/month",
+      "Unlimited personas",
+      "Full API access",
+      "Voice cloning",
+      "Guard rails & compliance",
+      "Inbound numbers",
+      "Live call monitoring",
+      "$0.40/extra call",
       "Priority support",
     ],
   },
@@ -56,11 +56,13 @@ export const PLANS = {
     priceId: "",
     features: [
       "Unlimited calls",
-      "Custom pricing",
+      "Custom per-call pricing",
       "White-label option",
-      "Dedicated account manager",
+      "Dedicated infrastructure",
+      "SSO / SAML",
       "SLA guarantee",
       "Custom integrations",
+      "Dedicated account manager",
     ],
   },
 } as const;

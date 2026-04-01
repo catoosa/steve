@@ -15,11 +15,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Skawk — AI Voice Agents",
   description:
-    "Build AI agents that make and receive phone calls. Surveys, appointments, lead qualification, customer service — all automated. From $0.09/call.",
+    "Build AI agents that make and receive phone calls. Surveys, appointments, lead qualification, customer service — all automated.",
   openGraph: {
     title: "Skawk — AI Voice Agents",
     description:
-      "Build AI agents that make and receive phone calls. From $0.09/call.",
+      "Build AI agents that make and receive phone calls. Scales instantly.",
     type: "website",
   },
 };

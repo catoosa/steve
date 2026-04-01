@@ -97,7 +97,7 @@ const USE_CASES = [
     icon: FileText,
     title: "Stock & Availability",
     desc: "Call suppliers, stores, or warehouses. Get structured stock data back in JSON.",
-    stat: "$0.09",
+    stat: "$0.30",
     statLabel: "per call",
   },
   {
@@ -137,56 +137,42 @@ const INTEGRATIONS = [
 
 const PLANS = [
   {
-    name: "Free",
-    price: "$0",
-    period: "/month",
-    desc: "Try it out",
-    calls: "50 calls included",
-    cta: "Get Started Free",
-    href: "/signup",
-    features: [
-      "50 calls/month",
-      "1 persona",
-      "Basic analytics",
-      "Transcripts",
-      "Community support",
-    ],
-  },
-  {
     name: "Starter",
-    price: "$49",
+    price: "$149",
     period: "/month",
-    desc: "For growing teams",
-    calls: "500 calls included",
+    desc: "For small teams getting started",
+    calls: "300 calls included",
     cta: "Start Free Trial",
     href: "/signup?plan=starter",
-    popular: true,
     features: [
-      "500 calls/month",
-      "Unlimited personas",
+      "300 calls/month",
+      "3 personas",
       "CSV batch upload",
       "Conversation pathways",
+      "Basic analytics",
       "Webhook integrations",
-      "$0.50/extra call",
+      "$0.55/extra call",
       "Email support",
     ],
   },
   {
     name: "Pro",
-    price: "$199",
+    price: "$499",
     period: "/month",
-    desc: "For serious operations",
-    calls: "5,000 calls included",
+    desc: "For growing operations",
+    calls: "1,500 calls included",
     cta: "Start Free Trial",
     href: "/signup?plan=pro",
+    popular: true,
     features: [
-      "5,000 calls/month",
-      "Everything in Starter",
+      "1,500 calls/month",
+      "Unlimited personas",
       "Full API access",
       "Voice cloning",
       "Guard rails & compliance",
       "Inbound numbers",
-      "$0.30/extra call",
+      "Live call monitoring",
+      "$0.40/extra call",
       "Priority support",
     ],
   },
@@ -194,18 +180,19 @@ const PLANS = [
     name: "Enterprise",
     price: "Custom",
     period: "",
-    desc: "For scale",
+    desc: "For serious scale",
     calls: "Unlimited calls",
     cta: "Talk to Sales",
     href: "mailto:hello@skawk.io",
     features: [
       "Unlimited calls",
+      "Volume pricing from $0.30/call",
       "White-label option",
       "Dedicated infrastructure",
       "SSO / SAML",
       "SLA guarantee",
       "Custom integrations",
-      "Account manager",
+      "Dedicated account manager",
     ],
   },
 ];
@@ -287,7 +274,7 @@ export default function HomePage() {
               </button>
             </div>
 
-            <p className="text-sm text-white/30">50 free calls. No credit card required.</p>
+            <p className="text-sm text-white/30">14-day free trial. No credit card required.</p>
           </div>
 
           {/* Hero visual — floating call cards */}
@@ -298,7 +285,7 @@ export default function HomePage() {
                 {[
                   { value: "1M+", label: "Calls Made" },
                   { value: "< 300ms", label: "Avg Latency" },
-                  { value: "$0.09", label: "Per Minute" },
+                  { value: "$0.30", label: "Per Call" },
                   { value: "99.9%", label: "Uptime SLA" },
                 ].map((s) => (
                   <div key={s.label} className="text-center">
@@ -536,7 +523,7 @@ export default function HomePage() {
             <h2 className="text-4xl font-black mb-4">Transparent pricing</h2>
             <p className="text-muted-foreground">Start free. Pay as you grow. No hidden fees.</p>
           </div>
-          <div className="grid md:grid-cols-4 gap-5">
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {PLANS.map((plan) => (
               <div
                 key={plan.name}

@@ -2,6 +2,24 @@ import { redirect } from "next/navigation";
 import { PhoneCall } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
+const EMOTION_COLORS: Record<string, string> = {
+  neutral: "bg-muted text-muted-foreground",
+  happy: "bg-success/10 text-success",
+  angry: "bg-destructive/10 text-destructive",
+  sad: "bg-blue-100 text-blue-600",
+  fear: "bg-yellow-100 text-yellow-600",
+};
+
+function EmotionBadge({ emotion }: { emotion: string }) {
+  const key = emotion.toLowerCase();
+  const colors = EMOTION_COLORS[key] || EMOTION_COLORS.neutral;
+  return (
+    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${colors}`}>
+      {emotion}
+    </span>
+  );
+}
+
 export default async function CallsPage() {
   const supabase = await createClient();
   const {
@@ -46,6 +64,7 @@ export default async function CallsPage() {
                   <th className="px-6 py-3 font-medium">Status</th>
                   <th className="px-6 py-3 font-medium">Answered By</th>
                   <th className="px-6 py-3 font-medium">Duration</th>
+                  <th className="px-6 py-3 font-medium">Emotion</th>
                   <th className="px-6 py-3 font-medium">Date</th>
                 </tr>
               </thead>
@@ -75,6 +94,13 @@ export default async function CallsPage() {
                     </td>
                     <td className="px-6 py-3 text-muted-foreground">
                       {call.duration_seconds ? `${call.duration_seconds}s` : "—"}
+                    </td>
+                    <td className="px-6 py-3">
+                      {call.analysis?.emotion ? (
+                        <EmotionBadge emotion={call.analysis.emotion.primary_emotion ?? call.analysis.emotion.emotion ?? "neutral"} />
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
                     </td>
                     <td className="px-6 py-3 text-muted-foreground">
                       {new Date(call.created_at).toLocaleString()}

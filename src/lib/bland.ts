@@ -65,6 +65,7 @@ export interface CallConfig {
   guardRails?: Array<{ description: string; action: string }>;
   dispositions?: string[];
   retry?: { enabled: boolean; max_retries?: number; delay?: number };
+  memoryId?: string;
 }
 
 /** Place a single call via Bland AI */
@@ -111,6 +112,7 @@ export async function makeCall(config: CallConfig) {
   if (config.guardRails) payload.guard_rails = config.guardRails;
   if (config.dispositions) payload.dispositions = config.dispositions;
   if (config.retry) payload.retry = config.retry;
+  if (config.memoryId) payload.memory_id = config.memoryId;
 
   return blandFetch("/calls", { method: "POST", body: JSON.stringify(payload) });
 }
@@ -139,6 +141,8 @@ export interface BatchCallConfig {
     transferPhoneNumber?: string;
     guardRails?: Array<{ description: string; action: string }>;
     summaryPrompt?: string;
+    dispositions?: string[];
+    memoryId?: string;
   };
   label?: string;
   statusWebhook?: string;
@@ -177,6 +181,8 @@ export async function makeBatchCalls(config: BatchCallConfig) {
   if (config.global.transferPhoneNumber) global.transfer_phone_number = config.global.transferPhoneNumber;
   if (config.global.guardRails) global.guard_rails = config.global.guardRails;
   if (config.global.summaryPrompt) global.summary_prompt = config.global.summaryPrompt;
+  if (config.global.dispositions) global.dispositions = config.global.dispositions;
+  if (config.global.memoryId) global.memory_id = config.global.memoryId;
 
   return blandFetch("/batches", {
     method: "POST",
@@ -951,6 +957,18 @@ export async function testAlarmNotification(id: string) {
 /** List alarm events */
 export async function listAlarmEvents() {
   return blandFetch("/alarms/events");
+}
+
+// =============================================================================
+// INTELLIGENCE
+// =============================================================================
+
+/** Analyze emotions in a call recording */
+export async function analyzeEmotion(audioUrl: string) {
+  return blandFetch("/intelligence/emotion-analysis", {
+    method: "POST",
+    body: JSON.stringify({ audio_url: audioUrl }),
+  });
 }
 
 // =============================================================================

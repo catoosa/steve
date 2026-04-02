@@ -42,6 +42,14 @@ export async function POST(request: NextRequest) {
     };
     const status = statusMap[payload.status] || payload.status;
 
+    // Merge disposition into analysis if Bland returned one
+    let analysis = payload.analysis ?? null;
+    if (payload.disposition && analysis && typeof analysis === "object") {
+      analysis = { ...analysis, disposition: payload.disposition };
+    } else if (payload.disposition && !analysis) {
+      analysis = { disposition: payload.disposition };
+    }
+
     // Update call record
     const callUpdate: Record<string, unknown> = {
       status,
@@ -49,7 +57,7 @@ export async function POST(request: NextRequest) {
       duration_seconds: payload.call_length ?? null,
       answered_by: payload.answered_by ?? null,
       transcript: transcript || null,
-      analysis: payload.analysis ?? null,
+      analysis,
       recording_url: payload.recording_url ?? null,
       cost_cents: payload.price ? Math.round(payload.price) : null,
       completed_at: new Date().toISOString(),

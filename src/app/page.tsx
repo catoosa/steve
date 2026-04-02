@@ -43,38 +43,53 @@ const FEATURES = [
   },
   {
     icon: Activity,
-    title: "Real-Time Analytics",
-    desc: "Live dashboards tracking call outcomes, sentiment analysis, and conversion metrics.",
+    title: "Emotion & Sentiment Analysis",
+    desc: "Automatically detect caller emotions — happy, neutral, angry, sad — across every call. Spot friction before it becomes churn.",
   },
   {
     icon: Globe,
     title: "Multi-Language",
-    desc: "Reach global markets with AI agents fluent in 20+ languages and regional accents.",
-  },
-  {
-    icon: Lock,
-    title: "Enterprise Security",
-    desc: "SOC 2 compliant, encrypted calls, and full audit trails for regulatory peace of mind.",
-  },
-  {
-    icon: Webhook,
-    title: "CRM Integration",
-    desc: "Seamless sync with Salesforce, HubSpot, and 50+ tools. Your data, always connected.",
+    desc: "Reach global markets with AI agents fluent in 40+ languages. Auto-detect and switch mid-call.",
   },
   {
     icon: GitBranch,
-    title: "Conversation Pathways",
-    desc: "Visual flow builder for branching logic. Handle objections, collect data, route to humans.",
+    title: "Visual Pathway Builder",
+    desc: "Drag-and-drop conversation flows with branching logic, conditions, transfers, and test chat. No code required.",
   },
   {
     icon: Bot,
     title: "Custom Personas",
-    desc: "Create distinct AI personalities. Friendly Steve for surveys, sharp Alex for sales.",
+    desc: "Create distinct AI personalities with custom voices, languages, and styles. Clone a real voice from a single audio clip.",
+  },
+  {
+    icon: MessageSquare,
+    title: "Voice + SMS Campaigns",
+    desc: "Run voice and SMS campaigns from the same platform. Same contacts, same analytics, full omnichannel reach.",
+  },
+  {
+    icon: FileText,
+    title: "Knowledge Bases",
+    desc: "Upload docs, URLs, or text your agent references in real time. AI answers questions from your own content.",
+  },
+  {
+    icon: BarChart3,
+    title: "A/B Testing",
+    desc: "Split contacts across prompt variants, compare answer rates and outcomes. Let data pick the winning script.",
+  },
+  {
+    icon: Webhook,
+    title: "Custom Tools & CRM Integration",
+    desc: "Agent calls your APIs mid-conversation — check inventory, book appointments, look up CRM data in real time.",
+  },
+  {
+    icon: Users,
+    title: "Client Portal",
+    desc: "Share a branded read-only dashboard with clients. They see results, transcripts, and analytics without touching your dashboard.",
   },
   {
     icon: Shield,
-    title: "Guard Rails",
-    desc: "Set boundaries on what your AI says. Automated compliance monitoring on every call.",
+    title: "Compliance Built-In",
+    desc: "Australian Spam Act, TCPA, and GDPR guard rails as one-click presets. Every call consent-verified, opt-outs handled automatically.",
   },
 ];
 
@@ -94,32 +109,32 @@ const USE_CASES = [
     statLabel: "fewer no-shows",
   },
   {
-    icon: FileText,
-    title: "Stock & Availability",
-    desc: "Call suppliers, stores, or warehouses. Get structured stock data back in JSON.",
-    stat: "$0.30",
-    statLabel: "per call",
-  },
-  {
-    icon: Headphones,
-    title: "Customer Service",
-    desc: "Handle inbound calls 24/7. Answer questions, route calls, resolve issues on autopilot.",
-    stat: "24/7",
-    statLabel: "availability",
-  },
-  {
     icon: Users,
     title: "Lead Qualification",
-    desc: "Screen leads with qualifying questions. Only pass hot prospects to your sales team.",
+    desc: "Screen leads with BANT questions. A/B test scripts automatically. Only pass hot prospects to your sales team.",
     stat: "3x",
     statLabel: "qualified leads",
   },
   {
+    icon: Headphones,
+    title: "Customer Service",
+    desc: "Handle inbound calls 24/7. Agent references your knowledge base to answer real questions, not scripts.",
+    stat: "24/7",
+    statLabel: "availability",
+  },
+  {
     icon: PhoneForwarded,
-    title: "Claims Follow-up",
-    desc: "Automate insurance claims calls. Collect updates without burning human agent hours.",
+    title: "Debt Recovery",
+    desc: "Automate collections calls with full compliance guard rails. Negotiate payment plans, log commitments.",
     stat: "80%",
     statLabel: "cost reduction",
+  },
+  {
+    icon: MessageSquare,
+    title: "SMS Follow-up",
+    desc: "Didn't answer the call? Auto-send a follow-up SMS from the same number with the same AI agent.",
+    stat: "2x",
+    statLabel: "contact rate",
   },
 ];
 
@@ -148,7 +163,9 @@ const PLANS = [
       "300 calls/month",
       "3 personas",
       "CSV batch upload",
+      "12 industry templates",
       "Conversation pathways",
+      "Disposition tracking",
       "Basic analytics",
       "Webhook integrations",
       "$0.55/extra call",
@@ -166,12 +183,15 @@ const PLANS = [
     popular: true,
     features: [
       "1,500 calls/month",
-      "Unlimited personas",
-      "Full API access",
-      "Voice cloning",
+      "Unlimited personas + voice cloning",
+      "SMS campaigns",
+      "Knowledge bases (RAG)",
+      "A/B testing",
+      "Emotion analysis",
+      "Client portal",
       "Guard rails & compliance",
       "Inbound numbers",
-      "Live call monitoring",
+      "Full API access",
       "$0.40/extra call",
       "Priority support",
     ],
@@ -247,7 +267,7 @@ export default function HomePage() {
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-4 py-1.5 text-sm font-medium text-white/70 mb-8">
               <Zap className="w-4 h-4 text-accent" />
-              AI-Powered Outbound Calling
+              Voice · SMS · Analytics · Compliance — all in one platform
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white mb-6 leading-[1.05]">
@@ -274,7 +294,7 @@ export default function HomePage() {
               </button>
             </div>
 
-            <p className="text-sm text-white/30">Plans from $149/month. Up and running in minutes.</p>
+            <p className="text-sm text-white/30">Plans from $149/month. Up and running in minutes. All calls to opted-in contacts only.</p>
           </div>
 
           {/* Hero visual — kookaburra + stats */}
@@ -380,7 +400,7 @@ export default function HomePage() {
                 num: "02",
                 icon: Settings,
                 title: "Configure Your Agent",
-                desc: "Set the voice, script outline, goals, and objection handling. Your AI agent learns your playbook.",
+                desc: "Pick a template or build your own. Set voice, persona, pathways, knowledge base, and compliance rules. Done in minutes.",
                 color: "bg-secondary",
               },
               {
@@ -415,11 +435,12 @@ export default function HomePage() {
               </div>
               <h2 className="text-3xl font-black mb-4">One API call to make a phone call</h2>
               <p className="text-muted-foreground mb-6 leading-relaxed">
-                Simple REST API. Send a POST with a phone number and a prompt — Skawk handles the conversation, transcription, and data extraction.
+                Simple REST API. Send a POST with a phone number and a prompt — Skawk handles the conversation, transcription, and data extraction. All contacts must be opted-in before calling.
               </p>
               <ul className="space-y-3 mb-8">
                 {[
                   "Single or batch up to 10,000 calls",
+                  "Built-in consent & Do Not Call verification",
                   "Custom voice, language, and persona",
                   "Structured JSON data extraction",
                   "Real-time webhooks on every event",
@@ -628,7 +649,7 @@ export default function HomePage() {
             <div className="md:col-span-2">
               <Image src="/skawk-logo.png" alt="Skawk" width={100} height={33} className="h-8 w-auto mb-4" />
               <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-                AI-powered outbound calling that sounds human, scales instantly, and converts more leads.
+                AI-powered calling for opted-in contacts that sounds human, scales instantly, and converts more leads. We never make cold calls — every contact must have given prior consent.
               </p>
               <p className="text-sm text-muted-foreground mt-3">skawk.io</p>
             </div>

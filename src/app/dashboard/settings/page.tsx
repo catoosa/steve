@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Settings, Save } from "lucide-react";
+import { Settings, Save, ExternalLink } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import PortalLink from "./portal-link";
 
 export default function SettingsPage() {
   const [orgName, setOrgName] = useState("");
@@ -11,6 +12,7 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [orgId, setOrgId] = useState("");
+  const [apiKey, setApiKey] = useState("");
 
   useEffect(() => {
     async function load() {
@@ -23,7 +25,7 @@ export default function SettingsPage() {
 
       const { data: membership } = await supabase
         .from("org_members")
-        .select("org_id, organizations(id, name, webhook_url)")
+        .select("org_id, organizations(id, name, webhook_url, api_key)")
         .eq("user_id", user.id)
         .limit(1)
         .single();
@@ -33,6 +35,7 @@ export default function SettingsPage() {
         setOrgId(org.id as string);
         setOrgName((org.name as string) || "");
         setWebhookUrl((org.webhook_url as string) || "");
+        setApiKey((org.api_key as string) || "");
       }
       setLoading(false);
     }
@@ -108,6 +111,25 @@ export default function SettingsPage() {
           {saving ? "Saving..." : saved ? "Saved!" : "Save Settings"}
         </button>
       </form>
+
+      {/* Client Portal */}
+      <div className="bg-background border border-border rounded-xl p-6 space-y-4 mt-8">
+        <div className="flex items-center gap-3 mb-2">
+          <ExternalLink className="w-5 h-5 text-primary" />
+          <h2 className="font-semibold">Client Portal</h2>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Share this link with clients to give them read-only access to their
+          campaign results. No login required — the link includes a secure key.
+        </p>
+        {orgId && apiKey ? (
+          <PortalLink orgId={orgId} apiKey={apiKey} />
+        ) : (
+          <p className="text-sm text-muted-foreground italic">
+            Loading portal link…
+          </p>
+        )}
+      </div>
     </div>
   );
 }

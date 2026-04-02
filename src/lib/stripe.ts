@@ -13,12 +13,25 @@ export function getStripe(): Stripe {
 
 // Pricing: call cost ~$0.20, minimum 50% margin = $0.30/call
 export const PLANS = {
+  free: {
+    name: "Free",
+    price: 0,
+    calls: 50,
+    perCallOverage: null,
+    priceId: "",
+    features: [
+      "50 calls to start",
+      "1 persona",
+      "Basic campaigns",
+      "Email support",
+    ],
+  },
   starter: {
     name: "Starter",
     price: 149,
     calls: 300,
     perCallOverage: 0.55,
-    priceId: "", // set after creating Stripe products
+    priceId: process.env.STRIPE_STARTER_PRICE_ID || "",
     features: [
       "300 calls/month",
       "3 personas",
@@ -35,7 +48,7 @@ export const PLANS = {
     price: 499,
     calls: 1500,
     perCallOverage: 0.40,
-    priceId: "",
+    priceId: process.env.STRIPE_PRO_PRICE_ID || "",
     features: [
       "1,500 calls/month",
       "Unlimited personas",

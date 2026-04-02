@@ -1,7 +1,12 @@
 import { redirect } from "next/navigation";
-import { CreditCard, Check, ArrowRight } from "lucide-react";
+import { CreditCard, Check } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { PLANS } from "@/lib/stripe";
+import {
+  SuccessBanner,
+  UpgradeButton,
+  ManageSubscriptionButton,
+} from "./billing-actions";
 
 export default async function BillingPage() {
   const supabase = await createClient();
@@ -22,10 +27,13 @@ export default async function BillingPage() {
 
   const org = membership?.organizations as unknown as Record<string, unknown> | null;
   const currentPlan = (org?.plan as string) || "free";
+  const hasSubscription = !!org?.stripe_subscription_id;
 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-8">Billing</h1>
+
+      <SuccessBanner />
 
       {/* Current plan */}
       <div className="bg-background border border-border rounded-xl p-6 mb-8">
@@ -43,19 +51,22 @@ export default async function BillingPage() {
               remaining this period
             </p>
           </div>
-          {/* Usage bar */}
-          <div className="w-48">
-            <div className="h-3 bg-muted rounded-full overflow-hidden">
-              <div
-                className="h-full bg-primary rounded-full"
-                style={{
-                  width: `${Math.min(100, ((1 - (org?.call_balance as number) / (org?.monthly_call_limit as number)) * 100))}%`,
-                }}
-              />
+          <div className="flex items-center gap-4">
+            {/* Usage bar */}
+            <div className="w-48">
+              <div className="h-3 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-primary rounded-full"
+                  style={{
+                    width: `${Math.min(100, ((1 - (org?.call_balance as number) / (org?.monthly_call_limit as number)) * 100))}%`,
+                  }}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground mt-1 text-right">
+                {(org?.monthly_call_limit as number) - (org?.call_balance as number)} used
+              </p>
             </div>
-            <p className="text-xs text-muted-foreground mt-1 text-right">
-              {(org?.monthly_call_limit as number) - (org?.call_balance as number)} used
-            </p>
+            {hasSubscription && <ManageSubscriptionButton />}
           </div>
         </div>
       </div>
@@ -74,8 +85,8 @@ export default async function BillingPage() {
           >
             <h3 className="font-semibold">{plan.name}</h3>
             <p className="text-2xl font-bold mt-2">
-              {plan.price !== null ? `$${plan.price}` : "Custom"}
-              {plan.price !== null && (
+              {plan.price !== null ? (plan.price === 0 ? "Free" : `$${plan.price}`) : "Custom"}
+              {plan.price !== null && plan.price > 0 && (
                 <span className="text-sm font-normal text-muted-foreground">
                   /mo
                 </span>
@@ -98,9 +109,7 @@ export default async function BillingPage() {
                   Current plan
                 </span>
               ) : (
-                <button className="w-full rounded-lg border border-border px-3 py-2 text-sm font-medium hover:bg-muted">
-                  {key === "enterprise" ? "Contact Sales" : "Upgrade"}
-                </button>
+                <UpgradeButton plan={key} />
               )}
             </div>
           </div>

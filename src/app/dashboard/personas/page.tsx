@@ -1,37 +1,27 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Plus, Bot, Mic } from "lucide-react";
+import { Plus, Bot, Mic, Ghost } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { listPersonas } from "@/lib/bland";
+import { DeletePersonaButton } from "./delete-button";
 
 export default async function PersonasPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const SAMPLE_PERSONAS = [
-    {
-      name: "Steve",
-      voice: "mason",
-      language: "en-AU",
-      desc: "Friendly Australian bloke. Great for surveys and data collection.",
-      color: "bg-primary",
-    },
-    {
-      name: "Alex",
-      voice: "nat",
-      language: "en-US",
-      desc: "Professional and warm. Perfect for appointment reminders.",
-      color: "bg-secondary",
-    },
-    {
-      name: "Custom",
-      voice: "—",
-      language: "—",
-      desc: "Create your own persona with any voice, tone, and personality.",
-      color: "bg-accent",
-      isNew: true,
-    },
-  ];
+  let personas: Array<Record<string, unknown>> = [];
+  let error: string | null = null;
+
+  try {
+    const result = await listPersonas();
+    // Bland returns { personas: [...] } or an array directly
+    personas = Array.isArray(result) ? result : result?.personas ?? [];
+  } catch (e) {
+    error = e instanceof Error ? e.message : "Failed to load personas";
+  }
 
   return (
     <div>
@@ -39,7 +29,8 @@ export default async function PersonasPage() {
         <div>
           <h1 className="text-2xl font-bold">Personas</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            AI personalities for different use cases. Each persona has its own voice, language, and style.
+            AI personalities for different use cases. Each persona has its own
+            voice, language, and style.
           </p>
         </div>
         <Link
@@ -51,35 +42,65 @@ export default async function PersonasPage() {
         </Link>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
-        {SAMPLE_PERSONAS.map((p) => (
-          <div
-            key={p.name}
-            className={`bg-card border rounded-2xl p-6 hover:shadow-lg transition-shadow ${
-              p.isNew ? "border-dashed border-primary/50" : "border-border"
-            }`}
+      {error && (
+        <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-6 text-sm text-red-400 mb-6">
+          {error}
+        </div>
+      )}
+
+      {!error && personas.length === 0 && (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border p-16 text-center">
+          <Ghost className="w-12 h-12 text-muted-foreground mb-4" />
+          <h3 className="text-lg font-semibold mb-1">No personas yet</h3>
+          <p className="text-sm text-muted-foreground mb-6 max-w-sm">
+            Create your first persona to define an AI personality with a
+            specific voice, language, and style.
+          </p>
+          <Link
+            href="/dashboard/personas/new"
+            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:bg-primary-hover transition-all"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <div className={`${p.color} w-10 h-10 rounded-xl flex items-center justify-center`}>
-                {p.isNew ? (
-                  <Plus className="w-5 h-5 text-white" />
-                ) : (
+            <Plus className="w-4 h-4" />
+            Create Persona
+          </Link>
+        </div>
+      )}
+
+      {personas.length > 0 && (
+        <div className="grid md:grid-cols-3 gap-6">
+          {personas.map((p) => (
+            <div
+              key={String(p.id || p.persona_id)}
+              className="bg-card border border-border rounded-2xl p-6 hover:shadow-lg transition-shadow group relative"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-primary w-10 h-10 rounded-xl flex items-center justify-center">
                   <Bot className="w-5 h-5 text-white" />
-                )}
-              </div>
-              <div>
-                <h3 className="font-semibold">{p.name}</h3>
-                {!p.isNew && (
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold truncate">
+                    {String(p.name || "Unnamed")}
+                  </h3>
                   <p className="text-xs text-muted-foreground flex items-center gap-1">
-                    <Mic className="w-3 h-3" /> {p.voice} &middot; {p.language}
+                    <Mic className="w-3 h-3 flex-shrink-0" />
+                    {String(p.voice || "default")}
+                    {p.language ? ` \u00B7 ${String(p.language)}` : ""}
                   </p>
-                )}
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground line-clamp-3">
+                {String(p.description || p.prompt || "No description")}
+              </p>
+              <div className="mt-4 pt-3 border-t border-border flex items-center justify-end">
+                <DeletePersonaButton
+                  id={String(p.id || p.persona_id)}
+                  name={String(p.name || "Unnamed")}
+                />
               </div>
             </div>
-            <p className="text-sm text-muted-foreground">{p.desc}</p>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import {
   LayoutDashboard,
   Megaphone,
+  Phone,
   PhoneCall,
   Settings,
   Key,
@@ -12,6 +13,11 @@ import {
   Bot,
   GitBranch,
   Activity,
+  BookOpen,
+  MessageSquare,
+  Wrench,
+  Brain,
+  Shield,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
@@ -21,7 +27,13 @@ const NAV_ITEMS = [
   { href: "/dashboard/personas", label: "Personas", icon: Bot },
   { href: "/dashboard/calls", label: "Call Logs", icon: PhoneCall },
   { href: "/dashboard/pathways", label: "Pathways", icon: GitBranch },
+  { href: "/dashboard/knowledge", label: "Knowledge", icon: BookOpen },
+  { href: "/dashboard/sms", label: "SMS", icon: MessageSquare },
+  { href: "/dashboard/tools", label: "Tools", icon: Wrench },
+  { href: "/dashboard/numbers", label: "Numbers", icon: Phone },
   { href: "/dashboard/analytics", label: "Analytics", icon: Activity },
+  { href: "/dashboard/memory", label: "Memory", icon: Brain },
+  { href: "/dashboard/compliance", label: "Compliance", icon: Shield },
   { href: "/dashboard/api", label: "API Keys", icon: Key },
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },

@@ -62,6 +62,7 @@ export async function POST(
       return Response.json({ error: "No pending contacts" }, { status: 400 });
     }
 
+    const campaignMeta = (campaign.metadata as Record<string, unknown>) || {};
     const org = campaign.organizations as Record<string, unknown>;
     if ((org.call_balance as number) < contacts.length) {
       return Response.json(
@@ -77,9 +78,11 @@ export async function POST(
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://skawk.io";
     const webhookUrl = `${appUrl}/api/webhook/bland`;
 
-    // Create call records
+    // Create call records — check for A/B variant data in contact metadata
     const batchCalls = await Promise.all(
       contacts.map(async (contact: Record<string, unknown>) => {
+        const contactMeta = (contact.metadata as Record<string, unknown>) || {};
+
         const { data: callRecord } = await supabase
           .from("calls")
           .insert({
@@ -88,7 +91,7 @@ export async function POST(
             contact_id: contact.id as string,
             phone: contact.phone as string,
             status: "queued",
-            metadata: (contact.metadata as Record<string, unknown>) || {},
+            metadata: contactMeta,
           })
           .select("id")
           .single();
@@ -98,18 +101,36 @@ export async function POST(
           .update({ status: "queued" })
           .eq("id", contact.id as string);
 
+        // If the contact has variant-specific prompt data, use it as a per-call override
+        const variantPrompt = contactMeta.variant_prompt as string | undefined;
+        const variantFirstSentence = contactMeta.variant_first_sentence as string | undefined;
+
         return {
           phone: contact.phone as string,
+          ...(variantPrompt ? { prompt: variantPrompt } : {}),
+          ...(variantFirstSentence ? { firstSentence: variantFirstSentence } : {}),
           metadata: {
             org_id: campaign.org_id,
             campaign_id: id,
             contact_id: contact.id as string,
             steve_call_id: callRecord?.id || "",
             contact_name: (contact.name as string) || "",
+            ...(contactMeta.variant ? { variant: contactMeta.variant as string } : {}),
           },
         };
       })
     );
+
+    // Resolve memory ID: use stored ID or pass undefined (Bland auto-creates if memory enabled)
+    const memoryEnabled = campaignMeta.enable_memory === true;
+    const resolvedMemoryId = memoryEnabled
+      ? ((campaignMeta.memory_id as string | undefined) || undefined)
+      : undefined;
+
+    // Resolve compliance guard rails stored in campaign metadata
+    const complianceGuardRails = Array.isArray(campaignMeta.guard_rails)
+      ? (campaignMeta.guard_rails as Array<{ description: string; action: string }>)
+      : undefined;
 
     // Send to Bland AI
     const result = await makeBatchCalls({
@@ -122,6 +143,11 @@ export async function POST(
         language: campaign.language,
         maxDuration: campaign.max_duration,
         webhookUrl,
+        dispositions: campaign.dispositions || undefined,
+        memoryId: resolvedMemoryId,
+        ...(complianceGuardRails && complianceGuardRails.length > 0
+          ? { guardRails: complianceGuardRails }
+          : {}),
       },
       label: `Skawk: ${campaign.name} (${batchCalls.length} calls)`,
     });

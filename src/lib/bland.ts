@@ -1,18 +1,13 @@
-/**
- * Bland AI API client — wraps all Bland endpoints that Skawk exposes.
- * Skawk acts as a proxy/value-add layer on top of Bland's infrastructure.
- */
-
-const BLAND_API_BASE = "https://api.bland.ai/v1";
+const VOICE_API_BASE = "https://api.bland.ai/v1";
 
 function getKey(): string {
   const key = process.env.BLAND_API_KEY;
-  if (!key) throw new Error("BLAND_API_KEY not configured");
+  if (!key) throw new Error("Voice API not configured. Please contact support.");
   return key;
 }
 
 async function blandFetch(path: string, options: RequestInit = {}) {
-  const res = await fetch(`${BLAND_API_BASE}${path}`, {
+  const res = await fetch(`${VOICE_API_BASE}${path}`, {
     ...options,
     headers: {
       Authorization: getKey(),
@@ -23,7 +18,7 @@ async function blandFetch(path: string, options: RequestInit = {}) {
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Bland API error (${res.status}): ${text}`);
+    throw new Error(`Voice API error (${res.status}): ${text}`);
   }
 
   return res.json();

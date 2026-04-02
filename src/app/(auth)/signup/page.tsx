@@ -3,8 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { Mail } from "lucide-react";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
@@ -12,41 +11,55 @@ export default function SignupPage() {
   const [orgName, setOrgName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const [confirmed, setConfirmed] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    const supabase = createClient();
-    const { data, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { org_name: orgName } },
+    const res = await fetch("/api/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, orgName }),
     });
 
-    if (signUpError) {
-      setError(signUpError.message);
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.error || "Something went wrong");
       setLoading(false);
       return;
     }
 
-    if (data.user) {
-      const slug = orgName
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-|-$/g, "");
-
-      await supabase.from("organizations").insert({
-        name: orgName,
-        slug: slug || `org-${Date.now()}`,
-        owner_id: data.user.id,
-      });
-
-      router.push("/dashboard");
-    }
+    setConfirmed(true);
     setLoading(false);
+  }
+
+  if (confirmed) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-6 bg-gradient-to-br from-hero-gradient-start to-hero-gradient-end">
+        <div className="w-full max-w-sm text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/20 mb-6">
+            <Mail className="w-8 h-8 text-primary" />
+          </div>
+          <h1 className="text-2xl font-bold text-white mb-3">Check your email</h1>
+          <p className="text-white/60 mb-2">
+            We've sent a confirmation link to
+          </p>
+          <p className="text-white font-semibold mb-6">{email}</p>
+          <p className="text-white/40 text-sm mb-8">
+            Click the link in the email to activate your account and access your dashboard. Check your spam folder if you don't see it.
+          </p>
+          <Link
+            href="/login"
+            className="inline-flex items-center justify-center w-full rounded-lg border border-white/20 px-4 py-3 text-sm font-medium text-white hover:bg-white/5 transition-colors"
+          >
+            Back to sign in
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (

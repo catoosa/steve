@@ -217,9 +217,133 @@ const PLANS = [
   },
 ];
 
+const STRUCTURED_DATA = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://skawk.io/#organization",
+      name: "Skawk",
+      url: "https://skawk.io",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://skawk.io/skawk-logo.png",
+      },
+      contactPoint: {
+        "@type": "ContactPoint",
+        email: "hello@skawk.io",
+        contactType: "customer support",
+      },
+      legalName: "CareplanAI Pty Ltd",
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://skawk.io/#website",
+      url: "https://skawk.io",
+      name: "Skawk",
+      description:
+        "AI-powered voice calling platform for outbound campaign automation",
+      publisher: { "@id": "https://skawk.io/#organization" },
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: "Skawk",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      url: "https://skawk.io",
+      description:
+        "Automate outbound and inbound phone calls with AI voice agents. Run lead qualification, appointment reminders, surveys, and debt recovery campaigns at scale.",
+      offers: [
+        {
+          "@type": "Offer",
+          name: "Starter",
+          price: "149",
+          priceCurrency: "USD",
+          billingIncrement: "P1M",
+          description: "300 calls/month, 3 personas, basic analytics",
+        },
+        {
+          "@type": "Offer",
+          name: "Pro",
+          price: "499",
+          priceCurrency: "USD",
+          billingIncrement: "P1M",
+          description:
+            "1,500 calls/month, unlimited personas, SMS campaigns, A/B testing, knowledge bases",
+        },
+      ],
+      featureList: [
+        "AI voice agents",
+        "Outbound call campaigns",
+        "Inbound call handling",
+        "SMS campaigns",
+        "Conversation pathways",
+        "Knowledge bases",
+        "A/B testing",
+        "Emotion analysis",
+        "Disposition tracking",
+        "Compliance guard rails",
+        "Client portal",
+        "CSV export",
+        "Webhook integrations",
+        "Voice cloning",
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "How much does Skawk cost?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Skawk starts at $149/month for 300 calls. Pro is $499/month for 1,500 calls. Enterprise pricing is custom. Extra calls are $0.30–$0.55 each.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "How many calls can Skawk make at once?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Skawk can run up to 10,000 simultaneous calls. Batch campaigns can be launched with a single API call or via the dashboard.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "What languages does Skawk support?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Skawk supports 40+ languages including English (AU, US, UK), Spanish, French, German, Japanese, Chinese, Korean, and more.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Is Skawk TCPA and Spam Act compliant?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes. Skawk has built-in compliance guard rails for Australian Spam Act, US TCPA, and EU GDPR. One-click compliance presets cover AI disclosure, opt-out handling, and recording notices.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Can I use Skawk for inbound calls?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes. You can purchase phone numbers and configure AI agents to answer inbound calls 24/7, with custom prompts and call routing.",
+          },
+        },
+      ],
+    },
+  ],
+};
+
 export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED_DATA) }}
+      />
       {/* Nav */}
       <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#1a1a2e]/95 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -604,6 +728,63 @@ export default function HomePage() {
                   {plan.cta}
                 </Link>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-24 px-6 bg-muted">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-sm font-bold text-primary uppercase tracking-wider mb-3">FAQ</p>
+            <h2 className="text-4xl font-black mb-4">Common questions</h2>
+          </div>
+          <div className="space-y-4">
+            {[
+              {
+                q: "How much does Skawk cost?",
+                a: "Starter is $149/month for 300 calls. Pro is $499/month for 1,500 calls. Enterprise is custom. Extra calls are $0.30–$0.55 each depending on plan — no hidden per-minute or per-SMS fees.",
+              },
+              {
+                q: "How many calls can Skawk make simultaneously?",
+                a: "Up to 10,000 simultaneous calls. Launch a batch campaign via the dashboard or a single API call. Scale up or down instantly — no infrastructure to manage.",
+              },
+              {
+                q: "What languages does Skawk support?",
+                a: "40+ languages including English (AU, US, UK), Spanish, French, German, Japanese, Chinese, Korean, Portuguese, Italian, Arabic, Hindi, and more. Babel mode auto-detects and switches mid-call.",
+              },
+              {
+                q: "Is Skawk compliant with Australian Spam Act and TCPA?",
+                a: "Yes. Built-in compliance presets cover Australian Spam Act, US TCPA, and EU GDPR. One click applies AI disclosure, company identification, opt-out handling, and recording consent rules to every call.",
+              },
+              {
+                q: "Can I handle inbound calls too?",
+                a: "Yes. Purchase phone numbers directly from the dashboard, configure your AI agent's prompt, voice, and routing — and it answers inbound calls 24/7 automatically.",
+              },
+              {
+                q: "How does A/B testing work?",
+                a: "When creating a campaign, enable A/B testing and write different prompts for each variant. Skawk randomly splits your contacts across variants and shows a side-by-side comparison of answer rates, duration, and dispositions so you can see which script wins.",
+              },
+              {
+                q: "What is a knowledge base?",
+                a: "A knowledge base lets your AI agent reference your own documents, FAQs, or web pages during a live call. Upload text, files, or URLs — the agent retrieves relevant information in real time to answer caller questions accurately.",
+              },
+              {
+                q: "Can I give clients access to results?",
+                a: "Yes. The client portal gives your clients a branded read-only dashboard showing their campaign stats, call outcomes, and dispositions — no login or dashboard access required on their end.",
+              },
+            ].map((item) => (
+              <details
+                key={item.q}
+                className="bg-card border border-border rounded-2xl px-6 py-4 group"
+              >
+                <summary className="font-semibold cursor-pointer list-none flex items-center justify-between gap-4">
+                  {item.q}
+                  <span className="text-muted-foreground text-xl group-open:rotate-45 transition-transform shrink-0">+</span>
+                </summary>
+                <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{item.a}</p>
+              </details>
             ))}
           </div>
         </div>

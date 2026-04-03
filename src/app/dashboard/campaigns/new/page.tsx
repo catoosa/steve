@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, Loader2, Plus, Trash2, FlaskConical, Brain, Shield } from "lucide-react";
+import { ArrowLeft, Loader2, Plus, Trash2, FlaskConical, Brain, Shield, Bot } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { CAMPAIGN_TEMPLATES } from "@/lib/campaign-templates";
@@ -74,12 +74,14 @@ function NewCampaignForm() {
   const searchParams = useSearchParams();
   const templateKey = searchParams.get("template");
   const template = templateKey ? CAMPAIGN_TEMPLATES[templateKey] : null;
+  const personaId = searchParams.get("persona_id");
+  const personaName = searchParams.get("agent_name");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const [name, setName] = useState("");
-  const [agentName, setAgentName] = useState(template?.agentName || "Steve");
+  const [agentName, setAgentName] = useState(personaName || template?.agentName || "Steve");
   const [prompt, setPrompt] = useState(template?.prompt || "");
   const [firstSentence, setFirstSentence] = useState(template?.firstSentence || "");
   const [analysisPrompt, setAnalysisPrompt] = useState(template?.analysisPrompt || "");
@@ -207,7 +209,7 @@ function NewCampaignForm() {
           max_duration: maxDuration,
           total_contacts: contactLines.length,
           dispositions: dispositions.length > 0 ? dispositions : null,
-          metadata: campaignMeta,
+          metadata: { ...campaignMeta, ...(personaId ? { persona_id: personaId } : {}) },
         })
         .select("id")
         .single();
@@ -287,10 +289,17 @@ function NewCampaignForm() {
       <h1 className="text-2xl font-bold mb-4">New Campaign</h1>
 
       {template && (
-        <div className="bg-primary/10 border border-primary/20 rounded-xl px-4 py-3 mb-8 text-sm">
+        <div className="bg-primary/10 border border-primary/20 rounded-xl px-4 py-3 mb-4 text-sm">
           <span className="font-medium text-primary">Template:</span>{" "}
           <span className="text-foreground">{template.title}</span>
           <span className="text-muted-foreground"> &mdash; {template.desc}</span>
+        </div>
+      )}
+
+      {personaId && personaName && (
+        <div className="bg-secondary/10 border border-secondary/20 rounded-xl px-4 py-3 mb-8 text-sm flex items-center gap-2">
+          <Bot className="w-4 h-4 text-secondary shrink-0" />
+          <span>Using persona <span className="font-semibold text-foreground">{decodeURIComponent(personaName)}</span></span>
         </div>
       )}
 

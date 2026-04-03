@@ -8,8 +8,10 @@ import {
   Activity,
   Plus,
   Zap,
+  Bot,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { listPersonas } from "@/lib/bland";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -33,6 +35,14 @@ export default async function DashboardPage() {
         <p className="text-muted-foreground">Something went wrong during signup.</p>
       </div>
     );
+  }
+
+  let personas: Array<Record<string, unknown>> = [];
+  try {
+    const result = await listPersonas();
+    personas = Array.isArray(result) ? result : result?.personas ?? [];
+  } catch {
+    // silently fail — personas section just won't show
   }
 
   const [campaignRes, callsRes, recentCallsRes] = await Promise.all([
@@ -114,6 +124,55 @@ export default async function DashboardPage() {
           </div>
         ))}
       </div>
+
+      {/* Personas */}
+      {personas.length > 0 && (
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-semibold">Your Personas</h2>
+            <Link href="/dashboard/personas" className="text-xs text-primary hover:underline">
+              Manage
+            </Link>
+          </div>
+          <div className="flex gap-3 flex-wrap">
+            {personas.map((p) => {
+              const id = String(p.id || p.persona_id || "");
+              const name = String(p.name || "Unnamed");
+              const voice = String(p.voice || "");
+              const language = String(p.language || "");
+              return (
+                <Link
+                  key={id}
+                  href={`/dashboard/campaigns/new?persona_id=${id}&agent_name=${encodeURIComponent(name)}`}
+                  className="flex items-center gap-3 bg-card border border-border rounded-xl px-4 py-3 hover:border-primary/40 hover:shadow-md transition-all group"
+                >
+                  <div className="bg-primary/10 w-9 h-9 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
+                    <Bot className="w-4 h-4 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">{name}</p>
+                    {(voice || language) && (
+                      <p className="text-xs text-muted-foreground">
+                        {[voice, language].filter(Boolean).join(" · ")}
+                      </p>
+                    )}
+                  </div>
+                  <ArrowRight className="w-3.5 h-3.5 text-muted-foreground ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Link>
+              );
+            })}
+            <Link
+              href="/dashboard/personas/new"
+              className="flex items-center gap-3 bg-card border border-dashed border-border rounded-xl px-4 py-3 hover:border-primary/40 transition-all text-muted-foreground hover:text-foreground"
+            >
+              <div className="w-9 h-9 rounded-lg border border-dashed border-border flex items-center justify-center shrink-0">
+                <Plus className="w-4 h-4" />
+              </div>
+              <span className="text-sm">New Persona</span>
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Quick actions + Recent calls */}
       <div className="grid lg:grid-cols-3 gap-6">

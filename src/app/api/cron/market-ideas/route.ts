@@ -4,26 +4,27 @@ import { Resend } from "resend";
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const DAILY_FOCUS = [
+// Secondary lens rotates daily — adds a different angle to the always-broad search
+const DAILY_LENS = [
   // Sun
-  "government & public sector AI — council services, benefits processing, regulatory compliance, citizen communication, permit management, court systems",
+  "government & public sector — councils, federal agencies, courts, benefits processing, regulatory compliance, citizen services",
   // Mon
-  "healthcare & aged care AI — clinical documentation, patient triage, aged care quality standards, mental health support, chronic disease management, hospital admin",
+  "healthcare & aged care — clinical documentation, aged care quality standards, NDIS, mental health, chronic disease, hospital admin",
   // Tue
-  "education & workforce AI — learning platforms, skills assessment, student support, NDIS/disability services, vocational training, career guidance",
+  "education & workforce — skills assessment, student support, vocational training, career guidance, HR automation",
   // Wed
-  "legal, compliance & risk AI — contract review, regulatory reporting, audit trail automation, privacy law, workplace safety, licensing",
+  "legal, compliance & risk — contract review, regulatory reporting, workplace safety, licensing, audit automation",
   // Thu
-  "finance, insurance & fintech AI — claims processing, fraud detection, loan assessment, superannuation, financial advice, SMB accounting",
+  "finance & insurance — claims processing, fraud detection, loan assessment, superannuation, SMB accounting, fintech",
   // Fri
-  "logistics, property & infrastructure AI — supply chain, real estate, construction compliance, asset management, utilities, agriculture",
+  "property, construction & infrastructure — strata management, DA compliance, construction safety, asset management, utilities",
   // Sat
-  "consumer & community AI — mental health apps, community services, non-profits, family support, emergency services, social housing",
+  "community & social services — mental health, non-profits, emergency services, social housing, disability support",
 ];
 
-function getDailyFocus(): string {
+function getDailyLens(): string {
   const dayOfWeek = new Date().getDay(); // 0=Sun
-  return DAILY_FOCUS[dayOfWeek];
+  return DAILY_LENS[dayOfWeek];
 }
 
 function confidenceBadge(pct: number): string {
@@ -100,7 +101,7 @@ function buildEmail(ideas: Idea[], focus: string, dateStr: string): string {
         </div>
         <div style="text-align:right;">
           <p style="margin:0;color:rgba(255,255,255,0.9);font-size:13px;font-weight:600;">${dateStr}</p>
-          <p style="margin:4px 0 0 0;color:rgba(255,255,255,0.6);font-size:11px;">Focus: ${focus.split("—")[0].trim()}</p>
+          <p style="margin:4px 0 0 0;color:rgba(255,255,255,0.6);font-size:11px;">Lens: ${focus.split("—")[0].trim()} + wide</p>
         </div>
       </div>
     </div>
@@ -125,7 +126,7 @@ export async function GET(request: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const focus = getDailyFocus();
+  const focus = getDailyLens();
   const today = new Date();
   const dateStr = today.toLocaleDateString("en-AU", {
     weekday: "long",
@@ -134,36 +135,44 @@ export async function GET(request: Request) {
     day: "numeric",
   });
 
-  const prompt = `You are an AI product strategist and startup advisor. Your job is to generate high-quality, specific, actionable AI product ideas that a small technical team (1-5 devs) could realistically build and monetise.
+  const prompt = `You are an AI product strategist and startup scout. Your job: find the 10 best AI product opportunities a small technical team could build and monetise right now. Cast the net wide — the goal is the 10 strongest ideas regardless of sector, with a secondary bias toward today's lens.
 
 Today's date: ${dateStr}
-Today's focus sector: ${focus}
+Today's secondary lens (bias, not a limit): ${focus}
 
-The builder's background: They run CareplanAI (a health/aged care SaaS), Skawk (AI voice calling platform for SMBs), and have deep experience building multi-tenant SaaS on Next.js/Supabase, integrating AI APIs (Claude, OpenAI, voice AI), and selling to healthcare, government, and SMB markets in Australia. They are looking for their next build — could be a standalone product, a new vertical, a tool to sell to government/enterprise, or an AI-native workflow product.
+Builder background: runs CareplanAI (health/aged care SaaS) and Skawk (AI voice calling for SMBs). Deep experience with Next.js/Supabase, Claude/OpenAI APIs, voice AI, and selling to healthcare, government, and SMB markets in Australia. Looking for the next thing to build — standalone products, new verticals, AI-native workflow tools, or B2G plays.
 
-Generate exactly 8 specific, buildable AI product ideas focused on today's sector. These should be real gap-in-market opportunities — not vague "AI for X" concepts but concrete products with clear buyers, pricing, and a realistic path to $10K–$500K ARR.
+Your process: First, think across ALL sectors and types of AI opportunity — healthcare, government, legal, finance, property, logistics, education, consumer, developer tools, data products, API services, platform plays, anything. Then surface the 10 that are most compelling right now based on:
+1. Real pain that existing software fails to solve
+2. AI capability that's now good enough to solve it (LLMs, RAG, voice AI, computer vision, agents)
+3. Clear willingness to pay from identifiable buyers
+4. A realistic path to $50K–$1M ARR for a small team
+5. No massive incumbent already winning with AI
 
-Think about:
-- Workflows that are still being done manually that AI can automate
-- Data that exists in silos that AI can synthesise and act on
-- Regulatory/compliance burdens that AI can reduce
-- Human bottlenecks (call centres, case workers, reviewers) that AI can augment
-- Government procurement opportunities (Australian federal/state/local)
-- Aged care, disability, mental health, primary care gaps
-- Problems where the incumbent software is terrible and AI-native alternatives win
+Today's lens should give 3–4 of the 10 ideas. The other 6–7 should come from wherever the strongest opportunities are globally — do not force them into the lens sector.
 
-For each idea respond with a JSON array. Each item must have exactly these fields:
+Think specifically about:
+- Manual workflows still done by humans that AI can now do faster/cheaper
+- Compliance and regulatory burdens where AI can be the specialist
+- Data trapped in PDFs, emails, or legacy systems that AI can unlock
+- Government procurement in Australia (federal, state, local) — these are large, sticky contracts
+- Healthcare, aged care, disability — massive government spend, outdated software, strong AI fit
+- "Second-order" products: tools that help AI builders, safety/compliance layers for AI, evals, observability
+- Emerging agent-based products where AI takes end-to-end actions (not just answers questions)
+
+Return exactly 10 ideas as a JSON array. Each item must have exactly these fields:
 - title: punchy product name (max 8 words)
+- sector: one of: healthcare, government, legal, finance, property, education, logistics, consumer, developer-tools, other
 - oneliner: one sentence — what it does and for whom
-- target_market: specific buyer (e.g. "aged care facility operators in Australia", "local councils", "mortgage brokers")
-- revenue_model: specific pricing (e.g. "$299/mo SaaS per facility", "per-report pricing at $49/report", "government contract $80K/year")
-- confidence_pct: integer 0-100 — realistic confidence this generates meaningful revenue within 18 months given current AI capabilities and market readiness
-- why_it_works: 2-3 sentences. Cite specific pain points, market size signals, or regulatory drivers that make this timely right now
-- key_risk: the single most likely reason this fails
+- target_market: specific buyer with enough detail to cold-email them (e.g. "aged care facility operators in NSW/VIC with 50+ beds", "local council procurement teams in AU", "immigration law firms handling employer-sponsored visas")
+- revenue_model: specific pricing and structure (e.g. "$299/mo per facility + $2/resident/mo", "per-report at $79, volume discount after 50/mo", "AU government panel contract $120K/year")
+- confidence_pct: integer 0-100 — realistic probability this generates meaningful revenue within 18 months. Account for: market readiness, competition, sales cycle length, technical feasibility
+- why_it_works: 2-3 sentences citing specific evidence — name the regulation, the market size, the incumbent's weakness, or the recent AI capability that makes this viable now (not 2 years ago)
+- key_risk: single most likely failure mode
 
-Vary confidence scores realistically across the 8 ideas. Include at least one moonshot (20-35%), several mid-confidence plays (45-65%), and at least two high-conviction ideas (75-90%). Be brutally honest about risk.
+Scoring rules: At least 2 ideas should be high-conviction (75–92%). At least 2 should be contrarian/moonshot (18–38%). The rest should be spread realistically. Never give everything 70–75% — that's lazy scoring. Be brutally honest.
 
-Respond with ONLY a valid JSON array, no markdown fences, no explanation outside the JSON.`;
+Respond with ONLY a valid JSON array. No markdown fences, no text before or after the JSON.`;
 
   const message = await anthropic.messages.create({
     model: "claude-sonnet-4-6",

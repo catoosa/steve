@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Plus, Bot, Mic, Ghost } from "lucide-react";
+import { Plus, Bot, Mic } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { listPersonas } from "@/lib/bland";
 import { DeletePersonaButton } from "./delete-button";
@@ -50,11 +50,11 @@ export default async function PersonasPage() {
 
       {!error && personas.length === 0 && (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border p-16 text-center">
-          <Ghost className="w-12 h-12 text-muted-foreground mb-4" />
-          <h3 className="text-lg font-semibold mb-1">No personas yet</h3>
-          <p className="text-sm text-muted-foreground mb-6 max-w-sm">
-            Create your first persona to define an AI personality with a
-            specific voice, language, and style.
+          <Bot className="w-14 h-14 text-muted-foreground opacity-30 mb-5" />
+          <h3 className="text-lg font-semibold mb-2">No personas yet</h3>
+          <p className="text-sm text-muted-foreground mb-8 max-w-sm">
+            Personas are AI agents with unique names, voices, and personalities.
+            Create one to use across multiple campaigns.
           </p>
           <Link
             href="/dashboard/personas/new"

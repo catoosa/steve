@@ -45,7 +45,8 @@ export async function POST(request: NextRequest) {
       break;
     }
 
-    case "invoice.paid": {
+    case "invoice.paid":
+    case "invoice.payment_succeeded": {
       // Monthly renewal — reset call balance
       const invoice = event.data.object;
       const customerId = invoice.customer as string;

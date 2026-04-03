@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { listPersonas } from "@/lib/bland";
+import { OnboardingBanner } from "./onboarding-banner";
+import { WelcomeModal } from "./welcome-modal";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -63,6 +65,16 @@ export default async function DashboardPage() {
 
   return (
     <div>
+      <WelcomeModal />
+
+      {/* Onboarding banner — shown only when no campaigns and no calls */}
+      {totalCampaigns === 0 && totalCalls === 0 && (
+        <OnboardingBanner
+          hasPersona={personas.length > 0}
+          hasCampaign={totalCampaigns > 0}
+        />
+      )}
+
       {/* Welcome header */}
       <div className="flex items-center justify-between mb-8">
         <div>

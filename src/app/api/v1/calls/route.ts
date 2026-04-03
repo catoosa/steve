@@ -65,9 +65,15 @@ export async function POST(request: NextRequest) {
         return Response.json({ error: "Maximum 10,000 calls per batch" }, { status: 400 });
       }
 
-      if (org.call_balance < callCount) {
+      // Atomically reserve balance — prevents race conditions with concurrent requests
+      const { data: batchReserved, error: batchReserveError } = await supabase.rpc(
+        "reserve_call_balance",
+        { p_org_id: org.id, p_count: callCount }
+      );
+
+      if (batchReserveError || !batchReserved) {
         return Response.json(
-          { error: "Insufficient call balance", balance: org.call_balance, required: callCount },
+          { error: "Insufficient call balance", required: callCount },
           { status: 402 }
         );
       }
@@ -105,32 +111,39 @@ export async function POST(request: NextRequest) {
         requestData: c.request_data as Record<string, unknown> | undefined,
       }));
 
-      const result = await makeBatchCalls({
-        calls: batchCalls,
-        global: {
-          prompt: body.prompt,
-          pathwayId: body.pathway_id,
-          firstSentence: body.first_sentence,
-          analysisPrompt: body.analysis_prompt,
-          voice: body.voice,
-          language: body.language,
-          maxDuration: body.max_duration,
-          model: body.model,
-          temperature: body.temperature,
-          record: body.record,
-          waitForGreeting: body.wait_for_greeting,
-          webhookUrl,
-          transferPhoneNumber: body.transfer_phone_number,
-          guardRails: body.guard_rails,
-          summaryPrompt: body.summary_prompt,
-        },
-        label: body.label || `Skawk API batch - ${callCount} calls`,
-        statusWebhook: body.status_webhook,
-      });
+      let batchResult;
+      try {
+        batchResult = await makeBatchCalls({
+          calls: batchCalls,
+          global: {
+            prompt: body.prompt,
+            pathwayId: body.pathway_id,
+            firstSentence: body.first_sentence,
+            analysisPrompt: body.analysis_prompt,
+            voice: body.voice,
+            language: body.language,
+            maxDuration: body.max_duration,
+            model: body.model,
+            temperature: body.temperature,
+            record: body.record,
+            waitForGreeting: body.wait_for_greeting,
+            webhookUrl,
+            transferPhoneNumber: body.transfer_phone_number,
+            guardRails: body.guard_rails,
+            summaryPrompt: body.summary_prompt,
+          },
+          label: body.label || `Skawk API batch - ${callCount} calls`,
+          statusWebhook: body.status_webhook,
+        });
+      } catch (blandError) {
+        // Bland call failed — restore the reserved balance
+        await supabase.rpc("release_call_balance", { p_org_id: org.id, p_count: callCount });
+        throw blandError;
+      }
 
       return Response.json({
         success: true,
-        batch_id: result.data?.batch_id || result.batch_id,
+        batch_id: batchResult.data?.batch_id || batchResult.batch_id,
         calls_queued: callCount,
       });
     }
@@ -142,8 +155,14 @@ export async function POST(request: NextRequest) {
       return Response.json({ error: "phone is required" }, { status: 400 });
     }
 
-    if (org.call_balance < 1) {
-      return Response.json({ error: "Insufficient call balance", balance: 0 }, { status: 402 });
+    // Atomically reserve 1 call
+    const { data: singleReserved, error: singleReserveError } = await supabase.rpc(
+      "reserve_call_balance",
+      { p_org_id: org.id, p_count: 1 }
+    );
+
+    if (singleReserveError || !singleReserved) {
+      return Response.json({ error: "Insufficient call balance" }, { status: 402 });
     }
 
     // Create call record
@@ -158,47 +177,54 @@ export async function POST(request: NextRequest) {
       .select("id")
       .single();
 
-    const result = await makeCall({
-      phone: body.phone,
-      prompt: body.prompt,
-      pathwayId: body.pathway_id,
-      firstSentence: body.first_sentence,
-      analysisPrompt: body.analysis_prompt,
-      voice: body.voice,
-      language: body.language,
-      maxDuration: body.max_duration,
-      model: body.model,
-      temperature: body.temperature,
-      waitForGreeting: body.wait_for_greeting,
-      record: body.record ?? true,
-      from: body.from,
-      transferPhoneNumber: body.transfer_phone_number,
-      transferList: body.transfer_list,
-      pronunciationGuide: body.pronunciation_guide,
-      backgroundTrack: body.background_track,
-      noiseCancellation: body.noise_cancellation,
-      blockInterruptions: body.block_interruptions,
-      interruptionThreshold: body.interruption_threshold,
-      voicemail: body.voicemail,
-      summaryPrompt: body.summary_prompt,
-      metadata: {
-        org_id: org.id,
-        steve_call_id: callRecord?.id || "",
-        ...(body.metadata
-          ? Object.fromEntries(
-              Object.entries(body.metadata as Record<string, unknown>).map(([k, v]) => [k, String(v)])
-            )
-          : {}),
-      },
-      requestData: body.request_data,
-      webhookUrl,
-      webhookEvents: body.webhook_events,
-      dynamicData: body.dynamic_data,
-      keywords: body.keywords,
-      guardRails: body.guard_rails,
-      dispositions: body.dispositions,
-      retry: body.retry,
-    });
+    let result;
+    try {
+      result = await makeCall({
+        phone: body.phone,
+        prompt: body.prompt,
+        pathwayId: body.pathway_id,
+        firstSentence: body.first_sentence,
+        analysisPrompt: body.analysis_prompt,
+        voice: body.voice,
+        language: body.language,
+        maxDuration: body.max_duration,
+        model: body.model,
+        temperature: body.temperature,
+        waitForGreeting: body.wait_for_greeting,
+        record: body.record ?? true,
+        from: body.from,
+        transferPhoneNumber: body.transfer_phone_number,
+        transferList: body.transfer_list,
+        pronunciationGuide: body.pronunciation_guide,
+        backgroundTrack: body.background_track,
+        noiseCancellation: body.noise_cancellation,
+        blockInterruptions: body.block_interruptions,
+        interruptionThreshold: body.interruption_threshold,
+        voicemail: body.voicemail,
+        summaryPrompt: body.summary_prompt,
+        metadata: {
+          org_id: org.id,
+          steve_call_id: callRecord?.id || "",
+          ...(body.metadata
+            ? Object.fromEntries(
+                Object.entries(body.metadata as Record<string, unknown>).map(([k, v]) => [k, String(v)])
+              )
+            : {}),
+        },
+        requestData: body.request_data,
+        webhookUrl,
+        webhookEvents: body.webhook_events,
+        dynamicData: body.dynamic_data,
+        keywords: body.keywords,
+        guardRails: body.guard_rails,
+        dispositions: body.dispositions,
+        retry: body.retry,
+      });
+    } catch (blandError) {
+      // Bland call failed — restore the reserved balance
+      await supabase.rpc("release_call_balance", { p_org_id: org.id, p_count: 1 });
+      throw blandError;
+    }
 
     // Update with Bland call ID
     if (callRecord?.id) {

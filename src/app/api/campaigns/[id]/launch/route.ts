@@ -23,7 +23,7 @@ export async function POST(
     // Get campaign with org
     const { data: campaign } = await supabase
       .from("campaigns")
-      .select("*, organizations(id, call_balance)")
+      .select("*")
       .eq("id", id)
       .single();
 
@@ -63,12 +63,17 @@ export async function POST(
     }
 
     const campaignMeta = (campaign.metadata as Record<string, unknown>) || {};
-    const org = campaign.organizations as Record<string, unknown>;
-    if ((org.call_balance as number) < contacts.length) {
+
+    // Atomically reserve balance — prevents race conditions with concurrent launches
+    const { data: reserved, error: reserveError } = await supabase.rpc(
+      "reserve_call_balance",
+      { p_org_id: campaign.org_id, p_count: contacts.length }
+    );
+
+    if (reserveError || !reserved) {
       return Response.json(
         {
           error: "Insufficient call balance",
-          balance: org.call_balance,
           required: contacts.length,
         },
         { status: 402 }
@@ -132,25 +137,35 @@ export async function POST(
       ? (campaignMeta.guard_rails as Array<{ description: string; action: string }>)
       : undefined;
 
-    // Send to Bland AI
-    const result = await makeBatchCalls({
-      calls: batchCalls,
-      global: {
-        prompt: campaign.agent_prompt,
-        firstSentence: campaign.first_sentence || undefined,
-        analysisPrompt: campaign.analysis_prompt || undefined,
-        voice: campaign.voice,
-        language: campaign.language,
-        maxDuration: campaign.max_duration,
-        webhookUrl,
-        dispositions: campaign.dispositions || undefined,
-        memoryId: resolvedMemoryId,
-        ...(complianceGuardRails && complianceGuardRails.length > 0
-          ? { guardRails: complianceGuardRails }
-          : {}),
-      },
-      label: `Skawk: ${campaign.name} (${batchCalls.length} calls)`,
-    });
+    // Send to Bland AI — release reserved balance if the API call fails
+    let result;
+    try {
+      result = await makeBatchCalls({
+        calls: batchCalls,
+        global: {
+          prompt: campaign.agent_prompt,
+          firstSentence: campaign.first_sentence || undefined,
+          analysisPrompt: campaign.analysis_prompt || undefined,
+          voice: campaign.voice,
+          language: campaign.language,
+          maxDuration: campaign.max_duration,
+          webhookUrl,
+          dispositions: campaign.dispositions || undefined,
+          memoryId: resolvedMemoryId,
+          ...(complianceGuardRails && complianceGuardRails.length > 0
+            ? { guardRails: complianceGuardRails }
+            : {}),
+        },
+        label: `Skawk: ${campaign.name} (${batchCalls.length} calls)`,
+      });
+    } catch (blandError) {
+      // Bland call failed — restore the reserved balance
+      await supabase.rpc("release_call_balance", {
+        p_org_id: campaign.org_id,
+        p_count: contacts.length,
+      });
+      throw blandError;
+    }
 
     // Update campaign status
     await supabase

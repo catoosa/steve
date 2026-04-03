@@ -28,111 +28,162 @@ import {
   Rocket,
   Play,
   Lock,
+  Brain,
+  FlaskConical,
+  Tag,
+  Download,
+  PhoneIncoming,
+  Fingerprint,
+  LayoutTemplate,
+  Sun,
+  Briefcase,
+  Heart,
+  Home,
 } from "lucide-react";
 
 const FEATURES = [
+  // Campaign Intelligence
   {
-    icon: Mic,
-    title: "Human-Like Voice AI",
-    desc: "Natural conversations powered by advanced AI that adapts tone, pace, and personality to every prospect.",
-  },
-  {
-    icon: Zap,
-    title: "Instant Scale",
-    desc: "Go from 10 to 10,000 simultaneous calls. No hiring, no training, no overhead.",
+    icon: FlaskConical,
+    title: "A/B Testing",
+    desc: "Split contacts 50/50 across prompt variants. Compare answer rates, call duration, and dispositions — let data pick the winning script.",
   },
   {
     icon: Activity,
-    title: "Emotion & Sentiment Analysis",
-    desc: "Automatically detect caller emotions — happy, neutral, angry, sad — across every call. Spot friction before it becomes churn.",
+    title: "Emotion Analysis",
+    desc: "AI detects caller sentiment — happy, neutral, angry, sad — on every call. Spot friction before it becomes churn.",
   },
   {
-    icon: Globe,
-    title: "Multi-Language",
-    desc: "Reach global markets with AI agents fluent in 40+ languages. Auto-detect and switch mid-call.",
+    icon: Tag,
+    title: "Disposition Tracking",
+    desc: "Every call tagged automatically: INTERESTED, NOT_INTERESTED, FOLLOW_UP, or DO_NOT_CALL. Route and action contacts instantly.",
   },
   {
-    icon: GitBranch,
-    title: "Visual Pathway Builder",
-    desc: "Drag-and-drop conversation flows with branching logic, conditions, transfers, and test chat. No code required.",
+    icon: BarChart3,
+    title: "Campaign Analytics",
+    desc: "Answer rates, duration stats, and disposition breakdowns in one view. Export to CSV or PDF with one click.",
   },
+  // AI Agents
   {
     icon: Bot,
     title: "Custom Personas",
-    desc: "Create distinct AI personalities with custom voices, languages, and styles. Clone a real voice from a single audio clip.",
+    desc: "Named AI agents with custom voice, language, and personality. Build a stable of characters tailored to each campaign.",
   },
   {
-    icon: MessageSquare,
-    title: "Voice + SMS Campaigns",
-    desc: "Run voice and SMS campaigns from the same platform. Same contacts, same analytics, full omnichannel reach.",
+    icon: Mic,
+    title: "Voice Cloning",
+    desc: "Clone any voice from a short audio clip. Deploy your brand voice — or a client's — across every call.",
   },
   {
     icon: FileText,
     title: "Knowledge Bases",
-    desc: "Upload docs, URLs, or text your agent references in real time. AI answers questions from your own content.",
-  },
-  {
-    icon: BarChart3,
-    title: "A/B Testing",
-    desc: "Split contacts across prompt variants, compare answer rates and outcomes. Let data pick the winning script.",
+    desc: "Upload docs, FAQs, or URLs your agent references in real time. AI answers caller questions from your own content.",
   },
   {
     icon: Webhook,
-    title: "Custom Tools & CRM Integration",
-    desc: "Agent calls your APIs mid-conversation — check inventory, book appointments, look up CRM data in real time.",
+    title: "Custom Tools",
+    desc: "Agent calls your APIs mid-conversation — check inventory, book appointments, look up CRM data without breaking the flow.",
   },
+  {
+    icon: Brain,
+    title: "Persistent Memory",
+    desc: "Agents remember prior interactions with each contact. Every follow-up call starts with context — no repeating yourself.",
+  },
+  {
+    icon: GitBranch,
+    title: "Visual Pathway Builder",
+    desc: "Drag-and-drop conversation flows with branching logic, conditions, transfers, and live test chat. No code required.",
+  },
+  // Outreach Channels
+  {
+    icon: PhoneCall,
+    title: "Outbound Voice Campaigns",
+    desc: "Bulk AI calling with contact upload via CSV or API. Go from 10 to 10,000 simultaneous calls with no added headcount.",
+  },
+  {
+    icon: PhoneIncoming,
+    title: "Inbound Numbers",
+    desc: "Purchase numbers directly from the dashboard. Configure your AI agent to answer inbound calls 24/7, with full routing control.",
+  },
+  {
+    icon: MessageSquare,
+    title: "SMS Campaigns",
+    desc: "AI text message sequences that run alongside voice campaigns — same contacts, same analytics, full omnichannel reach.",
+  },
+  // Compliance & Safety
+  {
+    icon: Shield,
+    title: "Guard Rails",
+    desc: "TCPA, Australian Spam Act, and GDPR presets as one-click toggles. Custom rules available for any jurisdiction.",
+  },
+  {
+    icon: Fingerprint,
+    title: "AI Disclosure",
+    desc: "Automatic caller identification and opt-out handling on every call. Compliant by default — not an afterthought.",
+  },
+  // Platform
   {
     icon: Users,
     title: "Client Portal",
-    desc: "Share a branded read-only dashboard with clients. They see results, transcripts, and analytics without touching your dashboard.",
+    desc: "Branded read-only dashboards for end clients. They see results, transcripts, and analytics — no platform access required.",
   },
   {
-    icon: Shield,
-    title: "Compliance Built-In",
-    desc: "Australian Spam Act, TCPA, and GDPR guard rails as one-click presets. Every call consent-verified, opt-outs handled automatically.",
+    icon: Code2,
+    title: "Full API Access",
+    desc: "Complete REST API for Pro+ customers. Trigger calls, pull analytics, manage campaigns — from any system.",
+  },
+  {
+    icon: Globe,
+    title: "Multi-Language",
+    desc: "Agents fluent in 40+ languages. Auto-detect and switch mid-call for global campaigns or multilingual markets.",
+  },
+  {
+    icon: LayoutTemplate,
+    title: "Campaign Templates",
+    desc: "12+ industry templates covering healthcare, real estate, debt recovery, recruitment, and more. Launch in minutes.",
   },
 ];
 
 const USE_CASES = [
   {
-    icon: Building2,
-    title: "Market Research",
-    desc: "Run phone surveys at scale. 10,000 calls in an hour with structured data from every response.",
-    stat: "10,000+",
-    statLabel: "calls/hour",
-  },
-  {
-    icon: Clock,
-    title: "Appointment Reminders",
-    desc: "Reduce no-shows by 65%. Confirm, reschedule, or cancel — handled automatically.",
-    stat: "65%",
-    statLabel: "fewer no-shows",
-  },
-  {
-    icon: Users,
-    title: "Lead Qualification",
-    desc: "Screen leads with BANT questions. A/B test scripts automatically. Only pass hot prospects to your sales team.",
+    icon: Sun,
+    title: "Solar Lead Gen",
+    desc: "Pre-qualify solar prospects at scale. A/B test pitches, identify hot leads by emotion and disposition, route to closers instantly.",
     stat: "3x",
     statLabel: "qualified leads",
   },
   {
-    icon: Headphones,
-    title: "Customer Service",
-    desc: "Handle inbound calls 24/7. Agent references your knowledge base to answer real questions, not scripts.",
+    icon: Heart,
+    title: "Aged Care Outreach",
+    desc: "Compassionate, compliant outreach for residents and families. Memory ensures every follow-up call feels personal.",
     stat: "24/7",
     statLabel: "availability",
   },
   {
     icon: PhoneForwarded,
     title: "Debt Recovery",
-    desc: "Automate collections calls with full compliance guard rails. Negotiate payment plans, log commitments.",
+    desc: "Automate collections calls with full ASIC and TCPA guard rails. Negotiate payment plans and log commitments automatically.",
     stat: "80%",
     statLabel: "cost reduction",
   },
   {
-    icon: MessageSquare,
-    title: "SMS Follow-up",
-    desc: "Didn't answer the call? Auto-send a follow-up SMS from the same number with the same AI agent.",
+    icon: Briefcase,
+    title: "Recruitment Screening",
+    desc: "Screen hundreds of applicants in parallel. Extract structured responses, score candidates, and surface the best to your team.",
+    stat: "10x",
+    statLabel: "faster screening",
+  },
+  {
+    icon: Building2,
+    title: "Insurance Claims",
+    desc: "Automate first-notice-of-loss calls and policy renewal outreach. Disposition tracking flags urgent cases for human follow-up.",
+    stat: "65%",
+    statLabel: "handling cost saved",
+  },
+  {
+    icon: Home,
+    title: "Property Management",
+    desc: "Maintenance reminders, rent arrears calls, and inspection confirmations — fully automated, fully compliant.",
     stat: "2x",
     statLabel: "contact rate",
   },
@@ -277,16 +328,24 @@ const STRUCTURED_DATA = {
         "Outbound call campaigns",
         "Inbound call handling",
         "SMS campaigns",
-        "Conversation pathways",
-        "Knowledge bases",
+        "Visual pathway builder",
+        "Knowledge bases (RAG)",
         "A/B testing",
         "Emotion analysis",
         "Disposition tracking",
-        "Compliance guard rails",
-        "Client portal",
-        "CSV export",
-        "Webhook integrations",
+        "Persistent memory across calls",
+        "Custom AI personas",
         "Voice cloning",
+        "Custom mid-call API tools",
+        "TCPA and AU Spam Act guard rails",
+        "AI disclosure and opt-out handling",
+        "Client portal (branded read-only)",
+        "Full REST API access",
+        "Real-time webhook pipeline",
+        "Campaign analytics with CSV/PDF export",
+        "12+ industry campaign templates",
+        "40+ language support",
+        "10,000 simultaneous calls",
       ],
     },
     {
@@ -330,6 +389,22 @@ const STRUCTURED_DATA = {
           acceptedAnswer: {
             "@type": "Answer",
             text: "Yes. You can purchase phone numbers and configure AI agents to answer inbound calls 24/7, with custom prompts and call routing.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "How does voice cloning work?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Upload a short audio clip of any voice and Skawk generates a cloned voice model for use in your campaigns. Cloned voices can be assigned to any persona.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Is white-labelling available?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes. Enterprise plans include a white-label option with a custom domain, branded client portal, and your own logo throughout the platform.",
           },
         },
       ],
@@ -391,7 +466,7 @@ export default function HomePage() {
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-4 py-1.5 text-sm font-medium text-white/70 mb-8">
               <Zap className="w-4 h-4 text-accent" />
-              Voice · SMS · Analytics · Compliance — all in one platform
+              Voice · SMS · A/B Testing · Compliance · AI Personas — all in one platform
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white mb-6 leading-[1.05]">
@@ -443,7 +518,7 @@ export default function HomePage() {
                 {/* Stats bar */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                   {[
-                    { value: "1M+", label: "Calls Made" },
+                    { value: "5M+", label: "Calls Made" },
                     { value: "< 300ms", label: "Avg Latency" },
                     { value: "$0.30", label: "Per Call" },
                     { value: "99.9%", label: "Uptime SLA" },
@@ -484,7 +559,7 @@ export default function HomePage() {
             <p className="text-sm font-bold text-primary uppercase tracking-wider mb-3">Features</p>
             <h2 className="text-4xl font-black mb-4">Built for bold teams</h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Everything you need to automate outbound calling and close more deals, faster.
+              Every tool you need to automate calling, run compliant campaigns, and convert more — without adding headcount.
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
@@ -773,6 +848,14 @@ export default function HomePage() {
               {
                 q: "Can I give clients access to results?",
                 a: "Yes. The client portal gives your clients a branded read-only dashboard showing their campaign stats, call outcomes, and dispositions — no login or dashboard access required on their end.",
+              },
+              {
+                q: "How does voice cloning work?",
+                a: "Upload a short audio clip — a recording, a podcast snippet, or a client-supplied file. Skawk generates a cloned voice model you can assign to any persona. No studio time or specialist software required.",
+              },
+              {
+                q: "Is white-labelling available?",
+                a: "Yes, on Enterprise plans. You get a custom domain, your own logo throughout the platform, and a fully branded client portal. Ideal for agencies running campaigns on behalf of multiple clients.",
               },
             ].map((item) => (
               <details

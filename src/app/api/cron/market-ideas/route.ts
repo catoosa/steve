@@ -5,13 +5,20 @@ const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const DAILY_FOCUS = [
-  "healthcare AI voice automation (appointments, reminders, patient outreach)",
-  "agency & white-label reseller models for AI voice platforms",
-  "compliance & regulatory features (TCPA, HIPAA, ACMA/DNCR) as paid add-ons",
-  "CRM & scheduling integrations (GoHighLevel, HubSpot, Calendly)",
-  "new vertical markets for outbound AI calling (solar, real estate, insurance, staffing)",
-  "pricing, packaging, and monetisation strategies for AI SaaS",
-  "wild card ideas — adjacent tools, platform plays, or partnerships",
+  // Sun
+  "government & public sector AI — council services, benefits processing, regulatory compliance, citizen communication, permit management, court systems",
+  // Mon
+  "healthcare & aged care AI — clinical documentation, patient triage, aged care quality standards, mental health support, chronic disease management, hospital admin",
+  // Tue
+  "education & workforce AI — learning platforms, skills assessment, student support, NDIS/disability services, vocational training, career guidance",
+  // Wed
+  "legal, compliance & risk AI — contract review, regulatory reporting, audit trail automation, privacy law, workplace safety, licensing",
+  // Thu
+  "finance, insurance & fintech AI — claims processing, fraud detection, loan assessment, superannuation, financial advice, SMB accounting",
+  // Fri
+  "logistics, property & infrastructure AI — supply chain, real estate, construction compliance, asset management, utilities, agriculture",
+  // Sat
+  "consumer & community AI — mental health apps, community services, non-profits, family support, emergency services, social housing",
 ];
 
 function getDailyFocus(): string {
@@ -93,7 +100,7 @@ function buildEmail(ideas: Idea[], focus: string, dateStr: string): string {
         </div>
         <div style="text-align:right;">
           <p style="margin:0;color:rgba(255,255,255,0.9);font-size:13px;font-weight:600;">${dateStr}</p>
-          <p style="margin:4px 0 0 0;color:rgba(255,255,255,0.6);font-size:11px;">Today's focus: ${focus.split("(")[0].trim()}</p>
+          <p style="margin:4px 0 0 0;color:rgba(255,255,255,0.6);font-size:11px;">Focus: ${focus.split("—")[0].trim()}</p>
         </div>
       </div>
     </div>
@@ -127,30 +134,40 @@ export async function GET(request: Request) {
     day: "numeric",
   });
 
-  const prompt = `You are a strategic advisor for Skawk — an AI voice calling SaaS platform built on top of voice AI infrastructure (similar to Bland AI, Vapi, Retell). Skawk lets businesses run outbound AI voice campaigns: appointment reminders, lead qualification, debt collection, patient outreach, surveys, and more. It has multi-tenant orgs, campaign management, personas, knowledge bases, pathway builder, Stripe billing, and a webhook pipeline.
-
-Today's focus area: ${focus}
+  const prompt = `You are an AI product strategist and startup advisor. Your job is to generate high-quality, specific, actionable AI product ideas that a small technical team (1-5 devs) could realistically build and monetise.
 
 Today's date: ${dateStr}
+Today's focus sector: ${focus}
 
-Generate exactly 5 specific, actionable business ideas for what Skawk could build, add, or sell. These should be concrete opportunities — new features, pricing strategies, integrations, vertical plays, or adjacent products.
+The builder's background: They run CareplanAI (a health/aged care SaaS), Skawk (AI voice calling platform for SMBs), and have deep experience building multi-tenant SaaS on Next.js/Supabase, integrating AI APIs (Claude, OpenAI, voice AI), and selling to healthcare, government, and SMB markets in Australia. They are looking for their next build — could be a standalone product, a new vertical, a tool to sell to government/enterprise, or an AI-native workflow product.
 
-For each idea, respond with a JSON array. Each item must have exactly these fields:
-- title: short punchy name (max 8 words)
-- oneliner: one sentence description of the opportunity
-- target_market: who specifically buys this
-- revenue_model: how Skawk makes money from it (pricing, add-on, tier gate, etc.)
-- confidence_pct: integer 0-100 representing your confidence this will generate meaningful revenue within 12 months
-- why_it_works: 1-2 sentences on why this will work in the current market
-- key_risk: the single biggest thing that could kill this idea
+Generate exactly 8 specific, buildable AI product ideas focused on today's sector. These should be real gap-in-market opportunities — not vague "AI for X" concepts but concrete products with clear buyers, pricing, and a realistic path to $10K–$500K ARR.
 
-Be specific and creative. Draw on real market dynamics. Vary confidence scores realistically — not everything is 85%. Some ideas should be moonshots (30-40%), others are near-certain wins (80-90%).
+Think about:
+- Workflows that are still being done manually that AI can automate
+- Data that exists in silos that AI can synthesise and act on
+- Regulatory/compliance burdens that AI can reduce
+- Human bottlenecks (call centres, case workers, reviewers) that AI can augment
+- Government procurement opportunities (Australian federal/state/local)
+- Aged care, disability, mental health, primary care gaps
+- Problems where the incumbent software is terrible and AI-native alternatives win
 
-Respond with ONLY the JSON array, no markdown, no explanation.`;
+For each idea respond with a JSON array. Each item must have exactly these fields:
+- title: punchy product name (max 8 words)
+- oneliner: one sentence — what it does and for whom
+- target_market: specific buyer (e.g. "aged care facility operators in Australia", "local councils", "mortgage brokers")
+- revenue_model: specific pricing (e.g. "$299/mo SaaS per facility", "per-report pricing at $49/report", "government contract $80K/year")
+- confidence_pct: integer 0-100 — realistic confidence this generates meaningful revenue within 18 months given current AI capabilities and market readiness
+- why_it_works: 2-3 sentences. Cite specific pain points, market size signals, or regulatory drivers that make this timely right now
+- key_risk: the single most likely reason this fails
+
+Vary confidence scores realistically across the 8 ideas. Include at least one moonshot (20-35%), several mid-confidence plays (45-65%), and at least two high-conviction ideas (75-90%). Be brutally honest about risk.
+
+Respond with ONLY a valid JSON array, no markdown fences, no explanation outside the JSON.`;
 
   const message = await anthropic.messages.create({
     model: "claude-sonnet-4-6",
-    max_tokens: 2048,
+    max_tokens: 4096,
     messages: [{ role: "user", content: prompt }],
   });
 
@@ -162,7 +179,7 @@ Respond with ONLY the JSON array, no markdown, no explanation.`;
   await resend.emails.send({
     from: "Skawk Ideas <ideas@skawk.io>",
     to: "andrew@careplans.io",
-    subject: `Skawk Daily Ideas — ${dateStr}`,
+    subject: `AI Build Ideas — ${dateStr}`,
     html,
   });
 

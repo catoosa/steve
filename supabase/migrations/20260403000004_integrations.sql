@@ -1,0 +1,4 @@
+ALTER TABLE organizations
+  ADD COLUMN IF NOT EXISTS ghl_api_key TEXT,
+  ADD COLUMN IF NOT EXISTS ghl_location_id TEXT,
+  ADD COLUMN IF NOT EXISTS ghl_enabled BOOLEAN DEFAULT false;

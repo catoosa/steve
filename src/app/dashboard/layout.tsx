@@ -19,6 +19,8 @@ import {
   Brain,
   Shield,
   Mic,
+  Building2,
+  Plug,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
@@ -36,7 +38,9 @@ const NAV_ITEMS = [
   { href: "/dashboard/analytics", label: "Analytics", icon: Activity },
   { href: "/dashboard/memory", label: "Memory", icon: Brain },
   { href: "/dashboard/compliance", label: "Compliance", icon: Shield },
+  { href: "/dashboard/agency", label: "Agency", icon: Building2 },
   { href: "/dashboard/api", label: "API Keys", icon: Key },
+  { href: "/dashboard/integrations", label: "Integrations", icon: Plug },
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];

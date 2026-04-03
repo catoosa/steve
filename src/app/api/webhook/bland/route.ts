@@ -91,10 +91,10 @@ export async function POST(request: NextRequest) {
     // Deduct from org call balance
     await supabase.rpc("decrement_call_balance", { p_org_id: orgId });
 
-    // Fetch updated org for low-balance alert and customer webhook URL
+    // Fetch updated org for low-balance alert, customer webhook URL, and GHL settings
     const { data: org } = await supabase
       .from("organizations")
-      .select("call_balance, monthly_call_limit, name, webhook_url")
+      .select("call_balance, monthly_call_limit, name, webhook_url, ghl_enabled, ghl_api_key, ghl_location_id")
       .eq("id", orgId)
       .single();
 
@@ -184,6 +184,34 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Push call result to GHL if integration is enabled
+    if (org?.ghl_enabled && org?.ghl_api_key && org?.ghl_location_id) {
+      try {
+        const disposition =
+          analysis && typeof analysis === "object"
+            ? (analysis as Record<string, unknown>).disposition as string | undefined
+            : undefined;
+        const summary =
+          analysis && typeof analysis === "object"
+            ? (analysis as Record<string, unknown>).summary as string | undefined
+            : undefined;
+
+        await pushToGHL(
+          org.ghl_api_key,
+          org.ghl_location_id,
+          payload.to,
+          {
+            status,
+            disposition,
+            summary,
+            duration: payload.call_length ?? undefined,
+          }
+        );
+      } catch (ghlErr) {
+        console.error("[webhook] GHL push failed:", ghlErr);
+      }
+    }
+
     const elapsed = Date.now() - startTime;
     console.log(
       `[webhook] Processed call ${callId} | status=${status} | ${elapsed}ms`
@@ -195,4 +223,58 @@ export async function POST(request: NextRequest) {
     console.error("[webhook] Error:", message);
     return Response.json({ success: false, error: message });
   }
+}
+
+/**
+ * Push a call result to a GHL contact as a note.
+ * Uses the GHL API v2 to look up the contact by phone, then adds a note.
+ */
+async function pushToGHL(
+  apiKey: string,
+  locationId: string,
+  contactPhone: string,
+  callResult: {
+    status: string;
+    disposition?: string;
+    summary?: string;
+    duration?: number;
+  }
+) {
+  // Search for contact by phone number
+  const searchRes = await fetch(
+    `https://services.leadconnectorhq.com/contacts/search/duplicate?locationId=${locationId}&phone=${encodeURIComponent(contactPhone)}`,
+    {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        Version: "2021-07-28",
+      },
+    }
+  );
+
+  if (!searchRes.ok) return;
+
+  const { contact } = await searchRes.json();
+  if (!contact?.id) return;
+
+  // Add a note to the contact with the call result
+  await fetch(
+    `https://services.leadconnectorhq.com/contacts/${contact.id}/notes`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        Version: "2021-07-28",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        body: [
+          "Skawk AI Call Result",
+          `Status: ${callResult.status}`,
+          `Disposition: ${callResult.disposition || "N/A"}`,
+          `Duration: ${callResult.duration || 0}s`,
+          `Summary: ${callResult.summary || "N/A"}`,
+        ].join("\n"),
+      }),
+    }
+  );
 }

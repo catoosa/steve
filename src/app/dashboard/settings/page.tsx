@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Settings, Save, ExternalLink, Globe } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import PortalLink from "./portal-link";
+import TeamSection from "./team-section";
 
 export default function SettingsPage() {
   const [orgName, setOrgName] = useState("");
@@ -255,7 +256,7 @@ export default function SettingsPage() {
           </button>
         </form>
 
-        {/* DNS instructions */}
+        {/* DNS setup instructions */}
         <details className="pt-2">
           <summary className="text-sm font-medium cursor-pointer text-muted-foreground hover:text-foreground select-none">
             DNS setup instructions
@@ -277,6 +278,9 @@ export default function SettingsPage() {
           </div>
         </details>
       </div>
+
+      {/* Team Members */}
+      <TeamSection />
     </div>
   );
 }

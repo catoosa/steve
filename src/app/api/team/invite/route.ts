@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
   // Check if user is already a member
   const serviceClient = createServiceClient();
   const { data: existingUser } = await serviceClient.auth.admin.listUsers();
-  const inviteeUser = existingUser?.users?.find(
+  const inviteeUser = (existingUser?.users as { id: string; email?: string }[] | undefined)?.find(
     (u) => u.email?.toLowerCase() === email.toLowerCase()
   );
 

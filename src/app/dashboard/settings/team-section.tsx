@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Users, Trash2, X, Clock } from "lucide-react";
 import InviteForm from "./invite-form";
-import { createClient } from "@/lib/supabase/client";
 
 type Member = {
   user_id: string;
@@ -19,56 +18,32 @@ type Invitation = {
   created_at: string;
 };
 
-export default function TeamSection({
-  orgId,
-  currentUserId,
-  initialMembers,
-  initialInvitations,
-}: {
-  orgId: string;
-  currentUserId: string;
-  initialMembers: Member[];
-  initialInvitations: Invitation[];
-}) {
-  const [members, setMembers] = useState<Member[]>(initialMembers);
-  const [invitations, setInvitations] = useState<Invitation[]>(initialInvitations);
+export default function TeamSection() {
+  const [members, setMembers] = useState<Member[]>([]);
+  const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const [orgId, setOrgId] = useState<string>("");
+  const [currentUserId, setCurrentUserId] = useState<string>("");
+  const [loading, setLoading] = useState(true);
   const [removingUserId, setRemovingUserId] = useState<string | null>(null);
   const [revokingId, setRevokingId] = useState<string | null>(null);
 
+  const loadData = useCallback(async () => {
+    const res = await fetch("/api/team/members");
+    if (!res.ok) return;
+    const data = await res.json();
+    setMembers(data.members ?? []);
+    setInvitations(data.invitations ?? []);
+    setOrgId(data.orgId ?? "");
+    setCurrentUserId(data.currentUserId ?? "");
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
   const currentMember = members.find((m) => m.user_id === currentUserId);
   const canManage = ["owner", "admin"].includes(currentMember?.role ?? "");
-
-  const refreshData = useCallback(async () => {
-    const supabase = createClient();
-    const now = new Date().toISOString();
-
-    const [membersRes, invitesRes] = await Promise.all([
-      supabase
-        .from("org_members")
-        .select("user_id, role")
-        .eq("org_id", orgId),
-      supabase
-        .from("org_invitations")
-        .select("id, email, role, expires_at, created_at")
-        .eq("org_id", orgId)
-        .is("accepted_at", null)
-        .gt("expires_at", now)
-        .order("created_at", { ascending: false }),
-    ]);
-
-    if (membersRes.data) {
-      // We can't join auth.users from the client, keep existing emails
-      const updatedMembers = membersRes.data.map((m) => ({
-        ...m,
-        email: members.find((em) => em.user_id === m.user_id)?.email ?? null,
-      }));
-      setMembers(updatedMembers);
-    }
-
-    if (invitesRes.data) {
-      setInvitations(invitesRes.data);
-    }
-  }, [orgId, members]);
 
   async function handleRemove(userId: string) {
     setRemovingUserId(userId);
@@ -116,6 +91,18 @@ export default function TeamSection({
     return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
   }
 
+  if (loading) {
+    return (
+      <div className="bg-background border border-border rounded-xl p-6 mt-8">
+        <div className="flex items-center gap-3 mb-4">
+          <Users className="w-5 h-5 text-primary" />
+          <h2 className="font-semibold">Team Members</h2>
+        </div>
+        <p className="text-sm text-muted-foreground">Loading team...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-background border border-border rounded-xl p-6 space-y-6 mt-8">
       <div className="flex items-center gap-3">
@@ -135,8 +122,8 @@ export default function TeamSection({
               className="flex items-center justify-between gap-3 rounded-lg border border-border bg-card px-4 py-3"
             >
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-xs font-semibold shrink-0">
-                  {(member.email ?? "?")[0].toUpperCase()}
+                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-xs font-semibold shrink-0 uppercase">
+                  {(member.email ?? "?")[0]}
                 </div>
                 <span className="text-sm truncate">{member.email ?? member.user_id}</span>
               </div>
@@ -178,7 +165,7 @@ export default function TeamSection({
                 className="flex items-center justify-between gap-3 rounded-lg border border-dashed border-border bg-card px-4 py-3"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center text-xs shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center shrink-0">
                     <Clock className="w-4 h-4 text-muted-foreground" />
                   </div>
                   <div className="min-w-0">
@@ -216,8 +203,14 @@ export default function TeamSection({
       {canManage && (
         <div>
           <h3 className="text-sm font-medium text-muted-foreground mb-3">Invite a Member</h3>
-          <InviteForm onInvited={refreshData} />
+          <InviteForm onInvited={loadData} />
         </div>
+      )}
+
+      {!canManage && !loading && (
+        <p className="text-sm text-muted-foreground">
+          Only owners and admins can invite or remove members.
+        </p>
       )}
     </div>
   );

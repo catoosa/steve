@@ -66,6 +66,8 @@ export default function PortalCampaignPage({
   const searchParams = useSearchParams();
   const orgId = searchParams.get("org_id");
   const key = searchParams.get("key");
+  const slug = searchParams.get("__slug");
+  const hostParam = searchParams.get("__host");
 
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [calls, setCalls] = useState<Call[]>([]);
@@ -73,15 +75,21 @@ export default function PortalCampaignPage({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!orgId || !key) {
-      setLoading(false);
-      return;
-    }
-
     async function load() {
-      const res = await fetch(
-        `/api/portal/campaigns/${id}?org_id=${encodeURIComponent(orgId!)}&key=${encodeURIComponent(key!)}`
-      );
+      // Build query string for the API request
+      let qs: string;
+      if (slug) {
+        qs = `__slug=${encodeURIComponent(slug)}`;
+      } else if (hostParam) {
+        qs = `__host=${encodeURIComponent(hostParam)}`;
+      } else if (orgId && key) {
+        qs = `org_id=${encodeURIComponent(orgId)}&key=${encodeURIComponent(key)}`;
+      } else {
+        setLoading(false);
+        return;
+      }
+
+      const res = await fetch(`/api/portal/campaigns/${id}?${qs}`);
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
         setError(json.error ?? "Failed to load campaign");
@@ -95,14 +103,23 @@ export default function PortalCampaignPage({
     }
 
     load();
-  }, [id, orgId, key]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, orgId, key, slug, hostParam]);
 
-  const backHref =
-    orgId && key
-      ? `/portal?org_id=${encodeURIComponent(orgId)}&key=${encodeURIComponent(key)}`
-      : "/portal";
+  // Build back href
+  const backSuffix = slug
+    ? `__slug=${encodeURIComponent(slug)}`
+    : hostParam
+    ? `__host=${encodeURIComponent(hostParam)}`
+    : orgId && key
+    ? `org_id=${encodeURIComponent(orgId)}&key=${encodeURIComponent(key)}`
+    : "";
 
-  if (!orgId || !key) {
+  const backHref = backSuffix ? `/portal?${backSuffix}` : "/portal";
+
+  const missingCreds = !orgId && !key && !slug && !hostParam;
+
+  if (missingCreds) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
         <div className="bg-white border border-gray-200 rounded-xl p-10 shadow-sm max-w-md">

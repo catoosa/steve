@@ -33,20 +33,52 @@ export default function PortalPage() {
   const searchParams = useSearchParams();
   const orgId = searchParams.get("org_id");
   const key = searchParams.get("key");
+  const slug = searchParams.get("__slug");
+  const hostParam = searchParams.get("__host");
 
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!orgId || !key) {
-      setLoading(false);
-      return;
-    }
+  // Resolved org_id + key (may come from slug/host lookup)
+  const [resolvedOrgId, setResolvedOrgId] = useState<string | null>(orgId);
+  const [resolvedKey, setResolvedKey] = useState<string | null>(key);
 
+  useEffect(() => {
     async function load() {
+      let oid = orgId;
+      let k = key;
+
+      // If accessed via subdomain or custom domain, resolve org from slug/host
+      if (slug || hostParam) {
+        const param = slug
+          ? `__slug=${encodeURIComponent(slug)}`
+          : `__host=${encodeURIComponent(hostParam!)}`;
+        const res = await fetch(`/api/portal/campaigns?${param}`);
+        if (!res.ok) {
+          const json = await res.json().catch(() => ({}));
+          setError(json.error ?? "Failed to load campaigns");
+          setLoading(false);
+          return;
+        }
+        const json = await res.json();
+        setResolvedOrgId(json.org_id ?? null);
+        setResolvedKey(json.api_key ?? null);
+        setCampaigns(json.campaigns ?? []);
+        setLoading(false);
+        return;
+      }
+
+      if (!oid || !k) {
+        setLoading(false);
+        return;
+      }
+
+      setResolvedOrgId(oid);
+      setResolvedKey(k);
+
       const res = await fetch(
-        `/api/portal/campaigns?org_id=${encodeURIComponent(orgId!)}&key=${encodeURIComponent(key!)}`
+        `/api/portal/campaigns?org_id=${encodeURIComponent(oid)}&key=${encodeURIComponent(k)}`
       );
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
@@ -60,9 +92,21 @@ export default function PortalPage() {
     }
 
     load();
-  }, [orgId, key]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orgId, key, slug, hostParam]);
 
-  if (!orgId || !key) {
+  // Determine campaign link params
+  const campaignLinkSuffix = slug
+    ? `__slug=${encodeURIComponent(slug)}`
+    : hostParam
+    ? `__host=${encodeURIComponent(hostParam)}`
+    : resolvedOrgId && resolvedKey
+    ? `org_id=${encodeURIComponent(resolvedOrgId)}&key=${encodeURIComponent(resolvedKey)}`
+    : "";
+
+  const missingCreds = !orgId && !key && !slug && !hostParam;
+
+  if (missingCreds) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
         <div className="bg-white border border-gray-200 rounded-xl p-10 shadow-sm max-w-md">
@@ -171,7 +215,7 @@ export default function PortalPage() {
 
               <div className="pt-2 border-t border-gray-100">
                 <Link
-                  href={`/portal/campaign/${campaign.id}?org_id=${encodeURIComponent(orgId)}&key=${encodeURIComponent(key)}`}
+                  href={`/portal/campaign/${campaign.id}${campaignLinkSuffix ? `?${campaignLinkSuffix}` : ""}`}
                   className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline"
                 >
                   View Details →

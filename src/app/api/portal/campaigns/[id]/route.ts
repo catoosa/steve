@@ -6,27 +6,56 @@ function maskPhone(phone: string): string {
   return phone.slice(-4).padStart(phone.length, "*");
 }
 
+async function resolveOrg(
+  supabase: ReturnType<typeof createServiceClient>,
+  req: NextRequest
+) {
+  const slug = req.nextUrl.searchParams.get("__slug");
+  const host = req.nextUrl.searchParams.get("__host");
+  const orgId = req.nextUrl.searchParams.get("org_id");
+  const key = req.nextUrl.searchParams.get("key");
+
+  if (slug) {
+    const { data } = await supabase
+      .from("organizations")
+      .select("id, name, api_key")
+      .eq("slug", slug)
+      .single();
+    return data ?? null;
+  }
+
+  if (host) {
+    const { data } = await supabase
+      .from("organizations")
+      .select("id, name, api_key")
+      .eq("custom_domain", host)
+      .single();
+    return data ?? null;
+  }
+
+  if (orgId && key) {
+    const { data } = await supabase
+      .from("organizations")
+      .select("id, name, api_key")
+      .eq("id", orgId)
+      .eq("api_key", key)
+      .single();
+    return data ?? null;
+  }
+
+  return null;
+}
+
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const orgId = req.nextUrl.searchParams.get("org_id");
-  const key = req.nextUrl.searchParams.get("key");
 
-  if (!orgId || !key) {
-    return NextResponse.json({ error: "Missing params" }, { status: 400 });
-  }
-
-  // Use service client to bypass RLS — auth is via api_key check
+  // Use service client to bypass RLS — auth is via api_key / slug / custom_domain
   const supabase = createServiceClient();
 
-  const { data: org } = await supabase
-    .from("organizations")
-    .select("id, name, api_key")
-    .eq("id", orgId)
-    .eq("api_key", key)
-    .single();
+  const org = await resolveOrg(supabase, req);
 
   if (!org) {
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
@@ -39,7 +68,7 @@ export async function GET(
       "id, name, status, total_contacts, calls_completed, calls_answered, created_at, prompt"
     )
     .eq("id", id)
-    .eq("org_id", orgId)
+    .eq("org_id", org.id)
     .single();
 
   if (!campaign) {
@@ -53,7 +82,7 @@ export async function GET(
       "id, phone, status, duration_seconds, answered_by, created_at, analysis"
     )
     .eq("campaign_id", id)
-    .eq("org_id", orgId)
+    .eq("org_id", org.id)
     .order("created_at", { ascending: false })
     .limit(500);
 

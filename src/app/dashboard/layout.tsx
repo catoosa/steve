@@ -18,6 +18,7 @@ import {
   Wrench,
   Brain,
   Shield,
+  Mic,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
@@ -25,6 +26,7 @@ const NAV_ITEMS = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
   { href: "/dashboard/campaigns", label: "Campaigns", icon: Megaphone },
   { href: "/dashboard/personas", label: "Personas", icon: Bot },
+  { href: "/dashboard/voices", label: "Voices", icon: Mic },
   { href: "/dashboard/calls", label: "Call Logs", icon: PhoneCall },
   { href: "/dashboard/pathways", label: "Pathways", icon: GitBranch },
   { href: "/dashboard/knowledge", label: "Knowledge", icon: BookOpen },

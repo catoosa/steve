@@ -358,6 +358,9 @@ export default function HomePage() {
             <Link href="/docs" className="text-sm font-medium text-white/60 hover:text-white transition-colors">
               API Docs
             </Link>
+            <Link href="/how-it-works" className="text-sm font-medium text-white/60 hover:text-white transition-colors">
+              How It Works
+            </Link>
             <Link href="/demo" className="text-sm font-medium text-white/60 hover:text-white transition-colors">
               Demo
             </Link>

@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { LaunchCampaignButton } from "./launch-button";
 import { AnalyzeEmotionButton } from "./analyze-emotion-button";
 import { ExportButtons } from "./export-buttons";
+import { LiveStats } from "./live-stats";
 
 export default async function CampaignDetailPage({
   params,
@@ -85,29 +86,43 @@ export default async function CampaignDetailPage({
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
-        {[
-          { label: "Total Contacts", value: campaign.total_contacts },
-          { label: "Calls Completed", value: campaign.calls_completed },
-          { label: "Calls Answered", value: campaign.calls_answered },
-          {
-            label: "Answer Rate",
-            value:
-              campaign.calls_completed > 0
-                ? `${Math.round((campaign.calls_answered / campaign.calls_completed) * 100)}%`
-                : "—",
-          },
-        ].map((s) => (
-          <div
-            key={s.label}
-            className="bg-background border border-border rounded-xl p-4"
-          >
-            <p className="text-sm text-muted-foreground">{s.label}</p>
-            <p className="text-xl font-bold mt-1">{s.value}</p>
-          </div>
-        ))}
-      </div>
+      {/* Stats — live when active, static otherwise */}
+      {campaign.status === "active" ? (
+        <LiveStats
+          campaignId={campaign.id}
+          campaignStatus={campaign.status}
+          initialStats={{
+            total: campaign.total_contacts,
+            completed: campaign.calls_completed,
+            answered: campaign.calls_answered,
+            inProgress: calls?.filter((c) => c.status === "in_progress").length ?? 0,
+            queued: calls?.filter((c) => c.status === "queued").length ?? 0,
+          }}
+        />
+      ) : (
+        <div className="grid grid-cols-4 gap-4 mb-8">
+          {[
+            { label: "Total Contacts", value: campaign.total_contacts },
+            { label: "Calls Completed", value: campaign.calls_completed },
+            { label: "Calls Answered", value: campaign.calls_answered },
+            {
+              label: "Answer Rate",
+              value:
+                campaign.calls_completed > 0
+                  ? `${Math.round((campaign.calls_answered / campaign.calls_completed) * 100)}%`
+                  : "—",
+            },
+          ].map((s) => (
+            <div
+              key={s.label}
+              className="bg-background border border-border rounded-xl p-4"
+            >
+              <p className="text-sm text-muted-foreground">{s.label}</p>
+              <p className="text-xl font-bold mt-1">{s.value}</p>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* A/B Variant Performance */}
       {(() => {

@@ -61,6 +61,20 @@ export const PLANS = {
       "Priority support",
     ],
   },
+  agency: {
+    name: "Agency",
+    price: 599,
+    calls: 0, // agency manages client allocations
+    perCallOverage: null,
+    priceId: process.env.STRIPE_AGENCY_PRICE_ID || "",
+    features: [
+      "Up to 10 client sub-accounts",
+      "Per-client call limits",
+      "White-label client portal",
+      "Usage reporting & export",
+      "All Pro features",
+    ],
+  },
   enterprise: {
     name: "Enterprise",
     price: null, // custom

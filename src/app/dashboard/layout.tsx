@@ -21,6 +21,9 @@ import {
   Mic,
   Building2,
   Plug,
+  Zap,
+  ListOrdered,
+  AlertTriangle,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
@@ -33,6 +36,9 @@ const NAV_ITEMS = [
   { href: "/dashboard/pathways", label: "Pathways", icon: GitBranch },
   { href: "/dashboard/knowledge", label: "Knowledge", icon: BookOpen },
   { href: "/dashboard/sms", label: "SMS", icon: MessageSquare },
+  { href: "/dashboard/workflows", label: "Workflows", icon: Zap },
+  { href: "/dashboard/sequences", label: "Sequences", icon: ListOrdered },
+  { href: "/dashboard/escalations", label: "Escalations", icon: AlertTriangle },
   { href: "/dashboard/tools", label: "Tools", icon: Wrench },
   { href: "/dashboard/numbers", label: "Numbers", icon: Phone },
   { href: "/dashboard/analytics", label: "Analytics", icon: Activity },

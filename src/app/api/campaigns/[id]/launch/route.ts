@@ -2,6 +2,14 @@ import { NextRequest } from "next/server";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { makeBatchCalls } from "@/lib/bland";
 
+function normalizePhone(phone: string): string {
+  const stripped = phone.trim();
+  if (stripped.startsWith("+")) {
+    return "+" + stripped.slice(1).replace(/\D/g, "");
+  }
+  return stripped.replace(/\D/g, "");
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -62,19 +70,39 @@ export async function POST(
       return Response.json({ error: "No pending contacts" }, { status: 400 });
     }
 
+    // DNC scrubbing — filter out contacts whose phone is on the org's DNC list
+    const { data: dncNumbers } = await supabase
+      .from("dnc_numbers")
+      .select("phone")
+      .eq("org_id", campaign.org_id);
+
+    const dncSet = new Set((dncNumbers || []).map((d: { phone: string }) => normalizePhone(d.phone)));
+
+    const scrubbedContacts = contacts.filter(
+      (c: Record<string, unknown>) => !dncSet.has(normalizePhone(c.phone as string))
+    );
+    const scrubbed = contacts.length - scrubbedContacts.length;
+
+    if (scrubbedContacts.length === 0) {
+      return Response.json(
+        { error: "All contacts are on the DNC list", scrubbed },
+        { status: 400 }
+      );
+    }
+
     const campaignMeta = (campaign.metadata as Record<string, unknown>) || {};
 
     // Atomically reserve balance — prevents race conditions with concurrent launches
     const { data: reserved, error: reserveError } = await supabase.rpc(
       "reserve_call_balance",
-      { p_org_id: campaign.org_id, p_count: contacts.length }
+      { p_org_id: campaign.org_id, p_count: scrubbedContacts.length }
     );
 
     if (reserveError || !reserved) {
       return Response.json(
         {
           error: "Insufficient call balance",
-          required: contacts.length,
+          required: scrubbedContacts.length,
         },
         { status: 402 }
       );
@@ -85,7 +113,7 @@ export async function POST(
 
     // Create call records — check for A/B variant data in contact metadata
     const batchCalls = await Promise.all(
-      contacts.map(async (contact: Record<string, unknown>) => {
+      scrubbedContacts.map(async (contact: Record<string, unknown>) => {
         const contactMeta = (contact.metadata as Record<string, unknown>) || {};
 
         const { data: callRecord } = await supabase
@@ -162,7 +190,7 @@ export async function POST(
       // Bland call failed — restore the reserved balance
       await supabase.rpc("release_call_balance", {
         p_org_id: campaign.org_id,
-        p_count: contacts.length,
+        p_count: scrubbedContacts.length,
       });
       throw blandError;
     }
@@ -176,7 +204,9 @@ export async function POST(
     return Response.json({
       success: true,
       batch_id: result.batch_id,
-      calls_queued: batchCalls.length,
+      total: contacts.length,
+      scrubbed,
+      launched: batchCalls.length,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

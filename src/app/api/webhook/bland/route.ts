@@ -88,6 +88,26 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Auto-add to DNC if disposition is DO_NOT_CALL
+    const dispositionValue =
+      analysis && typeof analysis === "object"
+        ? (analysis as Record<string, unknown>).disposition
+        : undefined;
+    const dispositionStr =
+      typeof dispositionValue === "string" ? dispositionValue.toUpperCase() : "";
+    if (payload.to && dispositionStr === "DO_NOT_CALL") {
+      const rawPhone = String(payload.to).trim();
+      const normalizedPhone = rawPhone.startsWith("+")
+        ? "+" + rawPhone.slice(1).replace(/\D/g, "")
+        : rawPhone.replace(/\D/g, "");
+      await supabase
+        .from("dnc_numbers")
+        .upsert(
+          { org_id: orgId, phone: normalizedPhone, source: "opt_out" },
+          { onConflict: "org_id,phone", ignoreDuplicates: true }
+        );
+    }
+
     // Deduct from org call balance
     await supabase.rpc("decrement_call_balance", { p_org_id: orgId });
 
@@ -209,6 +229,63 @@ export async function POST(request: NextRequest) {
         );
       } catch (ghlErr) {
         console.error("[webhook] GHL push failed:", ghlErr);
+      }
+    }
+
+    // === WORKFLOW AUTOMATION ENGINE ===
+    if (steveCallId && orgId) {
+      try {
+        const { executeWorkflows } = await import("@/lib/workflows/engine");
+        const callContext = {
+          id: steveCallId,
+          status,
+          answered_by: payload.answered_by ?? null,
+          duration_seconds: payload.call_length ?? null,
+          analysis,
+          transcript: transcript || null,
+          phone: payload.to || "",
+          metadata: metadata || {},
+          contact: null as { id: string; name: string | null; status: string; metadata: Record<string, unknown> } | null,
+          campaign_id: campaignId || null,
+        };
+
+        // Enrich with contact details
+        if (contactId) {
+          const { data: contact } = await supabase
+            .from("contacts")
+            .select("id, name, status, metadata")
+            .eq("id", contactId)
+            .single();
+          if (contact) callContext.contact = contact;
+        }
+
+        await Promise.race([
+          executeWorkflows(callContext, orgId, supabase),
+          new Promise((_, reject) => setTimeout(() => reject(new Error("Workflow timeout")), 30000)),
+        ]);
+      } catch (wfErr) {
+        console.error("[webhook] Workflow execution error:", wfErr);
+      }
+    }
+
+    // Record call timeline event
+    if (contactId && orgId) {
+      try {
+        const { recordTimelineEvent } = await import("@/lib/timeline");
+        await recordTimelineEvent(supabase, {
+          orgId,
+          contactId,
+          eventType: "call",
+          eventData: {
+            call_id: steveCallId,
+            status,
+            duration_seconds: payload.call_length,
+            answered_by: payload.answered_by,
+            analysis,
+          },
+        });
+      } catch (tlErr) {
+        console.error("[webhook] Timeline event error:", tlErr);
       }
     }
 

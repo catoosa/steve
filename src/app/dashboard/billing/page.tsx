@@ -73,7 +73,7 @@ export default async function BillingPage() {
 
       {/* Plans */}
       <h2 className="font-semibold text-lg mb-4">Available Plans</h2>
-      <div className="grid md:grid-cols-4 gap-4">
+      <div className="grid md:grid-cols-5 gap-4">
         {Object.entries(PLANS).map(([key, plan]) => (
           <div
             key={key}
@@ -93,7 +93,11 @@ export default async function BillingPage() {
               )}
             </p>
             <p className="text-sm text-muted-foreground mt-1">
-              {plan.calls !== null ? `${plan.calls.toLocaleString()} calls` : "Unlimited calls"}
+              {plan.calls === null
+                ? "Unlimited calls"
+                : plan.calls === 0
+                ? "Per-client allocations"
+                : `${plan.calls.toLocaleString()} calls`}
             </p>
             <ul className="mt-4 space-y-2">
               {plan.features.map((f) => (

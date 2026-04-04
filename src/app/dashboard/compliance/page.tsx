@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ShieldAlert } from "lucide-react";
 import { PresetCard } from "./preset-card";
 import { GuardRailsManager } from "./guard-rails-manager";
 
@@ -109,7 +111,31 @@ export default function CompliancePage() {
         </div>
       </section>
 
-      {/* Section B — Custom Guard Rails */}
+      {/* Section B — DNC List */}
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-lg font-semibold">Do Not Call List</h2>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            Manage numbers that are automatically excluded from all campaigns before launch.
+          </p>
+        </div>
+        <Link
+          href="/dashboard/compliance/dnc"
+          className="flex items-center gap-4 bg-background border border-border rounded-xl p-5 hover:border-primary/50 transition-colors"
+        >
+          <div className="bg-primary/10 text-primary rounded-lg p-2.5">
+            <ShieldAlert className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="font-medium">DNC List</p>
+            <p className="text-sm text-muted-foreground">
+              View and manage your Do Not Call numbers, upload in bulk, or download as CSV.
+            </p>
+          </div>
+        </Link>
+      </section>
+
+      {/* Section C — Custom Guard Rails */}
       <section className="space-y-4">
         <div>
           <h2 className="text-lg font-semibold">Custom Guard Rails</h2>

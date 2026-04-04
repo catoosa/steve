@@ -26,7 +26,6 @@ import {
   Upload,
   Settings,
   Rocket,
-  Play,
   Lock,
   Brain,
   FlaskConical,
@@ -46,12 +45,12 @@ const FEATURES = [
   {
     icon: FlaskConical,
     title: "A/B Testing",
-    desc: "Split contacts 50/50 across prompt variants. Compare answer rates, call duration, and dispositions — let data pick the winning script.",
+    desc: "Split contacts 50/50 across prompt variants. Compare answer rates, call duration, and dispositions. Let data pick the winning script.",
   },
   {
     icon: Activity,
     title: "Emotion Analysis",
-    desc: "AI detects caller sentiment — happy, neutral, angry, sad — on every call. Spot friction before it becomes churn.",
+    desc: "AI detects caller sentiment (happy, neutral, angry, sad) on every call. Spot friction before it becomes churn.",
   },
   {
     icon: Tag,
@@ -72,7 +71,7 @@ const FEATURES = [
   {
     icon: Mic,
     title: "Voice Cloning",
-    desc: "Clone any voice from a short audio clip. Deploy your brand voice — or a client's — across every call.",
+    desc: "Clone any voice from a short audio clip. Deploy your brand voice, or a client's, across every call.",
   },
   {
     icon: FileText,
@@ -82,12 +81,12 @@ const FEATURES = [
   {
     icon: Webhook,
     title: "Custom Tools",
-    desc: "Agent calls your APIs mid-conversation — check inventory, book appointments, look up CRM data without breaking the flow.",
+    desc: "Agent calls your APIs mid-conversation: check inventory, book appointments, look up CRM data without breaking the flow.",
   },
   {
     icon: Brain,
     title: "Persistent Memory",
-    desc: "Agents remember prior interactions with each contact. Every follow-up call starts with context — no repeating yourself.",
+    desc: "Agents remember prior interactions with each contact. Every follow-up call starts with context. No repeating yourself.",
   },
   {
     icon: GitBranch,
@@ -108,7 +107,7 @@ const FEATURES = [
   {
     icon: MessageSquare,
     title: "SMS Campaigns",
-    desc: "AI text message sequences that run alongside voice campaigns — same contacts, same analytics, full omnichannel reach.",
+    desc: "AI text message sequences that run alongside voice campaigns. Same contacts, same analytics, full omnichannel reach.",
   },
   // Compliance & Safety
   {
@@ -119,18 +118,18 @@ const FEATURES = [
   {
     icon: Fingerprint,
     title: "AI Disclosure",
-    desc: "Automatic caller identification and opt-out handling on every call. Compliant by default — not an afterthought.",
+    desc: "Automatic caller identification and opt-out handling on every call. Compliant by default, not an afterthought.",
   },
   // Platform
   {
     icon: Users,
     title: "Client Portal",
-    desc: "Branded read-only dashboards for end clients. They see results, transcripts, and analytics — no platform access required.",
+    desc: "Branded read-only dashboards for end clients. They see results, transcripts, and analytics. No platform access required.",
   },
   {
     icon: Code2,
     title: "Full API Access",
-    desc: "Complete REST API for Pro+ customers. Trigger calls, pull analytics, manage campaigns — from any system.",
+    desc: "Complete REST API. Trigger calls, pull analytics, manage campaigns from any system.",
   },
   {
     icon: Globe,
@@ -183,7 +182,7 @@ const USE_CASES = [
   {
     icon: Home,
     title: "Property Management",
-    desc: "Maintenance reminders, rent arrears calls, and inspection confirmations — fully automated, fully compliant.",
+    desc: "Maintenance reminders, rent arrears calls, and inspection confirmations. Fully automated, fully compliant.",
     stat: "2x",
     statLabel: "contact rate",
   },
@@ -201,72 +200,6 @@ const INTEGRATIONS = [
   "Custom API",
 ];
 
-const PLANS = [
-  {
-    name: "Starter",
-    price: "$149",
-    period: "/month",
-    desc: "For small teams getting started",
-    calls: "300 calls included",
-    cta: "Get Started",
-    href: "/signup?plan=starter",
-    features: [
-      "300 calls/month",
-      "3 personas",
-      "CSV batch upload",
-      "12 industry templates",
-      "Conversation pathways",
-      "Disposition tracking",
-      "Basic analytics",
-      "Webhook integrations",
-      "$0.55/extra call",
-      "Email support",
-    ],
-  },
-  {
-    name: "Pro",
-    price: "$499",
-    period: "/month",
-    desc: "For growing operations",
-    calls: "1,500 calls included",
-    cta: "Get Started",
-    href: "/signup?plan=pro",
-    popular: true,
-    features: [
-      "1,500 calls/month",
-      "Unlimited personas + voice cloning",
-      "SMS campaigns",
-      "Knowledge bases (RAG)",
-      "A/B testing",
-      "Emotion analysis",
-      "Client portal",
-      "Guard rails & compliance",
-      "Inbound numbers",
-      "Full API access",
-      "$0.40/extra call",
-      "Priority support",
-    ],
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    period: "",
-    desc: "For serious scale",
-    calls: "Unlimited calls",
-    cta: "Talk to Sales",
-    href: "mailto:hello@skawk.io",
-    features: [
-      "Unlimited calls",
-      "Volume pricing from $0.30/call",
-      "White-label option",
-      "Dedicated infrastructure",
-      "SSO / SAML",
-      "SLA guarantee",
-      "Custom integrations",
-      "Dedicated account manager",
-    ],
-  },
-];
 
 const STRUCTURED_DATA = {
   "@context": "https://schema.org",
@@ -304,25 +237,12 @@ const STRUCTURED_DATA = {
       url: "https://skawk.io",
       description:
         "Automate outbound and inbound phone calls with AI voice agents. Run lead qualification, appointment reminders, surveys, and debt recovery campaigns at scale.",
-      offers: [
-        {
-          "@type": "Offer",
-          name: "Starter",
-          price: "149",
-          priceCurrency: "USD",
-          billingIncrement: "P1M",
-          description: "300 calls/month, 3 personas, basic analytics",
-        },
-        {
-          "@type": "Offer",
-          name: "Pro",
-          price: "499",
-          priceCurrency: "USD",
-          billingIncrement: "P1M",
-          description:
-            "1,500 calls/month, unlimited personas, SMS campaigns, A/B testing, knowledge bases",
-        },
-      ],
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "AUD",
+        description: "Contact us to discuss your requirements",
+      },
       featureList: [
         "AI voice agents",
         "Outbound call campaigns",
@@ -353,10 +273,10 @@ const STRUCTURED_DATA = {
       mainEntity: [
         {
           "@type": "Question",
-          name: "How much does Skawk cost?",
+          name: "How do I get started with Skawk?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Skawk starts at $149/month for 300 calls. Pro is $499/month for 1,500 calls. Enterprise pricing is custom. Extra calls are $0.30–$0.55 each.",
+            text: "Talk to us at hello@skawk.io. We will walk you through the platform and set up your account.",
           },
         },
         {
@@ -426,7 +346,7 @@ export default function HomePage() {
             <Image src="/skawk-logo.png" alt="Skawk" width={120} height={40} className="h-9 w-auto" />
           </Link>
           <div className="hidden md:flex items-center gap-8">
-            {["Features", "Use Cases", "Pricing"].map((item) => (
+            {["Features", "Use Cases", "Contact"].map((item) => (
               <Link
                 key={item}
                 href={`#${item.toLowerCase().replace(" ", "-")}`}
@@ -437,6 +357,12 @@ export default function HomePage() {
             ))}
             <Link href="/docs" className="text-sm font-medium text-white/60 hover:text-white transition-colors">
               API Docs
+            </Link>
+            <Link href="/demo" className="text-sm font-medium text-white/60 hover:text-white transition-colors">
+              Demo
+            </Link>
+            <Link href="/help" className="text-sm font-medium text-white/60 hover:text-white transition-colors">
+              Help
             </Link>
           </div>
           <div className="flex items-center gap-3">
@@ -466,17 +392,19 @@ export default function HomePage() {
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-4 py-1.5 text-sm font-medium text-white/70 mb-8">
               <Zap className="w-4 h-4 text-accent" />
-              Voice · SMS · A/B Testing · Compliance · AI Personas — all in one platform
+              Voice · SMS · A/B Testing · Compliance · AI Personas, all in one platform
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white mb-6 leading-[1.05]">
-              Every call,
+              One API call.
               <br />
-              <span className="text-gradient">brilliantly handled.</span>
+              <span className="text-gradient">One phone call.</span>
+              <br />
+              Structured data back.
             </h1>
 
             <p className="text-xl text-white/50 max-w-2xl mx-auto mb-10 leading-relaxed">
-              Skawk supercharges your outbound calling with voice AI that sounds human, converts leads, and scales effortlessly. No scripts. No limits.
+              Agentic voice orchestration for developers. AI voice agents that follow conversational pathways, extract structured JSON, and trigger actions mid-call. 10 to 10,000 simultaneous calls.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
@@ -487,16 +415,12 @@ export default function HomePage() {
                 Get Started
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              <button className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-8 py-4 text-base font-medium text-white hover:bg-white/5 transition-colors">
-                <Play className="w-5 h-5 text-accent" />
-                Watch Demo
-              </button>
             </div>
 
-            <p className="text-sm text-white/30">Plans from $149/month. Up and running in minutes. All calls to opted-in contacts only.</p>
+            <p className="text-sm text-white/30">Up and running in minutes. All calls to opted-in contacts only.</p>
           </div>
 
-          {/* Hero visual — kookaburra + stats */}
+          {/* Hero visual.kookaburra + stats */}
           <div className="relative mt-20 max-w-4xl mx-auto">
             <div className="grid lg:grid-cols-5 gap-6 items-center">
               {/* Orange kookaburra */}
@@ -518,9 +442,9 @@ export default function HomePage() {
                 {/* Stats bar */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                   {[
-                    { value: "5M+", label: "Calls Made" },
                     { value: "< 300ms", label: "Avg Latency" },
-                    { value: "$0.30", label: "Per Call" },
+                    { value: "10K+", label: "Simultaneous Calls" },
+                    { value: "40+", label: "Languages" },
                     { value: "99.9%", label: "Uptime SLA" },
                   ].map((s) => (
                     <div key={s.label} className="text-center">
@@ -559,7 +483,7 @@ export default function HomePage() {
             <p className="text-sm font-bold text-primary uppercase tracking-wider mb-3">Features</p>
             <h2 className="text-4xl font-black mb-4">Built for bold teams</h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Every tool you need to automate calling, run compliant campaigns, and convert more — without adding headcount.
+              Every tool you need to automate calling, run compliant campaigns, and convert more, without adding headcount.
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
@@ -634,7 +558,7 @@ export default function HomePage() {
               </div>
               <h2 className="text-3xl font-black mb-4">One API call to make a phone call</h2>
               <p className="text-muted-foreground mb-6 leading-relaxed">
-                Simple REST API. Send a POST with a phone number and a prompt — Skawk handles the conversation, transcription, and data extraction. All contacts must be opted-in before calling.
+                Simple REST API. Send a POST with a phone number and a prompt. Skawk handles the conversation, transcription, and data extraction. All contacts must be opted-in before calling.
               </p>
               <ul className="space-y-3 mb-8">
                 {[
@@ -705,7 +629,7 @@ export default function HomePage() {
             <p className="text-sm font-bold text-accent uppercase tracking-wider mb-3">Use Cases</p>
             <h2 className="text-4xl font-black mb-4">Works across every industry</h2>
             <p className="text-white/50 max-w-xl mx-auto">
-              If your business makes phone calls, Skawk can automate them — for a fraction of the cost.
+              If your business makes phone calls, Skawk can automate them for a fraction of the cost.
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
@@ -732,7 +656,7 @@ export default function HomePage() {
       </section>
 
       {/* Integrations */}
-      <section className="py-20 px-6 bg-muted">
+      <section id="integrations" className="py-20 px-6 bg-muted">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-sm font-bold text-primary uppercase tracking-wider mb-3">Integrations</p>
           <h2 className="text-3xl font-black mb-4">Connects to everything</h2>
@@ -752,59 +676,52 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Pricing */}
-      <section id="pricing" className="py-24 px-6 bg-background">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-bold text-primary uppercase tracking-wider mb-3">Pricing</p>
-            <h2 className="text-4xl font-black mb-4">Transparent pricing</h2>
-            <p className="text-muted-foreground">Start free. Pay as you grow. No hidden fees.</p>
+      {/* Case Study */}
+      <section className="py-24 px-6 bg-primary text-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <p className="text-sm font-bold uppercase tracking-wider mb-3 text-white/70">Case Study</p>
+            <h2 className="text-4xl font-black mb-6">7,000 fuel stations. Every day. Zero humans.</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {PLANS.map((plan) => (
-              <div
-                key={plan.name}
-                className={`rounded-2xl border p-6 flex flex-col bg-card ${
-                  plan.popular
-                    ? "border-primary ring-2 ring-primary/20 relative shadow-xl shadow-primary/10"
-                    : "border-border"
-                }`}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-bold text-white">
-                    Most Popular
-                  </div>
-                )}
-                <div className="mb-6">
-                  <h3 className="font-bold text-lg">{plan.name}</h3>
-                  <p className="text-sm text-muted-foreground">{plan.desc}</p>
-                </div>
-                <div className="mb-1">
-                  <span className="text-4xl font-black">{plan.price}</span>
-                  <span className="text-muted-foreground text-sm">{plan.period}</span>
-                </div>
-                <p className="text-sm text-muted-foreground mb-6">{plan.calls}</p>
-                <ul className="flex flex-col gap-2.5 mb-8 flex-1">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm">
-                      <Check className="w-4 h-4 text-success shrink-0 mt-0.5" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href={plan.href}
-                  className={`text-center rounded-xl px-4 py-3 text-sm font-bold transition-all ${
-                    plan.popular
-                      ? "bg-primary text-white hover:bg-primary-hover glow-orange"
-                      : "border border-border hover:bg-muted"
-                  }`}
-                >
-                  {plan.cta}
-                </Link>
-              </div>
-            ))}
+          <p className="text-lg text-white/80 leading-relaxed text-center max-w-3xl mx-auto mb-8">
+            When a national fuel crisis hit Australia in March 2026, one customer used
+            Skawk to call 7,000 fuel stations daily to check fuel availability.
+            Structured stock data returned in JSON. Approximately 4 to 5 cents per call.
+            Zero human intervention.
+          </p>
+          <div className="grid sm:grid-cols-3 gap-6 mt-12">
+            <div className="text-center">
+              <div className="text-4xl font-black">7,000</div>
+              <div className="text-sm text-white/60 mt-1">Calls per day</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-black">~$0.05</div>
+              <div className="text-sm text-white/60 mt-1">Per call</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-black">0</div>
+              <div className="text-sm text-white/60 mt-1">Human operators</div>
+            </div>
           </div>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section id="contact" className="py-24 px-6 bg-background">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-sm font-bold text-primary uppercase tracking-wider mb-3">Get Started</p>
+          <h2 className="text-4xl font-black mb-4">Talk to us</h2>
+          <p className="text-muted-foreground mb-10 max-w-xl mx-auto">
+            Tell us what you are building. We will show you how Skawk can power it.
+          </p>
+          <a
+            href="mailto:hello@skawk.io?subject=Skawk%20inquiry"
+            className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-base font-bold text-white hover:bg-primary-hover transition-all glow-orange"
+          >
+            Talk to Us
+            <ArrowRight className="w-5 h-5" />
+          </a>
+          <p className="mt-6 text-sm text-muted-foreground">hello@skawk.io</p>
         </div>
       </section>
 
@@ -818,12 +735,12 @@ export default function HomePage() {
           <div className="space-y-4">
             {[
               {
-                q: "How much does Skawk cost?",
-                a: "Starter is $149/month for 300 calls. Pro is $499/month for 1,500 calls. Enterprise is custom. Extra calls are $0.30–$0.55 each depending on plan — no hidden per-minute or per-SMS fees.",
+                q: "How do I get started with Skawk?",
+                a: "Talk to us. We will walk you through the platform, discuss your use case, and set up your account. Contact hello@skawk.io.",
               },
               {
                 q: "How many calls can Skawk make simultaneously?",
-                a: "Up to 10,000 simultaneous calls. Launch a batch campaign via the dashboard or a single API call. Scale up or down instantly — no infrastructure to manage.",
+                a: "Up to 10,000 simultaneous calls. Launch a batch campaign via the dashboard or a single API call. Scale up or down instantly. No infrastructure to manage.",
               },
               {
                 q: "What languages does Skawk support?",
@@ -835,7 +752,7 @@ export default function HomePage() {
               },
               {
                 q: "Can I handle inbound calls too?",
-                a: "Yes. Purchase phone numbers directly from the dashboard, configure your AI agent's prompt, voice, and routing — and it answers inbound calls 24/7 automatically.",
+                a: "Yes. Purchase phone numbers directly from the dashboard, configure your AI agent's prompt, voice, and routing, and it answers inbound calls 24/7 automatically.",
               },
               {
                 q: "How does A/B testing work?",
@@ -843,15 +760,15 @@ export default function HomePage() {
               },
               {
                 q: "What is a knowledge base?",
-                a: "A knowledge base lets your AI agent reference your own documents, FAQs, or web pages during a live call. Upload text, files, or URLs — the agent retrieves relevant information in real time to answer caller questions accurately.",
+                a: "A knowledge base lets your AI agent reference your own documents, FAQs, or web pages during a live call. Upload text, files, or URLs and the agent retrieves relevant information in real time to answer caller questions accurately.",
               },
               {
                 q: "Can I give clients access to results?",
-                a: "Yes. The client portal gives your clients a branded read-only dashboard showing their campaign stats, call outcomes, and dispositions — no login or dashboard access required on their end.",
+                a: "Yes. The client portal gives your clients a branded read-only dashboard showing their campaign stats, call outcomes, and dispositions. No login or dashboard access required on their end.",
               },
               {
                 q: "How does voice cloning work?",
-                a: "Upload a short audio clip — a recording, a podcast snippet, or a client-supplied file. Skawk generates a cloned voice model you can assign to any persona. No studio time or specialist software required.",
+                a: "Upload a short audio clip (a recording, a podcast snippet, or a client-supplied file). Skawk generates a cloned voice model you can assign to any persona. No studio time or specialist software required.",
               },
               {
                 q: "Is white-labelling available?",
@@ -913,7 +830,7 @@ export default function HomePage() {
             <div className="md:col-span-2">
               <Image src="/skawk-logo.png" alt="Skawk" width={100} height={33} className="h-8 w-auto mb-4" />
               <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-                AI-powered calling for opted-in contacts that sounds human, scales instantly, and converts more leads. We never make cold calls — every contact must have given prior consent.
+                AI-powered calling for opted-in contacts that sounds human, scales instantly, and converts more leads. We never make cold calls. Every contact must have given prior consent.
               </p>
               <p className="text-sm text-muted-foreground mt-3">skawk.io</p>
             </div>
@@ -922,9 +839,8 @@ export default function HomePage() {
               <ul className="space-y-2.5">
                 {[
                   { label: "Features", href: "#features" },
-                  { label: "Pricing", href: "#pricing" },
-                  { label: "Integrations", href: "#" },
-                  { label: "API Docs", href: "/dashboard/api" },
+                  { label: "Use Cases", href: "#use-cases" },
+                  { label: "Integrations", href: "#integrations" },
                 ].map((item) => (
                   <li key={item.label}>
                     <Link href={item.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -935,24 +851,25 @@ export default function HomePage() {
               </ul>
             </div>
             <div>
-              <h4 className="font-bold mb-4 text-sm">Company</h4>
+              <h4 className="font-bold mb-4 text-sm">Contact</h4>
               <ul className="space-y-2.5">
-                {["About", "Blog", "Careers", "Contact"].map((item) => (
-                  <li key={item}>
-                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                      {item}
-                    </Link>
-                  </li>
-                ))}
+                <li>
+                  <a href="mailto:hello@skawk.io" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    hello@skawk.io
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4 text-sm">Legal</h4>
               <ul className="space-y-2.5">
-                {["Privacy", "Terms", "Security", "GDPR"].map((item) => (
-                  <li key={item}>
-                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                      {item}
+                {[
+                  { label: "Privacy", href: "/privacy" },
+                  { label: "Terms", href: "/terms" },
+                ].map((item) => (
+                  <li key={item.label}>
+                    <Link href={item.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                      {item.label}
                     </Link>
                   </li>
                 ))}
@@ -961,7 +878,7 @@ export default function HomePage() {
           </div>
           <div className="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} CareplanAI Pty Ltd. All rights reserved.
+              &copy; 2026 CareplanAI Pty Ltd | ABN 92 691 158 237
             </p>
             <p className="text-sm text-muted-foreground">
               hello@skawk.io

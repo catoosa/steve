@@ -21,6 +21,8 @@ export async function middleware(request: NextRequest) {
 
   const isCustomDomain =
     !host.endsWith(".skawk.io") &&
+    host !== "skawk.io" &&
+    host !== "www.skawk.io" &&
     host !== "localhost" &&
     !host.endsWith(".vercel.app");
 

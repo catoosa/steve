@@ -24,11 +24,14 @@ import {
   Zap,
   ListOrdered,
   AlertTriangle,
+  Radio,
+  DollarSign,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+  { href: "/dashboard/live", label: "Live Monitor", icon: Radio },
   { href: "/dashboard/campaigns", label: "Campaigns", icon: Megaphone },
   { href: "/dashboard/personas", label: "Personas", icon: Bot },
   { href: "/dashboard/voices", label: "Voices", icon: Mic },
@@ -42,6 +45,7 @@ const NAV_ITEMS = [
   { href: "/dashboard/tools", label: "Tools", icon: Wrench },
   { href: "/dashboard/numbers", label: "Numbers", icon: Phone },
   { href: "/dashboard/analytics", label: "Analytics", icon: Activity },
+  { href: "/dashboard/roi", label: "ROI", icon: DollarSign },
   { href: "/dashboard/memory", label: "Memory", icon: Brain },
   { href: "/dashboard/compliance", label: "Compliance", icon: Shield },
   { href: "/dashboard/agency", label: "Agency", icon: Building2 },

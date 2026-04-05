@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Play, Pause, PhoneCall, FlaskConical, Trophy } from "lucide-react";
+import { ArrowLeft, Play, Pause, PhoneCall, FlaskConical, Trophy, Brain } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { LaunchCampaignButton } from "./launch-button";
 import { AnalyzeEmotionButton } from "./analyze-emotion-button";
@@ -68,6 +68,13 @@ export default async function CampaignDetailPage({
           </p>
         </div>
         <div className="flex items-center gap-3">
+          <Link
+            href={`/dashboard/campaigns/${campaign.id}/intelligence`}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium hover:bg-muted transition-colors"
+          >
+            <Brain className="w-3.5 h-3.5 text-primary" />
+            Intelligence
+          </Link>
           <ExportButtons campaignId={campaign.id} />
           <span
             className={`text-sm font-medium px-3 py-1 rounded-full ${

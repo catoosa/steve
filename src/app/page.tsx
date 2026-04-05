@@ -443,7 +443,7 @@ export default function HomePage() {
               {/* Stats + call cards */}
               <div className="lg:col-span-3 bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
                 {/* Stats bar */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+                <div className="grid grid-cols-4 gap-4">
                   {[
                     { value: "< 300ms", label: "Avg Latency" },
                     { value: "10K+", label: "Simultaneous Calls" },
@@ -451,8 +451,8 @@ export default function HomePage() {
                     { value: "99.9%", label: "Uptime SLA" },
                   ].map((s) => (
                     <div key={s.label} className="text-center">
-                      <p className="text-2xl sm:text-3xl font-black text-accent">{s.value}</p>
-                      <p className="text-xs text-white/40 mt-1 font-medium">{s.label}</p>
+                      <p className="text-xl sm:text-3xl font-black text-accent">{s.value}</p>
+                      <p className="text-[10px] sm:text-xs text-white/40 mt-1 font-medium">{s.label}</p>
                     </div>
                   ))}
                 </div>

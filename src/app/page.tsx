@@ -423,56 +423,41 @@ export default function HomePage() {
             <p className="text-sm text-white/30">Up and running in minutes. All calls to opted-in contacts only.</p>
           </div>
 
-          {/* Hero visual.kookaburra + stats */}
-          <div className="relative mt-20 max-w-4xl mx-auto">
-            <div className="grid lg:grid-cols-5 gap-6 items-center">
-              {/* Orange kookaburra */}
-              <div className="lg:col-span-2 flex justify-center">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-primary/30 rounded-full blur-[80px]" />
-                  <Image
-                    src="/orange-kook.png"
-                    alt="Skawk kookaburra"
-                    width={300}
-                    height={400}
-                    className="relative rounded-3xl border-2 border-white/10 shadow-2xl shadow-primary/20 object-cover h-[320px] w-[240px]"
-                  />
+          {/* Stats bar */}
+          <div className="mt-16 max-w-3xl mx-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
+              {[
+                { value: "< 300ms", label: "Avg Latency" },
+                { value: "10K+", label: "Simultaneous Calls" },
+                { value: "40+", label: "Languages" },
+                { value: "99.9%", label: "Uptime SLA" },
+              ].map((s) => (
+                <div key={s.label} className="text-center">
+                  <p className="text-3xl sm:text-4xl font-black text-accent">{s.value}</p>
+                  <p className="text-xs text-white/40 mt-1 font-medium">{s.label}</p>
                 </div>
-              </div>
+              ))}
+            </div>
+          </div>
 
-              {/* Stats + call cards */}
-              <div className="lg:col-span-3 bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
-                {/* Stats bar */}
-                <div className="grid grid-cols-4 gap-4">
-                  {[
-                    { value: "< 300ms", label: "Avg Latency" },
-                    { value: "10K+", label: "Simultaneous Calls" },
-                    { value: "40+", label: "Languages" },
-                    { value: "99.9%", label: "Uptime SLA" },
-                  ].map((s) => (
-                    <div key={s.label} className="text-center">
-                      <p className="text-xl sm:text-3xl font-black text-accent">{s.value}</p>
-                      <p className="text-[10px] sm:text-xs text-white/40 mt-1 font-medium">{s.label}</p>
+          {/* Mini call visualization */}
+          <div className="mt-10 max-w-2xl mx-auto">
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-sm">
+              <p className="text-[10px] font-bold tracking-widest uppercase text-white/30 mb-3">Live calls</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {[
+                  { phone: "+61 412 ***", status: "Completed", dur: "0:42", color: "bg-success" },
+                  { phone: "+61 498 ***", status: "In Progress", dur: "0:18", color: "bg-accent" },
+                  { phone: "+61 411 ***", status: "Completed", dur: "1:03", color: "bg-success" },
+                ].map((call, i) => (
+                  <div key={i} className="bg-white/5 rounded-xl p-3 border border-white/5">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-mono text-white/60">{call.phone}</span>
+                      <span className={`w-2 h-2 rounded-full ${call.color}`} />
                     </div>
-                  ))}
-                </div>
-
-                {/* Mini call visualization */}
-                <div className="mt-8 grid grid-cols-3 gap-3">
-                  {[
-                    { phone: "+61 412 ***", status: "Completed", dur: "0:42", color: "bg-success" },
-                    { phone: "+61 498 ***", status: "In Progress", dur: "0:18", color: "bg-accent" },
-                    { phone: "+61 411 ***", status: "Completed", dur: "1:03", color: "bg-success" },
-                  ].map((call, i) => (
-                    <div key={i} className="bg-white/5 rounded-xl p-3 border border-white/5">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-mono text-white/60">{call.phone}</span>
-                        <span className={`w-2 h-2 rounded-full ${call.color}`} />
-                      </div>
-                      <p className="text-[10px] text-white/30">{call.status} &middot; {call.dur}</p>
-                    </div>
-                  ))}
-                </div>
+                    <p className="text-[10px] text-white/30">{call.status} &middot; {call.dur}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

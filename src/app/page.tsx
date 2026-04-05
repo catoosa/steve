@@ -39,6 +39,11 @@ import {
   Briefcase,
   Heart,
   Home,
+  Radio,
+  DollarSign,
+  ListOrdered,
+  AlertTriangle,
+  PhoneOff,
 } from "lucide-react";
 
 const FEATURES = [
@@ -141,6 +146,58 @@ const FEATURES = [
     icon: LayoutTemplate,
     title: "Campaign Templates",
     desc: "12+ industry templates covering healthcare, real estate, debt recovery, recruitment, and more. Launch in minutes.",
+  },
+  // Automation & Intelligence
+  {
+    icon: Zap,
+    title: "Workflow Automation",
+    desc: "When a call ends, workflows evaluate the results and chain actions: send SMS, schedule callbacks, create escalations, hit webhooks — automatically.",
+  },
+  {
+    icon: ListOrdered,
+    title: "Multi-Touch Sequences",
+    desc: "Day 1 call, Day 3 SMS, Day 7 follow-up. Define multi-step journeys that run themselves. Contacts progress automatically.",
+  },
+  {
+    icon: AlertTriangle,
+    title: "Escalation System",
+    desc: "Critical outcomes flag instantly. Priority routing (critical, high, medium, low) with acknowledge and resolve tracking for your team.",
+  },
+  {
+    icon: Radio,
+    title: "Live Call Monitor",
+    desc: "Watch calls happen in real time. Active call cards, live duration tickers, sentiment indicators, and a completions feed — like air traffic control.",
+  },
+  {
+    icon: Brain,
+    title: "Conversation Intelligence",
+    desc: "AI reads every transcript and reports: top objections, winning phrases, contact archetypes, and recommendations to improve your script.",
+  },
+  {
+    icon: DollarSign,
+    title: "ROI Dashboard",
+    desc: "See cost per call, cost per lead, human-equivalent savings, and ROI by campaign. Make the business case undeniable.",
+  },
+  // Bland-killers
+  {
+    icon: FlaskConical,
+    title: "Call Playground",
+    desc: "Test your prompts without making real calls. AI simulates both sides of the conversation. Free. Unlimited. Iterate until it's perfect.",
+  },
+  {
+    icon: Clock,
+    title: "Smart Scheduling",
+    desc: "Heatmap shows answer rates by day and time. Skawk recommends the best windows so you call when people actually pick up.",
+  },
+  {
+    icon: PhoneOff,
+    title: "Phone Validation",
+    desc: "Check every number before you call. Format validation, mobile vs landline detection. Stop wasting calls on dead numbers.",
+  },
+  {
+    icon: Download,
+    title: "Bland Migration",
+    desc: "Switching from Bland? Paste your API key, import personas, pathways, tools, and voices. Zero switching cost. One click.",
   },
 ];
 

@@ -689,6 +689,9 @@ export default function HelpPage() {
               hello@skawk.io
             </a>
           </p>
+          <p className="text-xs text-muted-foreground/60 mt-4">
+            &copy; 2026 CareplanAI Pty Ltd. All rights reserved.
+          </p>
         </div>
       </section>
     </div>

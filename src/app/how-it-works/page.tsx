@@ -434,7 +434,7 @@ export default function HowItWorksPage() {
       {/* Footer */}
       <footer className="py-8 px-6 border-t border-border">
         <div className="max-w-3xl mx-auto flex items-center justify-between text-xs text-muted-foreground">
-          <p>CareplanAI Pty Ltd</p>
+          <p>&copy; 2026 CareplanAI Pty Ltd. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link>

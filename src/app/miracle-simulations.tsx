@@ -311,9 +311,9 @@ export function MiracleSimulations() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <p className="text-sm font-bold text-primary uppercase tracking-wider mb-3">See what&apos;s possible</p>
-          <h2 className="text-4xl font-black text-white mb-4">Three things no one else can do</h2>
+          <h2 className="text-4xl font-black text-white mb-4">More than just a phone call</h2>
           <p className="text-white/50 max-w-xl mx-auto">
-            These aren&apos;t mockups. These are live simulations of real dashboard features. Every Skawk user gets this on day one.
+            Real-time monitoring, AI-powered insights, and clear ROI — all built in. Try them.
           </p>
         </div>
 

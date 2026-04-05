@@ -668,20 +668,21 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Case Study */}
+      {/* Case Study — Fuel Map */}
       <section className="py-24 px-6 bg-primary text-white">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-8">
-            <p className="text-sm font-bold uppercase tracking-wider mb-3 text-white/70">Case Study</p>
+            <p className="text-sm font-bold uppercase tracking-wider mb-3 text-white/70">Built with Skawk</p>
             <h2 className="text-4xl font-black mb-6">7,000 fuel stations. Every day. Zero humans.</h2>
           </div>
           <p className="text-lg text-white/80 leading-relaxed text-center max-w-3xl mx-auto mb-8">
-            When a national fuel crisis hit Australia in March 2026, one customer used
-            Skawk to call 7,000 fuel stations daily to check fuel availability.
-            Structured stock data returned in JSON. Approximately 4 to 5 cents per call.
-            Zero human intervention.
+            An AI voice agent calls thousands of fuel stations across Australia to check
+            what&apos;s in stock. Each call asks about fuel types, availability, and pricing.
+            Structured data comes back as clean JSON. The results feed a live map that
+            anyone can search. Around 4 to 5 cents per call.
           </p>
-          <div className="grid sm:grid-cols-3 gap-6 mt-12">
+
+          <div className="grid sm:grid-cols-3 gap-6 mt-8 mb-12">
             <div className="text-center">
               <div className="text-4xl font-black">7,000</div>
               <div className="text-sm text-white/60 mt-1">Calls per day</div>
@@ -694,6 +695,50 @@ export default function HomePage() {
               <div className="text-4xl font-black">0</div>
               <div className="text-sm text-white/60 mt-1">Human operators</div>
             </div>
+          </div>
+
+          {/* Example JSON structure */}
+          <div className="max-w-2xl mx-auto mb-10">
+            <p className="text-xs font-bold uppercase tracking-wider text-white/40 mb-3 text-center">Example data returned per station</p>
+            <div className="bg-black/30 rounded-xl border border-white/10 overflow-hidden">
+              <div className="px-4 py-2 border-b border-white/10 flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-red-400" />
+                <div className="w-2 h-2 rounded-full bg-yellow-400" />
+                <div className="w-2 h-2 rounded-full bg-green-400" />
+                <span className="text-[10px] text-white/30 ml-2 font-mono">call.analysis</span>
+              </div>
+              <pre className="p-5 text-xs font-mono text-white/70 overflow-x-auto leading-relaxed">{`{
+  "station": "BP Parramatta Road, Auburn",
+  "status": "open",
+  "fuels": {
+    "unleaded_91": { "available": true,  "price_per_litre": 1.89 },
+    "unleaded_95": { "available": true,  "price_per_litre": 2.05 },
+    "premium_98": { "available": false, "price_per_litre": null },
+    "diesel":     { "available": true,  "price_per_litre": 1.95 },
+    "e10":        { "available": true,  "price_per_litre": 1.82 },
+    "lpg":        { "available": false, "price_per_litre": null }
+  },
+  "queue_length": "moderate",
+  "estimated_wait": "10-15 minutes",
+  "purchase_limit": "40 litres per vehicle",
+  "last_delivery": "this morning",
+  "notes": "Premium and LPG sold out since yesterday"
+}`}</pre>
+            </div>
+          </div>
+
+          {/* CTA to try it */}
+          <div className="text-center">
+            <a
+              href="https://fuel-map-omega.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-base font-bold text-primary hover:bg-white/90 transition-all"
+            >
+              Try the Fuel Map
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+            </a>
+            <p className="text-xs text-white/40 mt-3">Live site powered by Skawk voice calls</p>
           </div>
         </div>
       </section>

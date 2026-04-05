@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { MiracleSimulations } from "./miracle-simulations";
 import {
   ArrowRight,
   Check,
@@ -534,6 +535,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Miracle simulations — live monitor, intelligence, ROI */}
+      <MiracleSimulations />
 
       {/* API showcase */}
       <section className="py-24 px-6 bg-background">

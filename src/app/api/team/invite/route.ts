@@ -2,7 +2,9 @@ import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
@@ -112,7 +114,7 @@ export async function POST(req: NextRequest) {
   const acceptUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://app.skawk.io"}/accept-invite?token=${invitation.token}`;
 
   // Send invite email via Resend
-  await resend.emails.send({
+  await getResend().emails.send({
     from: "Skawk <hello@skawk.io>",
     to: email,
     subject: `${inviterName} has invited you to join ${orgName} on Skawk`,

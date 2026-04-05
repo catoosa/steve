@@ -36,8 +36,7 @@ export default async function VoicesPage() {
         <div>
           <h1 className="text-2xl font-bold">Voices</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Manage cloned voices and browse built-in Bland AI voices for your
-            agents.
+            Manage cloned voices and browse built-in voices for your agents.
           </p>
         </div>
         <Link

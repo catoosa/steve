@@ -1,8 +1,13 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { Resend } from "resend";
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getAnthropic() {
+  return new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+}
+
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 // Secondary lens rotates daily — adds a different angle to the always-broad search
 const DAILY_LENS = [
@@ -174,7 +179,7 @@ Scoring rules: At least 2 ideas should be high-conviction (75–92%). At least 2
 
 Respond with ONLY a valid JSON array. No markdown fences, no text before or after the JSON.`;
 
-  const message = await anthropic.messages.create({
+  const message = await getAnthropic().messages.create({
     model: "claude-sonnet-4-6",
     max_tokens: 4096,
     messages: [{ role: "user", content: prompt }],
@@ -185,7 +190,7 @@ Respond with ONLY a valid JSON array. No markdown fences, no text before or afte
 
   const html = buildEmail(ideas, focus, dateStr);
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: "Skawk Ideas <ideas@skawk.io>",
     to: "andrew@careplans.io",
     subject: `AI Build Ideas — ${dateStr}`,

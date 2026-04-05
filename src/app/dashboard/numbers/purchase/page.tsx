@@ -112,8 +112,8 @@ export default function PurchaseNumberPage() {
 
         <div className="rounded-lg border border-border bg-muted/50 p-4">
           <p className="text-sm text-muted-foreground">
-            Phone numbers incur a monthly fee billed through your Bland AI
-            account. Charges will appear on your next billing cycle.
+            Phone numbers incur a monthly fee. Charges will appear on your
+            next billing cycle.
           </p>
         </div>
 

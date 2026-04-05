@@ -36,7 +36,7 @@ export async function GET() {
     const rows = dncNumbers ?? [];
     const csv = [
       "phone,reason,source,created_at",
-      ...rows.map((r) =>
+      ...rows.map((r: any) =>
         [
           `"${r.phone}"`,
           `"${(r.reason ?? "").replace(/"/g, '""')}"`,

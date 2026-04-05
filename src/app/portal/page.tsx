@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -30,6 +31,14 @@ function formatDate(iso: string) {
 }
 
 export default function PortalPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>}>
+      <PortalContent />
+    </Suspense>
+  );
+}
+
+function PortalContent() {
   const searchParams = useSearchParams();
   const orgId = searchParams.get("org_id");
   const key = searchParams.get("key");

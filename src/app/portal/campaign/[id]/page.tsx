@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { Suspense, use } from "react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -58,6 +58,18 @@ function formatDuration(seconds: number | null) {
 }
 
 export default function PortalCampaignPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>}>
+      <PortalCampaignContent params={params} />
+    </Suspense>
+  );
+}
+
+function PortalCampaignContent({
   params,
 }: {
   params: Promise<{ id: string }>;

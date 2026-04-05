@@ -2,7 +2,9 @@ import { NextRequest } from "next/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 /**
  * Bland AI webhook — receives call completion results.
@@ -137,7 +139,7 @@ export async function POST(request: NextRequest) {
           const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://skawk.io";
           const orgName = org?.name || "Your organisation";
 
-          await resend.emails.send({
+          await getResend().emails.send({
             from: "alerts@skawk.io",
             to: ownerEmail,
             subject: `Low call balance alert — ${currentBalance} calls remaining`,

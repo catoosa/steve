@@ -15,11 +15,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://skawk.io"),
   title: {
-    default: "Skawk — AI Voice Calling Platform | Automate Outbound Calls",
+    default: "Skawk | AI Voice Agents That Return JSON, Not Just Transcripts",
     template: "%s | Skawk",
   },
   description:
-    "Skawk automates outbound and inbound phone calls with human-like AI voice agents. Run campaigns at scale, qualify leads, send appointment reminders, collect surveys — from $0.30/call. No scripts, no limits.",
+    "One API call. One phone call. Structured data back. Actions triggered. Agentic voice orchestration for developers.",
   keywords: [
     "AI voice calling",
     "outbound call automation",
@@ -32,12 +32,12 @@ export const metadata: Metadata = {
     "bulk calling software",
     "AI voice agent",
     "conversational AI phone",
-    "Bland AI white label",
     "AI calling Australia",
     "outbound dialler AI",
-    "automated phone survey",
     "voice AI SaaS",
     "call automation platform",
+    "structured data extraction",
+    "agentic voice orchestration",
   ],
   authors: [{ name: "CareplanAI Pty Ltd", url: "https://skawk.io" }],
   creator: "CareplanAI Pty Ltd",
@@ -60,15 +60,15 @@ export const metadata: Metadata = {
     locale: "en_AU",
     url: "https://skawk.io",
     siteName: "Skawk",
-    title: "Skawk — AI Voice Calling Platform",
+    title: "Skawk | AI Voice Agents That Return JSON, Not Just Transcripts",
     description:
-      "Automate outbound calls with human-like AI voice agents. Lead qualification, appointment reminders, surveys, debt recovery — 10,000 calls/hour from $0.30/call.",
+      "One API call. One phone call. Structured data back. Actions triggered. Agentic voice orchestration for developers.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Skawk — AI Voice Calling Platform",
+        alt: "Skawk: AI Voice Agents That Return JSON",
       },
     ],
   },
@@ -76,9 +76,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@skawkio",
     creator: "@skawkio",
-    title: "Skawk — AI Voice Calling Platform",
+    title: "Skawk | AI Voice Agents That Return JSON, Not Just Transcripts",
     description:
-      "Automate outbound calls with human-like AI voice agents. 10,000 calls/hour from $0.30/call.",
+      "One API call. One phone call. Structured data back. Actions triggered. Agentic voice orchestration for developers.",
     images: ["/og-image.png"],
   },
   alternates: {

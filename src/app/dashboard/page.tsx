@@ -31,12 +31,7 @@ export default async function DashboardPage() {
   const orgId = membership?.org_id;
 
   if (!orgId) {
-    return (
-      <div className="text-center py-20">
-        <h2 className="text-xl font-semibold mb-2">No organization found</h2>
-        <p className="text-muted-foreground">Something went wrong during signup.</p>
-      </div>
-    );
+    redirect("/dashboard/onboarding");
   }
 
   let personas: Array<Record<string, unknown>> = [];

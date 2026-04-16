@@ -63,14 +63,6 @@ export const metadata: Metadata = {
     title: "Skawk | AI Voice Agents That Return JSON, Not Just Transcripts",
     description:
       "One API call. One phone call. Structured data back. Actions triggered. Agentic voice orchestration for developers.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Skawk: AI Voice Agents That Return JSON",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -79,15 +71,74 @@ export const metadata: Metadata = {
     title: "Skawk | AI Voice Agents That Return JSON, Not Just Transcripts",
     description:
       "One API call. One phone call. Structured data back. Actions triggered. Agentic voice orchestration for developers.",
-    images: ["/og-image.png"],
   },
   alternates: {
     canonical: "https://skawk.io",
+    languages: {
+      "en-AU": "https://skawk.io",
+      "x-default": "https://skawk.io",
+    },
   },
   verification: {
     google: "",
   },
 };
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Skawk",
+    legalName: "CareplanAI Pty Ltd",
+    url: "https://skawk.io",
+    description:
+      "AI voice agents that return structured JSON data. One API call, one phone call, structured data back.",
+    foundingDate: "2025",
+    founder: { "@type": "Person", name: "Andrew Payne" },
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "CICADA Health Technology Hub, Westmead Hospital",
+      addressLocality: "Westmead",
+      addressRegion: "NSW",
+      postalCode: "2145",
+      addressCountry: "AU",
+    },
+    sameAs: ["https://careplans.io", "https://nonni.ai", "https://tradee.io"],
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      email: "andrew@skawk.io",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Skawk",
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Web",
+    description:
+      "AI voice calling platform for developers. Make outbound calls, extract structured data, trigger actions — all via API.",
+    url: "https://skawk.io",
+    offers: {
+      "@type": "AggregateOffer",
+      lowPrice: "0",
+      highPrice: "999",
+      priceCurrency: "AUD",
+      offerCount: "3",
+    },
+    featureList:
+      "AI Voice Agents, Structured JSON Extraction, Outbound Calling API, Webhook Integrations, Lead Qualification, Appointment Booking, White-Label Voice AI",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Skawk",
+    url: "https://skawk.io",
+    inLanguage: "en-AU",
+    copyrightHolder: { "@type": "Organization", name: "CareplanAI Pty Ltd" },
+    copyrightYear: "2025",
+  },
+];
 
 export default function RootLayout({
   children,
@@ -99,6 +150,15 @@ export default function RootLayout({
       lang="en-AU"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        {structuredData.map((schema, i) => (
+          <script
+            key={i}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
+      </head>
       <body className="min-h-full flex flex-col font-sans">{children}</body>
     </html>
   );

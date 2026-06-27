@@ -2,6 +2,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Lock, Code2, Key } from "lucide-react";
 
+export const metadata = {
+  title: "API Documentation",
+  description:
+    "Skawk REST API documentation. Trigger AI voice calls, manage campaigns, pull analytics, and extract structured data with a single API call.",
+  alternates: {
+    canonical: "https://skawk.io/docs",
+  },
+};
+
 export default function DocsPage() {
   return (
     <div className="min-h-screen bg-[#1a1a2e] flex flex-col">

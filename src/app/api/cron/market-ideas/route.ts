@@ -126,8 +126,13 @@ function buildEmail(ideas: Idea[], focus: string, dateStr: string): string {
 
 export async function GET(request: Request) {
   // Verify this is a legitimate Vercel cron request
+  const cronSecret = process.env.CRON_SECRET;
+  if (!cronSecret) {
+    console.error("[cron/market-ideas] CRON_SECRET is not configured");
+    return Response.json({ error: "Not configured" }, { status: 500 });
+  }
   const authHeader = request.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (authHeader !== `Bearer ${cronSecret}`) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 

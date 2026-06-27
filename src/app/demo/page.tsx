@@ -265,12 +265,36 @@ export default function DemoPage() {
       </header>
 
       <div className="max-w-[1100px] mx-auto px-6 py-16">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <p className="text-sm font-bold tracking-widest uppercase text-primary mb-3">See it work</p>
+        {/* Live Demo Number */}
+        <div className="text-center mb-6 py-10 border-b border-[#21262d]">
+          <p className="text-sm font-bold tracking-widest uppercase text-green-500 mb-3">Try it live</p>
           <h1 className="text-[clamp(1.75rem,4vw,2.75rem)] font-extrabold leading-tight text-white mb-4">
-            One API call. One phone call. Structured data back.
+            Call our AI agent right now
           </h1>
+          <p className="text-base text-[#8b949e] max-w-[560px] mx-auto leading-relaxed mb-6">
+            Experience Skawk firsthand. Call the number below and have a real conversation with our AI. After your call, come back to see the structured JSON we extracted.
+          </p>
+          <a
+            href="tel:+61411199904"
+            className="inline-flex items-center gap-3 rounded-2xl bg-green-500/10 border-2 border-green-500/30 px-8 py-5 text-2xl font-black text-green-400 hover:bg-green-500/20 transition-all"
+          >
+            <Phone className="w-7 h-7" />
+            0411 199 904
+          </a>
+          <p className="text-sm text-[#484f58] mt-3">
+            Our demo agent handles a dental appointment scenario. Call from any phone.
+          </p>
+          <p className="text-xs text-[#30363d] mt-2">
+            After your call, the extracted JSON will appear below. This is what your webhook receives.
+          </p>
+        </div>
+
+        {/* Header */}
+        <div className="text-center mb-12 mt-12">
+          <p className="text-sm font-bold tracking-widest uppercase text-primary mb-3">Or watch the simulation</p>
+          <h2 className="text-[clamp(1.5rem,3vw,2.25rem)] font-extrabold leading-tight text-white mb-4">
+            One API call. One phone call. Structured data back.
+          </h2>
           <p className="text-base text-[#8b949e] max-w-[560px] mx-auto leading-relaxed">
             A dental practice sends one POST request. The AI calls the patient, handles a reschedule mid-call, and returns clean JSON. Watch.
           </p>

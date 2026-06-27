@@ -69,25 +69,87 @@ export async function POST(request: NextRequest) {
     };
 
     if (steveCallId) {
-      await supabase.from("calls").update(callUpdate).eq("id", steveCallId);
+      const { error: callUpdateErr } = await supabase.from("calls").update(callUpdate).eq("id", steveCallId);
+      if (callUpdateErr) console.error("[webhook] Call update failed:", callUpdateErr.message);
     }
 
     // Update contact status
     if (contactId) {
-      await supabase
+      const { error: contactUpdateErr } = await supabase
         .from("contacts")
         .update({ status: status === "completed" ? "completed" : "failed" })
         .eq("id", contactId);
+      if (contactUpdateErr) console.error("[webhook] Contact update failed:", contactUpdateErr.message);
+    }
+
+    // Auto-create deal from inbound call (no campaign = inbound)
+    if (!campaignId && status === "completed" && payload.answered_by === "human") {
+      try {
+        const customerPhone = payload.to || payload.from || "";
+        const customerName =
+          analysis && typeof analysis === "object"
+            ? (analysis as Record<string, unknown>).customer_name as string | undefined
+            : undefined;
+        const jobDescription =
+          analysis && typeof analysis === "object"
+            ? (analysis as Record<string, unknown>).summary as string | undefined
+            : undefined;
+
+        await supabase.from("deals").insert({
+          org_id: orgId,
+          contact_id: contactId || null,
+          call_id: steveCallId || null,
+          title: jobDescription
+            ? jobDescription.slice(0, 100)
+            : `Inbound call — ${customerPhone}`,
+          stage: "lead",
+          customer_name: customerName || null,
+          customer_phone: customerPhone,
+          source: "inbound_call",
+          notes: transcript
+            ? `Auto-created from inbound call.\n\nTranscript:\n${transcript.slice(0, 2000)}`
+            : "Auto-created from inbound call.",
+        });
+      } catch (dealErr) {
+        console.error("[webhook] Auto-deal creation error:", dealErr);
+      }
+    }
+
+    // Auto-create deal from outbound campaign call
+    if (campaignId && status === "completed" && payload.answered_by === "human") {
+      try {
+        const customerPhone = payload.to || "";
+        const summary =
+          analysis && typeof analysis === "object"
+            ? (analysis as Record<string, unknown>).summary as string | undefined
+            : undefined;
+
+        await supabase.from("deals").insert({
+          org_id: orgId,
+          contact_id: contactId || null,
+          call_id: steveCallId || null,
+          title: summary
+            ? summary.slice(0, 100)
+            : `Call lead — ${customerPhone}`,
+          stage: "lead",
+          customer_phone: customerPhone,
+          source: "outbound_call",
+          notes: "Auto-created from campaign call.",
+        });
+      } catch (dealErr) {
+        console.error("[webhook] Auto-deal creation error:", dealErr);
+      }
     }
 
     // Update campaign stats
     if (campaignId) {
       const isAnswered = status === "completed" && payload.answered_by === "human";
-      await supabase.rpc("increment_campaign_stats", {
+      const { error: statsErr } = await supabase.rpc("increment_campaign_stats", {
         p_campaign_id: campaignId,
         p_completed: 1,
         p_answered: isAnswered ? 1 : 0,
       });
+      if (statsErr) console.error("[webhook] Campaign stats update failed:", statsErr.message);
     }
 
     // Auto-add to DNC if disposition is DO_NOT_CALL
@@ -102,16 +164,18 @@ export async function POST(request: NextRequest) {
       const normalizedPhone = rawPhone.startsWith("+")
         ? "+" + rawPhone.slice(1).replace(/\D/g, "")
         : rawPhone.replace(/\D/g, "");
-      await supabase
+      const { error: dncErr } = await supabase
         .from("dnc_numbers")
         .upsert(
           { org_id: orgId, phone: normalizedPhone, source: "opt_out" },
           { onConflict: "org_id,phone", ignoreDuplicates: true }
         );
+      if (dncErr) console.error("[webhook] DNC upsert failed:", dncErr.message);
     }
 
     // Deduct from org call balance
-    await supabase.rpc("decrement_call_balance", { p_org_id: orgId });
+    const { error: balanceErr } = await supabase.rpc("decrement_call_balance", { p_org_id: orgId });
+    if (balanceErr) console.error("[webhook] Balance deduction failed:", balanceErr.message);
 
     // Fetch updated org for low-balance alert, customer webhook URL, and GHL settings
     const { data: org } = await supabase
@@ -177,9 +241,16 @@ export async function POST(request: NextRequest) {
 
     if (org?.webhook_url) {
       try {
+        // Validate webhook URL to prevent SSRF
+        const webhookUrl = new URL(org.webhook_url);
+        if (!["http:", "https:"].includes(webhookUrl.protocol)) {
+          throw new Error(`Invalid webhook protocol: ${webhookUrl.protocol}`);
+        }
+
         await fetch(org.webhook_url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal: AbortSignal.timeout(10000), // 10s timeout
           body: JSON.stringify({
             event: "call.completed",
             call_id: steveCallId,

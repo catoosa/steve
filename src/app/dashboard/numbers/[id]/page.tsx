@@ -2,7 +2,11 @@
 
 import { useState, useEffect, use } from "react";
 import Link from "next/link";
-import { ArrowLeft, Phone, Loader2, Save } from "lucide-react";
+import { ArrowLeft, Phone, Loader2, Save, Sparkles } from "lucide-react";
+import {
+  INBOUND_PERSONA_TEMPLATES,
+  INBOUND_PERSONA_CATEGORIES,
+} from "@/lib/inbound-persona-templates";
 
 const FALLBACK_VOICES = [
   { id: "nat", name: "Nat (Female)" },
@@ -179,6 +183,38 @@ export default function NumberConfigPage({
           <p className="text-sm text-muted-foreground font-mono">
             {phoneNumber}
           </p>
+        </div>
+      </div>
+
+      {/* Template Picker */}
+      <div className="mb-8">
+        <div className="flex items-center gap-2 mb-4">
+          <Sparkles className="w-4 h-4 text-primary" />
+          <h2 className="text-sm font-bold">Start from a template</h2>
+          <span className="text-xs text-muted-foreground">
+            (optional)
+          </span>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-2">
+          {Object.entries(INBOUND_PERSONA_TEMPLATES).map(([key, tpl]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => {
+                setPrompt(tpl.prompt);
+                if (tpl.voice) setVoice(tpl.voice);
+                if (tpl.language) setLanguage(tpl.language);
+                setMaxDuration(tpl.maxDuration);
+                if (tpl.transferPhone) setTransferPhone(tpl.transferPhone);
+              }}
+              className="text-left p-3 rounded-xl border border-border hover:border-primary/30 hover:bg-muted/50 transition-all"
+            >
+              <p className="text-sm font-semibold">{tpl.title}</p>
+              <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                {tpl.desc}
+              </p>
+            </button>
+          ))}
         </div>
       </div>
 

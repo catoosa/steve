@@ -13,7 +13,7 @@ async function resolveOrg(
   if (slug) {
     const { data } = await supabase
       .from("organizations")
-      .select("id, name, api_key")
+      .select("id, name")
       .eq("slug", slug)
       .single();
     return data ?? null;
@@ -22,7 +22,7 @@ async function resolveOrg(
   if (host) {
     const { data } = await supabase
       .from("organizations")
-      .select("id, name, api_key")
+      .select("id, name")
       .eq("custom_domain", host)
       .single();
     return data ?? null;
@@ -31,7 +31,7 @@ async function resolveOrg(
   if (orgId && key) {
     const { data } = await supabase
       .from("organizations")
-      .select("id, name, api_key")
+      .select("id, name")
       .eq("id", orgId)
       .eq("api_key", key)
       .single();
@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({
     org_id: org.id,
-    api_key: org.api_key,
+    org_name: org.name,
     campaigns: campaigns ?? [],
   });
 }

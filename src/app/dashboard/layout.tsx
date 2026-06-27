@@ -28,7 +28,10 @@ import {
   DollarSign,
   FlaskConical,
   Clock,
-  Download,
+  FileText,
+  Kanban,
+  Briefcase,
+  CalendarDays,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
@@ -39,6 +42,10 @@ const NAV_ITEMS = [
   { href: "/dashboard/campaigns", label: "Campaigns", icon: Megaphone },
   { href: "/dashboard/personas", label: "Personas", icon: Bot },
   { href: "/dashboard/voices", label: "Voices", icon: Mic },
+  { href: "/dashboard/pipeline", label: "Pipeline", icon: Kanban },
+  { href: "/dashboard/quotes", label: "Quotes", icon: FileText },
+  { href: "/dashboard/jobs", label: "Jobs", icon: Briefcase },
+  { href: "/dashboard/calendar", label: "Calendar", icon: CalendarDays },
   { href: "/dashboard/calls", label: "Call Logs", icon: PhoneCall },
   { href: "/dashboard/pathways", label: "Pathways", icon: GitBranch },
   { href: "/dashboard/knowledge", label: "Knowledge", icon: BookOpen },
@@ -56,7 +63,6 @@ const NAV_ITEMS = [
   { href: "/dashboard/agency", label: "Agency", icon: Building2 },
   { href: "/dashboard/api", label: "API Keys", icon: Key },
   { href: "/dashboard/integrations", label: "Integrations", icon: Plug },
-  { href: "/dashboard/migrate", label: "Migrate", icon: Download },
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];

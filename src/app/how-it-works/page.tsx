@@ -30,6 +30,15 @@ import {
   Headphones,
 } from "lucide-react";
 
+export const metadata = {
+  title: "How It Works",
+  description:
+    "See how Skawk turns one API call into a full AI voice conversation. Upload contacts, configure your agent, launch, and get structured JSON back in seconds.",
+  alternates: {
+    canonical: "https://skawk.io/how-it-works",
+  },
+};
+
 export default function HowItWorksPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">

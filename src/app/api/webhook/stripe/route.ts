@@ -9,15 +9,21 @@ const PLAN_CALLS: Record<string, number> = {
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
-  const sig = request.headers.get("stripe-signature")!;
+  const sig = request.headers.get("stripe-signature");
+
+  if (!sig) {
+    return Response.json({ error: "Missing stripe-signature header" }, { status: 400 });
+  }
+
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    console.error("[stripe-webhook] STRIPE_WEBHOOK_SECRET is not configured");
+    return Response.json({ error: "Webhook not configured" }, { status: 500 });
+  }
 
   let event;
   try {
-    event = getStripe().webhooks.constructEvent(
-      body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET!
-    );
+    event = getStripe().webhooks.constructEvent(body, sig, webhookSecret);
   } catch {
     return Response.json({ error: "Invalid signature" }, { status: 400 });
   }

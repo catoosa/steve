@@ -3,8 +3,13 @@ import { processSequenceEnrollments } from "@/lib/sequences/engine";
 
 export async function POST(request: Request) {
   try {
+    const cronSecret = process.env.CRON_SECRET;
+    if (!cronSecret) {
+      console.error("[cron/sequences] CRON_SECRET is not configured");
+      return Response.json({ error: "Not configured" }, { status: 500 });
+    }
     const authHeader = request.headers.get("authorization");
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    if (authHeader !== `Bearer ${cronSecret}`) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 

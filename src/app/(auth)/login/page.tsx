@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
@@ -12,6 +12,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -25,7 +26,10 @@ export default function LoginPage() {
       setError(error.message);
       setLoading(false);
     } else {
-      router.push("/dashboard");
+      const redirect = searchParams.get("redirect");
+      // Only allow relative redirects to prevent open redirect
+      const destination = redirect && redirect.startsWith("/") ? redirect : "/dashboard";
+      router.push(destination);
     }
   }
 
@@ -81,7 +85,7 @@ export default function LoginPage() {
 
         <p className="text-center text-sm text-white/50 mt-4">
           Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-accent hover:underline font-medium">Sign up</Link>
+          <Link href={searchParams.get("redirect") ? `/signup?redirect=${encodeURIComponent(searchParams.get("redirect")!)}` : "/signup"} className="text-accent hover:underline font-medium">Sign up</Link>
         </p>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MiracleSimulations } from "./miracle-simulations";
+import { FeaturesTabs } from "@/components/features-tabs";
+import { FaqSection } from "@/components/faq-section";
 import {
   ArrowRight,
   Check,
@@ -31,7 +33,6 @@ import {
   Brain,
   FlaskConical,
   Tag,
-  Download,
   PhoneIncoming,
   Fingerprint,
   LayoutTemplate,
@@ -46,158 +47,218 @@ import {
   PhoneOff,
 } from "lucide-react";
 
+export const metadata = {
+  title: "AI Voice Agents That Return JSON, Not Just Transcripts",
+  description:
+    "One API call. One phone call. Structured data back. Agentic voice orchestration for developers. AI voice agents that follow conversational pathways, extract structured JSON, and trigger actions mid-call. 10 to 10,000 simultaneous calls.",
+  alternates: {
+    canonical: "https://skawk.io",
+  },
+};
+
 const FEATURES = [
   // Campaign Intelligence
   {
     icon: FlaskConical,
     title: "A/B Testing",
     desc: "Split contacts 50/50 across prompt variants. Compare answer rates, call duration, and dispositions. Let data pick the winning script.",
+    hover: "Create two or more prompt variants when building a campaign. Skawk randomly assigns contacts and tracks metrics per variant so you can compare side by side.",
+    category: "Campaign Intelligence",
   },
   {
     icon: Activity,
     title: "Emotion Analysis",
     desc: "AI detects caller sentiment (happy, neutral, angry, sad) on every call. Spot friction before it becomes churn.",
+    hover: "Sentiment is scored from the transcript after each call. Filter your campaign results by emotion to find the calls that need human follow-up.",
+    category: "Campaign Intelligence",
   },
   {
     icon: Tag,
     title: "Disposition Tracking",
     desc: "Every call tagged automatically: INTERESTED, NOT_INTERESTED, FOLLOW_UP, or DO_NOT_CALL. Route and action contacts instantly.",
+    hover: "The AI reads the conversation and assigns a disposition tag. Use these tags to trigger workflows, build segments, or export qualified leads.",
+    category: "Campaign Intelligence",
   },
   {
     icon: BarChart3,
     title: "Campaign Analytics",
     desc: "Answer rates, duration stats, and disposition breakdowns in one view. Export to CSV or PDF with one click.",
+    hover: "Every campaign gets a live dashboard with answer rate, avg duration, disposition breakdown, and sentiment distribution. Export any view instantly.",
+    category: "Campaign Intelligence",
   },
   // AI Agents
   {
     icon: Bot,
     title: "Custom Personas",
     desc: "Named AI agents with custom voice, language, and personality. Build a stable of characters tailored to each campaign.",
+    hover: "Create a persona with a name, voice, language, and system prompt. Assign it to any campaign. Swap personas without rebuilding the campaign.",
+    category: "AI Agents",
   },
   {
     icon: Mic,
     title: "Voice Cloning",
     desc: "Clone any voice from a short audio clip. Deploy your brand voice, or a client's, across every call.",
+    hover: "Upload a 30-second audio clip in the dashboard. Skawk generates a voice model you can assign to any persona and use across all campaigns.",
+    category: "AI Agents",
   },
   {
     icon: FileText,
     title: "Knowledge Bases",
     desc: "Upload docs, FAQs, or URLs your agent references in real time. AI answers caller questions from your own content.",
+    hover: "Upload text files, PDFs, or paste URLs. The agent retrieves relevant chunks during the call using RAG so answers stay grounded in your content.",
+    category: "AI Agents",
   },
   {
     icon: Webhook,
     title: "Custom Tools",
     desc: "Agent calls your APIs mid-conversation: check inventory, book appointments, look up CRM data without breaking the flow.",
+    hover: "Define a tool with a name, description, and endpoint URL. The agent decides when to call it based on the conversation and passes structured params.",
+    category: "AI Agents",
   },
   {
     icon: Brain,
     title: "Persistent Memory",
     desc: "Agents remember prior interactions with each contact. Every follow-up call starts with context. No repeating yourself.",
+    hover: "After each call, key facts are saved to the contact record. On the next call, the agent loads that context automatically so it picks up where it left off.",
+    category: "AI Agents",
   },
   {
     icon: GitBranch,
     title: "Visual Pathway Builder",
     desc: "Drag-and-drop conversation flows with branching logic, conditions, transfers, and live test chat. No code required.",
+    hover: "Build conversation trees visually. Add nodes for questions, conditions, transfers, and tool calls. Test the full flow in a live chat simulator before launching.",
+    category: "AI Agents",
   },
   // Outreach Channels
   {
     icon: PhoneCall,
     title: "Outbound Voice Campaigns",
     desc: "Bulk AI calling with contact upload via CSV or API. Go from 10 to 10,000 simultaneous calls with no added headcount.",
+    hover: "Upload a CSV or push contacts via API. Set your persona, schedule, and compliance rules. Hit launch and Skawk dials every contact in parallel.",
+    category: "Channels",
   },
   {
     icon: PhoneIncoming,
     title: "Inbound Numbers",
-    desc: "Purchase numbers directly from the dashboard. Configure your AI agent to answer inbound calls 24/7, with full routing control.",
+    desc: "Purchase numbers directly from the dashboard. Configure your AI agent to answer inbound calls 24/7 with pre-built persona templates for common roles.",
+    hover: "Buy a local or toll-free number in the dashboard. Pick a role template (Receptionist, Support Agent, Scheduler) or write a custom prompt. The agent picks up every inbound call.",
+    category: "Channels",
   },
   {
     icon: MessageSquare,
     title: "SMS Campaigns",
     desc: "AI text message sequences that run alongside voice campaigns. Same contacts, same analytics, full omnichannel reach.",
+    hover: "Add SMS steps to any campaign. The AI generates personalised messages per contact and tracks delivery, replies, and opt-outs in the same dashboard.",
+    category: "Channels",
   },
   // Compliance & Safety
   {
     icon: Shield,
     title: "Guard Rails",
     desc: "TCPA, Australian Spam Act, and GDPR presets as one-click toggles. Custom rules available for any jurisdiction.",
+    hover: "Toggle a compliance preset and Skawk enforces calling windows, consent checks, recording notices, and opt-out handling automatically on every call.",
+    category: "Compliance",
   },
   {
     icon: Fingerprint,
     title: "AI Disclosure",
     desc: "Automatic caller identification and opt-out handling on every call. Compliant by default, not an afterthought.",
+    hover: "The agent identifies itself, states the company name, and offers an opt-out at the start of every call. All configurable per campaign.",
+    category: "Compliance",
   },
   // Platform
   {
     icon: Users,
     title: "Client Portal",
     desc: "Branded read-only dashboards for end clients. They see results, transcripts, and analytics. No platform access required.",
+    hover: "Generate a share link or invite a client by email. They get a branded view of their campaign results — no login to your main dashboard needed.",
+    category: "Platform",
   },
   {
     icon: Code2,
     title: "Full API Access",
     desc: "Complete REST API. Trigger calls, pull analytics, manage campaigns from any system.",
+    hover: "Generate an API key in settings. Use it to trigger single or batch calls, pull transcripts, manage contacts, and read analytics programmatically.",
+    category: "Platform",
   },
   {
     icon: Globe,
     title: "Multi-Language",
     desc: "Agents fluent in 40+ languages. Auto-detect and switch mid-call for global campaigns or multilingual markets.",
+    hover: "Set a language per persona or enable auto-detect. The agent identifies the caller's language and switches seamlessly without restarting the call.",
+    category: "Platform",
   },
   {
     icon: LayoutTemplate,
     title: "Campaign Templates",
     desc: "12+ industry templates covering healthcare, real estate, debt recovery, recruitment, and more. Launch in minutes.",
+    hover: "Pick a template, customise the prompt and persona, upload your contacts, and launch. Templates include pre-built pathways and compliance settings.",
+    category: "Platform",
   },
   // Automation & Intelligence
   {
     icon: Zap,
     title: "Workflow Automation",
     desc: "When a call ends, workflows evaluate the results and chain actions: send SMS, schedule callbacks, create escalations, hit webhooks — automatically.",
+    hover: "Build if/then rules on call outcomes. Example: if disposition is INTERESTED, send an SMS and notify your sales channel via webhook — all hands-free.",
+    category: "Automation",
   },
   {
     icon: ListOrdered,
     title: "Multi-Touch Sequences",
     desc: "Day 1 call, Day 3 SMS, Day 7 follow-up. Define multi-step journeys that run themselves. Contacts progress automatically.",
+    hover: "Define steps with delays and channel (call or SMS). Contacts move through the sequence automatically. Stop conditions prevent over-contacting.",
+    category: "Automation",
   },
   {
     icon: AlertTriangle,
     title: "Escalation System",
     desc: "Critical outcomes flag instantly. Priority routing (critical, high, medium, low) with acknowledge and resolve tracking for your team.",
+    hover: "Define escalation rules on dispositions or keywords. Flagged calls appear in a priority queue. Team members acknowledge and resolve with audit trail.",
+    category: "Automation",
   },
   {
     icon: Radio,
     title: "Live Call Monitor",
     desc: "Watch calls happen in real time. Active call cards, live duration tickers, sentiment indicators, and a completions feed — like air traffic control.",
+    hover: "Open the monitor during a campaign. See every active call with live duration, sentiment colour, and status. Completed calls stream into a live feed below.",
+    category: "Automation",
   },
   {
     icon: Brain,
     title: "Conversation Intelligence",
     desc: "AI reads every transcript and reports: top objections, winning phrases, contact archetypes, and recommendations to improve your script.",
+    hover: "After a campaign completes, Skawk analyses all transcripts and generates a report: common objections, effective phrases, and suggested prompt tweaks.",
+    category: "Automation",
   },
   {
     icon: DollarSign,
     title: "ROI Dashboard",
     desc: "See cost per call, cost per lead, human-equivalent savings, and ROI by campaign. Make the business case undeniable.",
+    hover: "Enter your average human call cost. Skawk calculates cost per call, cost per qualified lead, and total savings compared to a human team.",
+    category: "Automation",
   },
-  // Bland-killers
+  // Differentiation
   {
     icon: FlaskConical,
     title: "Call Playground",
     desc: "Test your prompts without making real calls. AI simulates both sides of the conversation. Free. Unlimited. Iterate until it's perfect.",
+    hover: "Write a prompt, pick a persona, and hit Test. The AI plays both sides of the call so you can hear exactly how it sounds before spending a cent.",
+    category: "Platform",
   },
   {
     icon: Clock,
     title: "Smart Scheduling",
     desc: "Heatmap shows answer rates by day and time. Skawk recommends the best windows so you call when people actually pick up.",
+    hover: "Skawk analyses your past campaign data to build a per-contact heatmap. Schedule campaigns for the recommended window or let auto-schedule pick the slot.",
+    category: "Automation",
   },
   {
     icon: PhoneOff,
     title: "Phone Validation",
     desc: "Check every number before you call. Format validation, mobile vs landline detection. Stop wasting calls on dead numbers.",
-  },
-  {
-    icon: Download,
-    title: "Bland Migration",
-    desc: "Switching from Bland? Paste your API key, import personas, pathways, tools, and voices. Zero switching cost. One click.",
+    hover: "Numbers are checked on upload. Invalid, disconnected, and landline-only numbers get flagged so your campaign only dials real, reachable mobiles.",
+    category: "Compliance",
   },
 ];
 
@@ -334,7 +395,7 @@ const STRUCTURED_DATA = {
           name: "How do I get started with Skawk?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Talk to us at hello@skawk.io. We will walk you through the platform and set up your account.",
+            text: "Sign up for a free account with 50 calls included. No credit card required. Launch your first campaign in minutes using one of our 12+ templates, or connect via API.",
           },
         },
         {
@@ -350,7 +411,7 @@ const STRUCTURED_DATA = {
           name: "What languages does Skawk support?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Skawk supports 40+ languages including English (AU, US, UK), Spanish, French, German, Japanese, Chinese, Korean, and more.",
+            text: "Skawk supports 40+ languages including English (AU, US, UK), Spanish, French, German, Japanese, Chinese, Korean, and more. Babel mode auto-detects and switches mid-call.",
           },
         },
         {
@@ -358,15 +419,31 @@ const STRUCTURED_DATA = {
           name: "Is Skawk TCPA and Spam Act compliant?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Yes. Skawk has built-in compliance guard rails for Australian Spam Act, US TCPA, and EU GDPR. One-click compliance presets cover AI disclosure, opt-out handling, and recording notices.",
+            text: "Yes. Built-in compliance presets cover Australian Spam Act, US TCPA, and EU GDPR. One click applies AI disclosure, opt-out handling, and recording consent rules to every call.",
           },
         },
         {
           "@type": "Question",
-          name: "Can I use Skawk for inbound calls?",
+          name: "Can Skawk handle both inbound and outbound calls?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Yes. You can purchase phone numbers and configure AI agents to answer inbound calls 24/7, with custom prompts and call routing.",
+            text: "Yes. Outbound campaigns call thousands of contacts in parallel. Inbound numbers let you purchase a phone number and configure an AI agent to answer calls 24/7 with pre-built persona templates.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "How much does Skawk cost?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Free plan: 50 calls, no cost. Starter: $149/mo for 300 calls. Pro: $499/mo for 1,500 calls. Agency: $599/mo for multi-client management. Enterprise: custom pricing.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "How does the API work?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Simple REST API. Send a POST to /api/v1/calls with a phone number, prompt, and optional analysis schema. Skawk handles the call, transcription, and data extraction. Results come back via webhook.",
           },
         },
         {
@@ -374,7 +451,7 @@ const STRUCTURED_DATA = {
           name: "How does voice cloning work?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Upload a short audio clip of any voice and Skawk generates a cloned voice model for use in your campaigns. Cloned voices can be assigned to any persona.",
+            text: "Upload a short audio clip and Skawk generates a cloned voice model you can assign to any persona. No studio time or specialist software required.",
           },
         },
         {
@@ -383,6 +460,14 @@ const STRUCTURED_DATA = {
           acceptedAnswer: {
             "@type": "Answer",
             text: "Yes. Enterprise plans include a white-label option with a custom domain, branded client portal, and your own logo throughout the platform.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Can Skawk integrate with my existing CRM?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes. We integrate with Salesforce, HubSpot, GoHighLevel, and any system via webhooks, Zapier, or our REST API. Call results can be pushed to your CRM automatically.",
           },
         },
       ],
@@ -413,6 +498,9 @@ export default function HomePage() {
                 {item}
               </Link>
             ))}
+            <Link href="/pricing" className="text-sm font-medium text-white/60 hover:text-white transition-colors">
+              Pricing
+            </Link>
             <Link href="/docs" className="text-sm font-medium text-white/60 hover:text-white transition-colors">
               API Docs
             </Link>
@@ -476,9 +564,29 @@ export default function HomePage() {
                 Get Started
                 <ArrowRight className="w-5 h-5" />
               </Link>
+              <a
+                href="tel:+61411199904"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-8 py-4 text-base font-medium text-white hover:bg-white/5 transition-colors"
+              >
+                <Phone className="w-5 h-5 text-green-400" />
+                Call our AI: 0411 199 904
+              </a>
             </div>
 
-            <p className="text-sm text-white/30">Up and running in minutes. All calls to opted-in contacts only.</p>
+            <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-white/40">
+              <span className="inline-flex items-center gap-1.5 bg-white/5 rounded-full px-3 py-1 border border-white/10">
+                <Check className="w-3.5 h-3.5 text-green-400" /> No credit card required
+              </span>
+              <span className="inline-flex items-center gap-1.5 bg-white/5 rounded-full px-3 py-1 border border-white/10">
+                <Check className="w-3.5 h-3.5 text-green-400" /> 50 free calls
+              </span>
+              <span className="inline-flex items-center gap-1.5 bg-white/5 rounded-full px-3 py-1 border border-white/10">
+                <Check className="w-3.5 h-3.5 text-green-400" /> Up and running in minutes
+              </span>
+              <span className="inline-flex items-center gap-1.5 bg-white/5 rounded-full px-3 py-1 border border-white/10">
+                <Shield className="w-3.5 h-3.5 text-green-400" /> TCPA &amp; Spam Act compliant
+              </span>
+            </div>
           </div>
 
           {/* Stats bar */}
@@ -532,20 +640,7 @@ export default function HomePage() {
               Every tool you need to automate calling, run compliant campaigns, and convert more, without adding headcount.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {FEATURES.map((f) => (
-              <div
-                key={f.title}
-                className="group bg-card border border-border rounded-2xl p-6 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all"
-              >
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                  <f.icon className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="text-lg font-bold mb-2">{f.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
-          </div>
+          <FeaturesTabs features={FEATURES} />
         </div>
       </section>
 
@@ -820,69 +915,7 @@ export default function HomePage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-24 px-6 bg-muted">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-sm font-bold text-primary uppercase tracking-wider mb-3">FAQ</p>
-            <h2 className="text-4xl font-black mb-4">Common questions</h2>
-          </div>
-          <div className="space-y-4">
-            {[
-              {
-                q: "How do I get started with Skawk?",
-                a: "Talk to us. We will walk you through the platform, discuss your use case, and set up your account. Contact hello@skawk.io.",
-              },
-              {
-                q: "How many calls can Skawk make simultaneously?",
-                a: "Up to 10,000 simultaneous calls. Launch a batch campaign via the dashboard or a single API call. Scale up or down instantly. No infrastructure to manage.",
-              },
-              {
-                q: "What languages does Skawk support?",
-                a: "40+ languages including English (AU, US, UK), Spanish, French, German, Japanese, Chinese, Korean, Portuguese, Italian, Arabic, Hindi, and more. Babel mode auto-detects and switches mid-call.",
-              },
-              {
-                q: "Is Skawk compliant with Australian Spam Act and TCPA?",
-                a: "Yes. Built-in compliance presets cover Australian Spam Act, US TCPA, and EU GDPR. One click applies AI disclosure, company identification, opt-out handling, and recording consent rules to every call.",
-              },
-              {
-                q: "Can I handle inbound calls too?",
-                a: "Yes. Purchase phone numbers directly from the dashboard, configure your AI agent's prompt, voice, and routing, and it answers inbound calls 24/7 automatically.",
-              },
-              {
-                q: "How does A/B testing work?",
-                a: "When creating a campaign, enable A/B testing and write different prompts for each variant. Skawk randomly splits your contacts across variants and shows a side-by-side comparison of answer rates, duration, and dispositions so you can see which script wins.",
-              },
-              {
-                q: "What is a knowledge base?",
-                a: "A knowledge base lets your AI agent reference your own documents, FAQs, or web pages during a live call. Upload text, files, or URLs and the agent retrieves relevant information in real time to answer caller questions accurately.",
-              },
-              {
-                q: "Can I give clients access to results?",
-                a: "Yes. The client portal gives your clients a branded read-only dashboard showing their campaign stats, call outcomes, and dispositions. No login or dashboard access required on their end.",
-              },
-              {
-                q: "How does voice cloning work?",
-                a: "Upload a short audio clip (a recording, a podcast snippet, or a client-supplied file). Skawk generates a cloned voice model you can assign to any persona. No studio time or specialist software required.",
-              },
-              {
-                q: "Is white-labelling available?",
-                a: "Yes, on Enterprise plans. You get a custom domain, your own logo throughout the platform, and a fully branded client portal. Ideal for agencies running campaigns on behalf of multiple clients.",
-              },
-            ].map((item) => (
-              <details
-                key={item.q}
-                className="bg-card border border-border rounded-2xl px-6 py-4 group"
-              >
-                <summary className="font-semibold cursor-pointer list-none flex items-center justify-between gap-4">
-                  {item.q}
-                  <span className="text-muted-foreground text-xl group-open:rotate-45 transition-transform shrink-0">+</span>
-                </summary>
-                <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{item.a}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
+      <FaqSection />
 
       {/* CTA */}
       <section className="py-28 px-6 bg-[#1a1a2e] relative overflow-hidden">
@@ -914,6 +947,7 @@ export default function HomePage() {
               Talk to Sales
             </Link>
           </div>
+          <p className="text-sm text-white/30 mt-6">No credit card required. 50 calls free. Cancel anytime.</p>
         </div>
       </section>
 
@@ -933,6 +967,7 @@ export default function HomePage() {
               <ul className="space-y-2.5">
                 {[
                   { label: "Features", href: "#features" },
+                  { label: "Pricing", href: "/pricing" },
                   { label: "Use Cases", href: "#use-cases" },
                   { label: "Integrations", href: "#integrations" },
                 ].map((item) => (

@@ -495,8 +495,8 @@ export default function DemoPage() {
             {[
               { label: "Dental & Medical", detail: "Appointment reminders, rescheduling, pre-visit forms" },
               { label: "Real Estate", detail: "Buyer qualification, inspection bookings, off-market alerts" },
-              { label: "Solar & Energy", detail: "Lead qualification, roof type, budget extraction" },
-              { label: "Debt Recovery", detail: "Promise-to-pay, compliant scripting, DNC management" },
+              { label: "Home Care", detail: "Wellbeing check-ins, service confirmations, feedback calls" },
+              { label: "Property Management", detail: "Maintenance follow-up, inspection scheduling, arrears reminders" },
               { label: "Recruitment", detail: "Candidate screening, availability, skill matching" },
               { label: "Insurance", detail: "Claims follow-up, renewals, quote qualification" },
             ].map((item, i) => (
@@ -534,7 +534,7 @@ export default function DemoPage() {
       {/* Footer */}
       <footer className="border-t border-[#21262d] py-8 px-6">
         <div className="max-w-3xl mx-auto flex items-center justify-between text-xs text-[#484f58]">
-          <p>&copy; 2026 CareplanAI Pty Ltd. All rights reserved.</p>
+          <p>&copy; 2026 Skawk. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="hover:text-[#8b949e] transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-[#8b949e] transition-colors">Terms</Link>

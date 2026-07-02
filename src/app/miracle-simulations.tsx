@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import {
@@ -17,14 +17,14 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-// ─── Miracle 1: Live Monitor Simulation ──────────────────────────────────────
+// â”€â”€â”€ Miracle 1: Live Monitor Simulation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const SIMULATED_CALLS = [
   { phone: "+61 412 ***", name: "Margaret W.", campaign: "Post-Discharge", status: "in_progress", duration: 0, sentiment: "neutral" },
-  { phone: "+61 498 ***", name: "David Chen", campaign: "Solar Leads", status: "in_progress", duration: 0, sentiment: "positive" },
+  { phone: "+61 498 ***", name: "David Chen", campaign: "Lead Follow-up", status: "in_progress", duration: 0, sentiment: "positive" },
   { phone: "+61 411 ***", name: "Sarah K.", campaign: "Appointment Reminder", status: "ringing", duration: 0, sentiment: "neutral" },
   { phone: "+61 423 ***", name: "James O.", campaign: "Post-Discharge", status: "in_progress", duration: 0, sentiment: "positive" },
-  { phone: "+61 456 ***", name: "Priya M.", campaign: "Solar Leads", status: "ringing", duration: 0, sentiment: "neutral" },
+  { phone: "+61 456 ***", name: "Priya M.", campaign: "Lead Follow-up", status: "ringing", duration: 0, sentiment: "neutral" },
 ];
 
 const LIVE_EVENTS = [
@@ -147,7 +147,7 @@ function LiveMonitorSim() {
   );
 }
 
-// ─── Miracle 2: Intelligence Simulation ──────────────────────────────────────
+// â”€â”€â”€ Miracle 2: Intelligence Simulation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function IntelligenceSim() {
   const [visible, setVisible] = useState(false);
@@ -234,12 +234,12 @@ function IntelligenceSim() {
   );
 }
 
-// ─── Miracle 3: ROI Simulation ───────────────────────────────────────────────
+// â”€â”€â”€ Miracle 3: ROI Simulation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function RoiSim() {
   const [calls, setCalls] = useState(500);
   const costPerCall = 0.35;
-  const humanCostPerCall = 4.0; // $30/hr ÷ 7.5 calls/hr
+  const humanCostPerCall = 4.0; // $30/hr Ã· 7.5 calls/hr
   const skawkCost = calls * costPerCall;
   const humanCost = calls * humanCostPerCall;
   const savings = humanCost - skawkCost;
@@ -303,7 +303,7 @@ function RoiSim() {
   );
 }
 
-// ─── Export ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Export â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function MiracleSimulations() {
   return (
@@ -313,7 +313,7 @@ export function MiracleSimulations() {
           <p className="text-sm font-bold text-primary uppercase tracking-wider mb-3">See what&apos;s possible</p>
           <h2 className="text-4xl font-black text-white mb-4">More than just a phone call</h2>
           <p className="text-white/50 max-w-xl mx-auto">
-            Real-time monitoring, AI-powered insights, and clear ROI — all built in. Try them.
+            Real-time monitoring, AI-powered insights, and clear ROI â€” all built in. Try them.
           </p>
         </div>
 

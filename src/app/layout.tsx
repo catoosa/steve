@@ -39,9 +39,9 @@ export const metadata: Metadata = {
     "structured data extraction",
     "agentic voice orchestration",
   ],
-  authors: [{ name: "CareplanAI Pty Ltd", url: "https://skawk.io" }],
-  creator: "CareplanAI Pty Ltd",
-  publisher: "CareplanAI Pty Ltd",
+  authors: [{ name: "Skawk", url: "https://skawk.io" }],
+  creator: "Skawk",
+  publisher: "Skawk",
   category: "technology",
   applicationName: "Skawk",
   robots: {
@@ -89,7 +89,6 @@ const structuredData = [
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Skawk",
-    legalName: "CareplanAI Pty Ltd",
     url: "https://skawk.io",
     description:
       "AI voice agents that return structured JSON data. One API call, one phone call, structured data back.",
@@ -135,7 +134,7 @@ const structuredData = [
     name: "Skawk",
     url: "https://skawk.io",
     inLanguage: "en-AU",
-    copyrightHolder: { "@type": "Organization", name: "CareplanAI Pty Ltd" },
+    copyrightHolder: { "@type": "Organization", name: "Skawk" },
     copyrightYear: "2025",
   },
 ];

@@ -36,7 +36,6 @@ import {
   PhoneIncoming,
   Fingerprint,
   LayoutTemplate,
-  Sun,
   Briefcase,
   Heart,
   Home,
@@ -191,7 +190,7 @@ const FEATURES = [
   {
     icon: LayoutTemplate,
     title: "Campaign Templates",
-    desc: "12+ industry templates covering healthcare, real estate, debt recovery, recruitment, and more. Launch in minutes.",
+    desc: "12+ industry templates covering healthcare, real estate, recruitment, property management, and more. Launch in minutes.",
     hover: "Pick a template, customise the prompt and persona, upload your contacts, and launch. Templates include pre-built pathways and compliance settings.",
     category: "Platform",
   },
@@ -264,13 +263,6 @@ const FEATURES = [
 
 const USE_CASES = [
   {
-    icon: Sun,
-    title: "Solar Lead Gen",
-    desc: "Pre-qualify solar prospects at scale. A/B test pitches, identify hot leads by emotion and disposition, route to closers instantly.",
-    stat: "3x",
-    statLabel: "qualified leads",
-  },
-  {
     icon: Heart,
     title: "Aged Care Outreach",
     desc: "Compassionate, compliant outreach for residents and families. Memory ensures every follow-up call feels personal.",
@@ -279,10 +271,10 @@ const USE_CASES = [
   },
   {
     icon: PhoneForwarded,
-    title: "Debt Recovery",
-    desc: "Automate collections calls with full ASIC and TCPA guard rails. Negotiate payment plans and log commitments automatically.",
+    title: "Patient Follow-up",
+    desc: "Post-discharge and appointment follow-up calls with structured responses, disposition tracking, and escalation to clinical staff when it matters.",
     stat: "80%",
-    statLabel: "cost reduction",
+    statLabel: "admin time saved",
   },
   {
     icon: Briefcase,
@@ -337,7 +329,7 @@ const STRUCTURED_DATA = {
         email: "hello@skawk.io",
         contactType: "customer support",
       },
-      legalName: "CareplanAI Pty Ltd",
+      legalName: "Skawk",
     },
     {
       "@type": "WebSite",
@@ -355,7 +347,7 @@ const STRUCTURED_DATA = {
       operatingSystem: "Web",
       url: "https://skawk.io",
       description:
-        "Automate outbound and inbound phone calls with AI voice agents. Run lead qualification, appointment reminders, surveys, and debt recovery campaigns at scale.",
+        "Automate outbound and inbound phone calls with AI voice agents. Run lead qualification, appointment reminders, surveys, and follow-up campaigns at scale.",
       offers: {
         "@type": "Offer",
         price: "0",
@@ -1007,7 +999,7 @@ export default function HomePage() {
           </div>
           <div className="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              &copy; 2026 CareplanAI Pty Ltd | ABN 92 691 158 237
+              &copy; 2026 Skawk
             </p>
             <p className="text-sm text-muted-foreground">
               hello@skawk.io

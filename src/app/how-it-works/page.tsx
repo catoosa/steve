@@ -77,7 +77,7 @@ export default function HowItWorksPage() {
           <h2 className="text-3xl font-black mb-6">Phone calls don&apos;t scale. Your business does.</h2>
           <div className="prose prose-lg text-muted-foreground space-y-4">
             <p>
-              Every day, businesses need to make hundreds or thousands of phone calls. Sales follow-ups. Patient check-ins. Appointment reminders. Debt recovery. Lead qualification. Customer surveys.
+              Every day, businesses need to make hundreds or thousands of phone calls. Sales follow-ups. Patient check-ins. Appointment reminders. Lead qualification. Customer surveys.
             </p>
             <p>
               The maths never works. One person makes maybe 60 calls a day. To reach 1,000 people, you need a team of 17. To reach them at the right time, in the right language, with the right script — and then actually <em>do something</em> with what they tell you — that&apos;s where it breaks down.
@@ -103,7 +103,7 @@ export default function HowItWorksPage() {
             </div>
             <div className="pl-[52px] space-y-4 text-muted-foreground">
               <p>
-                You create a <strong className="text-foreground">persona</strong> — an AI agent with a name, a voice, and a personality. Maybe it&apos;s Emma, a warm aged care nurse doing post-discharge check-ins. Or Marcus, a direct debt recovery specialist. Or Priya, a multilingual customer success agent who speaks Hindi and English.
+                You create a <strong className="text-foreground">persona</strong> — an AI agent with a name, a voice, and a personality. Maybe it&apos;s Emma, a warm aged care nurse doing post-discharge check-ins. Or Marcus, a friendly recruitment screener. Or Priya, a multilingual customer success agent who speaks Hindi and English.
               </p>
               <p>
                 You write a prompt that tells the agent what to say, what to ask, and how to behave. You pick a voice — or clone your own from a 30-second audio clip. You choose the language. That&apos;s your agent.
@@ -154,7 +154,7 @@ export default function HowItWorksPage() {
 }`}</pre>
               </div>
               <p className="mt-4">
-                For solar sales, it might be <code className="text-xs bg-muted px-1.5 py-0.5 rounded">interested: boolean, roof_type: string, budget_range: string</code>. For debt recovery, <code className="text-xs bg-muted px-1.5 py-0.5 rounded">promise_to_pay: boolean, amount_agreed: number, payment_date: string</code>. You define the schema. Skawk fills it in.
+                For lead qualification, it might be <code className="text-xs bg-muted px-1.5 py-0.5 rounded">interested: boolean, property_type: string, budget_range: string</code>. For patient follow-up, <code className="text-xs bg-muted px-1.5 py-0.5 rounded">recovering_well: boolean, pain_level: number, callback_requested: boolean</code>. You define the schema. Skawk fills it in.
               </p>
             </div>
           </div>
@@ -279,35 +279,35 @@ export default function HowItWorksPage() {
               </p>
             </div>
 
-            {/* Solar */}
+            {/* Home services */}
             <div>
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-9 h-9 rounded-lg bg-yellow-500/10 flex items-center justify-center">
                   <TrendingUp className="w-5 h-5 text-yellow-500" />
                 </div>
-                <h3 className="text-lg font-bold">Solar & Home Services</h3>
+                <h3 className="text-lg font-bold">Home Services & Trades</h3>
               </div>
               <p className="text-muted-foreground mb-4">
-                A solar company generates 500 leads a week from Facebook ads. Their sales team can call maybe 100. The other 400 go cold.
+                A home services company generates 500 enquiries a week. Their team can call maybe 100. The other 400 go cold.
               </p>
               <p className="text-muted-foreground">
-                <strong className="text-foreground">With Skawk:</strong> Every lead gets a call within minutes. The AI qualifies them — roof type, ownership status, budget range, interest level. Interested leads are instantly pushed to the CRM and enrolled in a 3-day follow-up sequence. Not interested? Marked and never called again. The sales team only talks to warm, qualified leads.
+                <strong className="text-foreground">With Skawk:</strong> Every enquiry gets a call within minutes. The AI qualifies them — property type, job scope, budget range, interest level. Interested customers are instantly pushed to the CRM and enrolled in a 3-day follow-up sequence. Not interested? Marked and never called again. The team only talks to warm, qualified customers.
               </p>
             </div>
 
-            {/* Debt Recovery */}
+            {/* Healthcare follow-up */}
             <div>
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-9 h-9 rounded-lg bg-green-500/10 flex items-center justify-center">
                   <DollarSign className="w-5 h-5 text-green-500" />
                 </div>
-                <h3 className="text-lg font-bold">Debt Recovery & Collections</h3>
+                <h3 className="text-lg font-bold">Healthcare Follow-up</h3>
               </div>
               <p className="text-muted-foreground mb-4">
-                A collections firm has 10,000 accounts in arrears. Human agents cost $30/hour and burn out fast. Compliance requirements make every call a legal minefield.
+                A clinic network needs to follow up thousands of patients after appointments and procedures. Staff time is scarce, and every missed follow-up is a clinical and compliance risk.
               </p>
               <p className="text-muted-foreground">
-                <strong className="text-foreground">With Skawk:</strong> Compliant AI calls every account with built-in guard rails — AI disclosure, company identification, recording notice, opt-out handling. Promise-to-pay is extracted as structured data. Accounts that agree to pay are updated automatically. Those that request no further contact are added to the DNC list instantly. 10,000 calls in a morning.
+                <strong className="text-foreground">With Skawk:</strong> Compliant AI calls every patient with built-in guard rails — AI disclosure, organisation identification, recording notice, opt-out handling. Responses are extracted as structured data, records update automatically, and anything concerning is escalated to a human clinician. Thousands of follow-ups in a morning.
               </p>
             </div>
 
@@ -443,7 +443,7 @@ export default function HowItWorksPage() {
       {/* Footer */}
       <footer className="py-8 px-6 border-t border-border">
         <div className="max-w-3xl mx-auto flex items-center justify-between text-xs text-muted-foreground">
-          <p>&copy; 2026 CareplanAI Pty Ltd. All rights reserved.</p>
+          <p>&copy; 2026 Skawk. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link>

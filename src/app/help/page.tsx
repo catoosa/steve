@@ -136,7 +136,7 @@ const CATEGORIES: FeatureCategory[] = [
         title: "Campaign Management",
         description: "Organize calls into campaigns with contacts, scheduling, and tracking",
         details: [
-          "12+ industry templates (Solar, Aged Care, Debt Recovery, etc.)",
+          "12+ industry templates (Aged Care, Healthcare, Recruitment, etc.)",
           "CSV contact upload",
           "Calling hours and timezone control",
           "Campaign status tracking (Draft → Active → Completed)",
@@ -690,7 +690,7 @@ export default function HelpPage() {
             </a>
           </p>
           <p className="text-xs text-muted-foreground/60 mt-4">
-            &copy; 2026 CareplanAI Pty Ltd. All rights reserved.
+            &copy; 2026 Skawk. All rights reserved.
           </p>
         </div>
       </section>

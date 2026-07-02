@@ -249,7 +249,7 @@ export default function PricingPage() {
       <footer className="py-12 px-6 border-t border-border bg-background">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            &copy; 2026 CareplanAI Pty Ltd | ABN 92 691 158 237
+            &copy; 2026 Skawk
           </p>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
             <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
